@@ -1,12 +1,14 @@
-**/node_modules/
-**/.env
-**/.expo/
-**/dist/
-**/build/
-**/.DS_Store
-**/npm-debug.log*
+# node
+node_modules/
 
-backend/supabase/.branches/
-backend/supabase/.temp/
-.claude/
-nul
+# env
+.env
+.env.local
+
+# supabase CLI temp files
+supabase/.branches/
+supabase/.temp/
+
+# OS
+.DS_Store
+Thumbs.db
