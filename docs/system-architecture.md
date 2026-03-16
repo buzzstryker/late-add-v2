@@ -4,13 +4,10 @@
 
 \## Structure
 
-
-
-\- `mobile/` — user-facing mobile app
-
-\- `backend/` — Supabase backend, migrations, edge functions, tests
-
-\- `docs/` — architecture and product notes
+- **`late-add-api/`** — Supabase backend, migrations, Edge Functions, tests. See [../late-add-api/README.md](../late-add-api/README.md).
+- **`late-add-admin/`** — Admin web UI (Vite + React).
+- **`docs/`** (this folder) — High-level architecture and product notes; canonical API is in **late-add-api/docs/**.
+- **`mobile/`** — (If present) user-facing mobile app.
 
 
 

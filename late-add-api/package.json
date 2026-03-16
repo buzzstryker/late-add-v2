@@ -1,0 +1,13 @@
+{
+  "name": "late-add-api",
+  "private": true,
+  "scripts": {
+    "test:local": "node tests/api_test.mjs",
+    "test:integration": "node tests/integration.mjs",
+    "test:domain": "node tests/domain-rules.mjs"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5"
+  }
+}

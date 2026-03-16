@@ -1,0 +1,18 @@
+diff --git a/.claude/settings.local.json b/.claude/settings.local.json
+index 2e4ec9b..1608d7b 100644
+--- a/.claude/settings.local.json
++++ b/.claude/settings.local.json
+@@ -77,7 +77,12 @@
+       "Bash(sed:*)",
+       "Bash(awk:*)",
+       "Bash(timeout 30)",
+-      "Bash(echo.)"
++      "Bash(echo.)",
++      "Bash(gh pr:*)",
++      "Bash(timeout 15)",
++      "Bash(tasklist //FI \"IMAGENAME eq node.exe\" //FO TABLE)",
++      "Bash(tasklist //FI \"IMAGENAME eq ngrok.exe\" //FO TABLE)",
++      "Bash(node scripts/convert-glide-ods.mjs)"
+     ]
+   }
+ }

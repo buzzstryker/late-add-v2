@@ -12,3 +12,7 @@ supabase/.temp/
 # OS
 .DS_Store
 Thumbs.db
+
+# Windows shell artifacts (repo root)
+/dir
+/nul

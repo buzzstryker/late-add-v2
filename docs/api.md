@@ -1,30 +1,5 @@
-\# Late Add v2 API
+# API (canonical)
 
+**The full API contract lives in [../late-add-api/docs/api.md](../late-add-api/docs/api.md).**
 
-
-\## Endpoints
-
-
-
-\### ingest-event-results
-
-Stores round/event results.
-
-
-
-\### get-standings
-
-Returns points-based standings.
-
-
-
-\### compute-money-deltas
-
-Computes round-scoped money deltas from effective points and payout config.
-
-
-
-\### generate-payment-requests
-
-Returns minimal payer → payee payment requests for a round.
-
+This folder is for high-level notes. For request/response shapes, validation, error codes, and payout/settlement design, use **late-add-api/docs/**.
