@@ -55,9 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         (_event, session) => {
           if (cancelled) return;
-          setSignedIn(Boolean(session?.access_token));
+          const hasToken = Boolean(session?.access_token);
+          console.log('[AUTH EVENT]', _event, 'email:', session?.user?.email ?? null, 'hasToken:', hasToken);
+          setSignedIn(hasToken);
           if (!readyRef.current) {
             readyRef.current = true;
+            console.log('[AUTH] ready=true');
             setReady(true);
           }
         }
@@ -109,21 +112,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: token.trim(),
         type: 'email',
       });
-      if (error) return { error: error.message };
-      // Session is established — onAuthStateChange will fire SIGNED_IN
+      if (error) {
+        console.log('[AUTH] verifyOtp error:', error.message);
+        return { error: error.message };
+      }
+      console.log('[AUTH] verifyOtp success');
       return { error: null };
     },
     [supabase]
   );
 
   const signOut = useCallback(async () => {
+    console.log('[AUTH] signOut called', new Error().stack?.split('\n').slice(1, 4).join(' <- '));
     if (supabase) await supabase.auth.signOut();
     setSignedIn(false);
   }, [supabase]);
 
   // Auto-sign-out on server 401 (expired/invalid JWT)
   useEffect(() => {
-    setOnUnauthorized(() => { signOut(); });
+    setOnUnauthorized(() => {
+      console.log('[AUTH] 401 intercepted → signOut');
+      signOut();
+    });
   }, [signOut]);
 
   const value = useMemo(
