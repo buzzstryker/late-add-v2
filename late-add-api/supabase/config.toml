@@ -53,23 +53,37 @@ otp_expiry = 3600
 subject = "Your Late Add login code"
 content_path = "./supabase/templates/otp.html"
 
-# Disable runtime JWT verification so our code does getUser(token) with the
-# same env as the test. Avoids "Invalid JWT" when the runtime uses a linked
-# remote project's keys instead of local.
+# Disable Supabase platform-level JWT verification for all Edge Functions.
+# Each function does its own auth via getUser(token) in the handler code.
+# Platform verify_jwt uses different keys when linked to a remote project,
+# causing "Invalid JWT" errors even with valid tokens.
 [functions.get-standings]
 verify_jwt = false
-
+[functions.events]
+verify_jwt = false
 [functions.ingest-event-results]
 verify_jwt = false
-
 [functions.compute-money-deltas]
 verify_jwt = false
-
 [functions.generate-payment-requests]
 verify_jwt = false
-
 [functions.review]
 verify_jwt = false
-
 [functions.standings-player-history]
+verify_jwt = false
+[functions.get-points-analysis]
+verify_jwt = false
+[functions.get-points-matrix]
+verify_jwt = false
+[functions.players]
+verify_jwt = false
+[functions.get-groups]
+verify_jwt = false
+[functions.groups]
+verify_jwt = false
+[functions.get-seasons]
+verify_jwt = false
+[functions.seasons]
+verify_jwt = false
+[functions.admin-reset]
 verify_jwt = false

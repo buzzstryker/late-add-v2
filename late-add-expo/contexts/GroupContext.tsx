@@ -117,14 +117,12 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
 
       // Auto-select: find the group the player most recently played in
       if (!selectedGroup && enriched.length > 0) {
+        let myGroupIds: Set<string> | null = null;
         try {
           const base = getApiBase().replace(/\/functions\/v1\/?$/, '');
           const token = await getStoredAccessToken();
           const anonKey = getSupabaseAnonKey() || '';
           const headers = { Authorization: `Bearer ${token}`, apikey: anonKey || token || '' };
-
-          // Get the player's group memberships
-          let myGroupIds: Set<string> | null = null;
           if (base && token) {
             const pidRes = await fetch(`${base}/rest/v1/rpc/get_my_player_ids`, {
               method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}',
@@ -164,7 +162,11 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
             setSelectedGroup(myGroup ?? enriched[0]);
           }
         } catch {
-          setSelectedGroup(enriched[0]);
+          // Even if events fetch fails, prefer a group the player belongs to
+          const fallback = myGroupIds
+            ? enriched.find((g) => myGroupIds!.has(g.id))
+            : null;
+          setSelectedGroup(fallback ?? enriched[0]);
         }
       }
     } catch {
