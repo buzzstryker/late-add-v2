@@ -26,12 +26,9 @@ function RootNavigator() {
     if (!ready) return;
     const first = segments[0];
     const onLogin = first === 'login';
-    console.log('[ROUTING]', { ready, signedIn, segment: first, onLogin });
     if (!signedIn && !onLogin) {
-      console.log('[ROUTING] → /login');
       router.replace('/login');
     } else if (signedIn && onLogin) {
-      console.log('[ROUTING] → /(tabs)/standings');
       router.replace('/(tabs)/standings');
     }
   }, [ready, signedIn, segments, router]);

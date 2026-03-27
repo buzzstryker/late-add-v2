@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [signedIn, setSignedIn] = useState(false);
   const supabase = useMemo(() => (hasSupabaseAuthConfig() ? createSupabase() : null), []);
   const readyRef = useRef(false);
-  const signedInAtRef = useRef<number>(0); // timestamp of last sign-in
+  const signedInAtRef = useRef<number>(0);
 
   // Wire up the access-token getter for api.ts
   useEffect(() => {
@@ -57,12 +57,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         (_event, session) => {
           if (cancelled) return;
           const hasToken = Boolean(session?.access_token);
-          console.log('[AUTH EVENT]', _event, 'email:', session?.user?.email ?? null, 'hasToken:', hasToken);
           setSignedIn(hasToken);
           if (hasToken) signedInAtRef.current = Date.now();
           if (!readyRef.current) {
             readyRef.current = true;
-            console.log('[AUTH] ready=true');
             setReady(true);
           }
         }
@@ -91,7 +89,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
-  // Send a 6-digit OTP code to the user's email
   const sendOtp = useCallback(
     async (email: string) => {
       if (!supabase) return { error: 'Supabase not configured' };
@@ -105,7 +102,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
-  // Verify the 6-digit OTP code → establishes session
   const verifyOtp = useCallback(
     async (email: string, token: string) => {
       if (!supabase) return { error: 'Supabase not configured' };
@@ -114,13 +110,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: token.trim(),
         type: 'email',
       });
-      if (error) {
-        console.log('[AUTH] verifyOtp error:', error.message);
-        return { error: error.message };
-      }
-      console.log('[AUTH] verifyOtp success');
-      // Explicitly set the session so the Supabase client (and getSession) has it
-      // immediately — prevents 401s from API calls that fire before onAuthStateChange
+      if (error) return { error: error.message };
+      // Explicitly set the session so getSession() returns it immediately
+      // for the next API call — prevents 401s from in-flight requests
       if (data.session) {
         await supabase.auth.setSession({
           access_token: data.session.access_token,
@@ -133,22 +125,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const signOut = useCallback(async () => {
-    console.log('[AUTH] signOut called');
     if (supabase) await supabase.auth.signOut();
     setSignedIn(false);
   }, [supabase]);
 
   // Auto-sign-out on server 401 (expired/invalid JWT).
-  // Grace period: ignore 401s within 5 seconds of sign-in — the fresh session
-  // may not have propagated to the API client for in-flight requests yet.
+  // 30-second grace period after sign-in: the user may spend time navigating
+  // the drawer, switching groups, or loading tabs before all API calls use
+  // the fresh session token. Stale in-flight requests can return 401 during
+  // this window — ignore them instead of signing out.
   useEffect(() => {
     setOnUnauthorized(() => {
-      const msSinceSignIn = signedInAtRef.current ? Date.now() - signedInAtRef.current : 9999;
-      if (msSinceSignIn < 5000) {
-        console.log('[AUTH] 401 ignored — within 5s grace period of sign-in');
-        return;
-      }
-      console.log('[AUTH] 401 intercepted → signOut');
+      const msSinceSignIn = signedInAtRef.current ? Date.now() - signedInAtRef.current : Infinity;
+      if (msSinceSignIn < 30_000) return;
       signOut();
     });
   }, [signOut]);

@@ -115,22 +115,53 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
       setGroups(enriched);
       setSections(s);
 
-      // Auto-select: find most recently active group (last round played)
+      // Auto-select: find the group the player most recently played in
       if (!selectedGroup && enriched.length > 0) {
         try {
-          // Try to find most recent round across all groups
+          const base = getApiBase().replace(/\/functions\/v1\/?$/, '');
+          const token = await getStoredAccessToken();
+          const anonKey = getSupabaseAnonKey() || '';
+          const headers = { Authorization: `Bearer ${token}`, apikey: anonKey || token || '' };
+
+          // Get the player's group memberships
+          let myGroupIds: Set<string> | null = null;
+          if (base && token) {
+            const pidRes = await fetch(`${base}/rest/v1/rpc/get_my_player_ids`, {
+              method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}',
+            });
+            if (pidRes.ok) {
+              const ids: string[] = await pidRes.json();
+              if (ids.length > 0) {
+                const inList = ids.map((id) => `"${id}"`).join(',');
+                const gmRes = await fetch(
+                  `${base}/rest/v1/group_members?player_id=in.(${inList})&is_active=eq.1&select=group_id`,
+                  { headers },
+                );
+                if (gmRes.ok) {
+                  const rows: { group_id: string }[] = await gmRes.json();
+                  myGroupIds = new Set(rows.map((r) => r.group_id));
+                }
+              }
+            }
+          }
+
+          // Find most recent round, preferring groups the player belongs to
           const events = await listEvents({});
           if (events.length > 0) {
             const sorted = [...events].sort((a, b) => b.round_date.localeCompare(a.round_date));
-            const recentGroupId = sorted[0].group_id;
-            const match = enriched.find((grp) => grp.id === recentGroupId);
-            if (match) {
-              setSelectedGroup(match);
-            } else {
-              setSelectedGroup(enriched[0]);
-            }
+            // Prefer a round from a group the player is in
+            const myEvent = myGroupIds
+              ? sorted.find((e) => myGroupIds!.has(e.group_id))
+              : null;
+            const bestGroupId = myEvent?.group_id ?? sorted[0].group_id;
+            const match = enriched.find((grp) => grp.id === bestGroupId);
+            setSelectedGroup(match ?? enriched[0]);
           } else {
-            setSelectedGroup(enriched[0]);
+            // No events — pick first group the player belongs to
+            const myGroup = myGroupIds
+              ? enriched.find((g) => myGroupIds!.has(g.id))
+              : null;
+            setSelectedGroup(myGroup ?? enriched[0]);
           }
         } catch {
           setSelectedGroup(enriched[0]);
