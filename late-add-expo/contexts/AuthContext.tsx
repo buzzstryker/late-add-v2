@@ -111,14 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         type: 'email',
       });
       if (error) return { error: error.message };
-      // Explicitly set the session so getSession() returns it immediately
-      // for the next API call — prevents 401s from in-flight requests
-      if (data.session) {
-        await supabase.auth.setSession({
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token,
-        });
-      }
+      // Session is established — onAuthStateChange will fire SIGNED_IN
       return { error: null };
     },
     [supabase]
