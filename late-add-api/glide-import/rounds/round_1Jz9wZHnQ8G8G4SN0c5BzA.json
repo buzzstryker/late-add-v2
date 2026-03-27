@@ -1,0 +1,27 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+  "round_date": "2023-07-20",
+  "scores_override": true,
+  "submitted_at": "2023-07-20T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "1Jz9wZHnQ8G8G4SN0c5BzA",
+  "scores": [
+    {
+      "source_player_ref": "a4SKiEpE8tWxPptWvXNU",
+      "source_player_name": "Chris",
+      "score_value": 5,
+      "source_email": "cbradburn@me.com",
+      "source_venmo_handle": "Chris-Bradburn-1",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": -5,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    }
+  ]
+}

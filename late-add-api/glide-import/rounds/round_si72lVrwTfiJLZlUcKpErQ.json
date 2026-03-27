@@ -1,0 +1,85 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "y9xzLEfVQPmmFa2SJlEwjQ",
+  "round_date": "2021-12-01",
+  "scores_override": true,
+  "submitted_at": "2026-01-26T20:02:57.715Z",
+  "source_app": "glide",
+  "external_event_id": "si72lVrwTfiJLZlUcKpErQ",
+  "scores": [
+    {
+      "source_player_ref": "tnaFbk6bp7z1qFHbcgBN",
+      "source_player_name": "BK",
+      "score_value": -465.5,
+      "source_email": "bknight91@aol.com",
+      "source_venmo_handle": "BrianKnight91",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "IQbIh7IOspmrmIHHDnfQ",
+      "source_player_name": "Cal",
+      "score_value": -38,
+      "source_email": "calvin.lyford@gmail.com",
+      "source_venmo_handle": "Cal-Lyford",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": -84,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "mGOrrykGEwNu44EBsj0z",
+      "source_player_name": "Scott",
+      "score_value": 76,
+      "source_email": "scottroseman@outlook.com",
+      "source_venmo_handle": "Scott-Roseman-2",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -570.5,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": 127,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "a4SKiEpE8tWxPptWvXNU",
+      "source_player_name": "Chris",
+      "score_value": 108.5,
+      "source_email": "cbradburn@me.com",
+      "source_venmo_handle": "Chris-Bradburn-1",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "XWE9ZQ4F8xKPAxTgtrWX",
+      "source_player_name": "X",
+      "score_value": 883.5,
+      "source_email": "todd.achondo@gmail.com",
+      "source_venmo_handle": "Todd-Achondo",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "TDyewdoZ6LIAsKTLfYUG",
+      "source_player_name": "Dietz",
+      "score_value": -37,
+      "source_email": "spdietz@me.com",
+      "source_venmo_handle": "Stephen-Dietz-5",
+      "source_is_active": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "group_id": "Y9vE37CUQNyHT2WFu2NB8g",
+  "season_id": "z0FvI7RqrI8KhNoJHUwU",
+  "round_date": "2026-03-04",
+  "scores_override": false,
+  "submitted_at": "2026-03-12T10:32:01.572Z",
+  "source_app": "glide",
+  "external_event_id": "WKmdQLmBRVuZnq8RFv1X-g",
+  "scores": [
+    {
+      "source_player_ref": "hauSuPkIQU-YdVRnao7BHw",
+      "source_player_name": "Neal",
+      "score_value": 30,
+      "source_email": "nealpomroy@gmail.com",
+      "source_photo_url": "https://storage.googleapis.com/glide-prod.appspot.com/uploads-v2/biWZwbGiI0DggcdHQulG/pub/OBNLJ7TZM74vZXROHbTy.jpg",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "k3N6DsOnSyWjbCAkUFdIzw",
+      "source_player_name": "NSF",
+      "score_value": -30,
+      "source_email": "nickfranklin90@gmail.com",
+      "source_role": "Y9vE37CUQNyHT2WFu2NB8g",
+      "source_is_active": true
+    }
+  ]
+}

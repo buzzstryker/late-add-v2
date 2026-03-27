@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2026-03-20",
+  "scores_override": false,
+  "submitted_at": "2026-03-20T15:14:20.072Z",
+  "source_app": "glide",
+  "external_event_id": "UPJ-48zhS.WNOTLpdCtMWw",
+  "scores": [
+    {
+      "source_player_ref": "mGOrrykGEwNu44EBsj0z",
+      "source_player_name": "Scott",
+      "score_value": 20,
+      "source_email": "scottroseman@outlook.com",
+      "source_venmo_handle": "Scott-Roseman-2",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -20,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    }
+  ]
+}

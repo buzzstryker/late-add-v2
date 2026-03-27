@@ -1,0 +1,3630 @@
+{
+  "source": "610470.Late Add Golf.ods",
+  "mode": "multi-group",
+  "rounds": [
+    {
+      "roundId": "utn5jJphQwSoJXDpM-LJMQ",
+      "round_date": "2026-03-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_utn5jJphQwSoJXDpM-LJMQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Z.FOn5YhQ4ieDrK7cfPjIw",
+      "round_date": "2026-03-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_Z_FOn5YhQ4ieDrK7cfPjIw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "WKmdQLmBRVuZnq8RFv1X-g",
+      "round_date": "2026-03-04",
+      "group_id": "Y9vE37CUQNyHT2WFu2NB8g",
+      "season_id": "z0FvI7RqrI8KhNoJHUwU",
+      "file": "rounds/round_WKmdQLmBRVuZnq8RFv1X-g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "r2Vrd.cbQueFt1miVmfSVg",
+      "round_date": "2026-03-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_r2Vrd_cbQueFt1miVmfSVg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "W.ovvcPjRoGXzrIsG8zcUw",
+      "round_date": "2026-03-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_W_ovvcPjRoGXzrIsG8zcUw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "R4eUk8ZdRkGEig8PQOUQkg",
+      "round_date": "2026-03-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_R4eUk8ZdRkGEig8PQOUQkg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "LjtqsIqCSvaU4oXSuL3.Vw",
+      "round_date": "2026-03-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_LjtqsIqCSvaU4oXSuL3_Vw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "lax6Tm3GS.-5qYyjBzberw",
+      "round_date": "2026-03-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_lax6Tm3GS_-5qYyjBzberw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "7HJ4FrAcQiyUvGgEWBCXFg",
+      "round_date": "2026-03-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_7HJ4FrAcQiyUvGgEWBCXFg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "0E6tGzmZT2W06aR1HMp89A",
+      "round_date": "2026-03-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_0E6tGzmZT2W06aR1HMp89A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "eeqlh1KbT0urYbYJUgu5oA",
+      "round_date": "2026-03-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_eeqlh1KbT0urYbYJUgu5oA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "bimEa1-LSpmpC6akNxoxUQ",
+      "round_date": "2026-03-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_bimEa1-LSpmpC6akNxoxUQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "UPJ-48zhS.WNOTLpdCtMWw",
+      "round_date": "2026-03-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_UPJ-48zhS_WNOTLpdCtMWw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Fi-n0WhWTeuwovlfyyo1mA",
+      "round_date": "2023-10-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Fi-n0WhWTeuwovlfyyo1mA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "adjJq-KkRBO4PvsKwBT1zA",
+      "round_date": "2025-09-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_adjJq-KkRBO4PvsKwBT1zA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mNZpN5r8TgSH3yrrc.jvOQ",
+      "round_date": "2023-06-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_mNZpN5r8TgSH3yrrc_jvOQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "9Q2aoEz6RfKzzoK.Wl3qCQ",
+      "round_date": "2024-11-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_9Q2aoEz6RfKzzoK_Wl3qCQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "DKl8mTgDQ2maiHfk3DpygQ",
+      "round_date": "2023-11-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_DKl8mTgDQ2maiHfk3DpygQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "eIC5zlxwQ8K2Ht9ZL2ZgRg",
+      "round_date": "2024-01-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_eIC5zlxwQ8K2Ht9ZL2ZgRg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "wRVdMdRNQbSYsQU4uulrZQ",
+      "round_date": "2024-12-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_wRVdMdRNQbSYsQU4uulrZQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "H5nWfPOmRpiZIm0XPk2sXw",
+      "round_date": "2023-11-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_H5nWfPOmRpiZIm0XPk2sXw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-sBdzQ8UToOvqJQ2z54bJA",
+      "round_date": "2024-09-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a-sBdzQ8UToOvqJQ2z54bJA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "LwnYTg5JRs6B76ZOzlV5-w",
+      "round_date": "2023-10-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_LwnYTg5JRs6B76ZOzlV5-w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "hYhYuteZTLqqkEOUJflLWA",
+      "round_date": "2023-02-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_hYhYuteZTLqqkEOUJflLWA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "TmC8FSA7RRqkrRHpvDM7cw",
+      "round_date": "2024-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_TmC8FSA7RRqkrRHpvDM7cw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4CLDIvqVRXGZqwnjp-TA2Q",
+      "round_date": "2024-03-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_4CLDIvqVRXGZqwnjp-TA2Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "xMJ2m9MSTSmFaOessixJRg",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_xMJ2m9MSTSmFaOessixJRg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0VAtO-rGSGSQ1bWT5cMEEg",
+      "round_date": "2023-12-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_0VAtO-rGSGSQ1bWT5cMEEg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "tns9NRCOSOOKWu1rt7BFxA",
+      "round_date": "2025-12-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_tns9NRCOSOOKWu1rt7BFxA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "lO7Sy4rxSoCFS.IGwpxzOA",
+      "round_date": "2023-06-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_lO7Sy4rxSoCFS_IGwpxzOA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "97ON6sf3Qhi3g1fQlK2ckw",
+      "round_date": "2024-01-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_97ON6sf3Qhi3g1fQlK2ckw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "K5lM5T4kS5-O3wzewWT2Lg",
+      "round_date": "2025-09-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_K5lM5T4kS5-O3wzewWT2Lg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "bYLxj1iwQQusi6T6QdNjig",
+      "round_date": "2023-02-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_bYLxj1iwQQusi6T6QdNjig.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "uRE4nknkS4qYsNN1mYZMDQ",
+      "round_date": "2024-02-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_uRE4nknkS4qYsNN1mYZMDQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "eMloXaY8RWieqSqd8qlsQw",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_eMloXaY8RWieqSqd8qlsQw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "tJVVVnJVTkWLdX-19g1d9Q",
+      "round_date": "2024-05-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_tJVVVnJVTkWLdX-19g1d9Q.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "E-m4NIxyQ2OtSoOm8IqD8A",
+      "round_date": "2025-08-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_E-m4NIxyQ2OtSoOm8IqD8A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MnufNmAuTcitlahpB4h7Kw",
+      "round_date": "2026-01-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_MnufNmAuTcitlahpB4h7Kw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "SseDY9iZSJu-CesKJ4G1HQ",
+      "round_date": "2023-05-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_SseDY9iZSJu-CesKJ4G1HQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "QemlciGOSW2X.lNNTPQdeQ",
+      "round_date": "2025-04-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_QemlciGOSW2X_lNNTPQdeQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "nzLwUIItSF6BwHBAIBN1rg",
+      "round_date": "2024-01-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_nzLwUIItSF6BwHBAIBN1rg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "LmtZcpcqQ.WuBbnZGVGXsA",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_LmtZcpcqQ_WuBbnZGVGXsA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "2JHS03dIQ.i3Awd.9Lzaig",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_2JHS03dIQ_i3Awd_9Lzaig.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "RqK5RuRETjKy79UxifhbNw",
+      "round_date": "2024-04-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_RqK5RuRETjKy79UxifhbNw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "vdUwCkccRYy66BdMS8-LvA",
+      "round_date": "2025-09-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_vdUwCkccRYy66BdMS8-LvA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "1Jz9wZHnQ8G8G4SN0c5BzA",
+      "round_date": "2023-07-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_1Jz9wZHnQ8G8G4SN0c5BzA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K6WqoKmlQt6PzEVoO4deQQ",
+      "round_date": "2024-05-04",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_K6WqoKmlQt6PzEVoO4deQQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "PlS-ZtTYRe2gzQWU78LvVQ",
+      "round_date": "2023-06-04",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_PlS-ZtTYRe2gzQWU78LvVQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "69-eBB11TLq73i111HZFKA",
+      "round_date": "2026-02-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_69-eBB11TLq73i111HZFKA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Amq0tOa0S1aLW-grAxjD0A",
+      "round_date": "2024-02-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Amq0tOa0S1aLW-grAxjD0A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "rEEyOu3WSGKLjFo.w5h7wQ",
+      "round_date": "2025-11-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_rEEyOu3WSGKLjFo_w5h7wQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Ue5Qm3AyT1GTvAJKOLWEDw",
+      "round_date": "2023-12-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Ue5Qm3AyT1GTvAJKOLWEDw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "93l86t5nSdSiiuVDWTeX2g",
+      "round_date": "2025-01-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_93l86t5nSdSiiuVDWTeX2g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4FUwl010R5Cd5V4N0B6RwA",
+      "round_date": "2024-05-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_4FUwl010R5Cd5V4N0B6RwA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "iliIVEJWQKWUa6ZrK4a.hQ",
+      "round_date": "2025-07-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_iliIVEJWQKWUa6ZrK4a_hQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Ck.vIyE1QgSZyM3y.53kdQ",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Ck_vIyE1QgSZyM3y_53kdQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4K-cdp-LQt-7ghA9dj2H2w",
+      "round_date": "2023-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_4K-cdp-LQt-7ghA9dj2H2w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K9ChuVQpR2GKaskGfdsytA",
+      "round_date": "2023-03-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_K9ChuVQpR2GKaskGfdsytA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "jrEAk6qjQpadErng5XLZ2Q",
+      "round_date": "2023-07-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_jrEAk6qjQpadErng5XLZ2Q.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "eu1F2yCSTl6LFENdZ3v6gw",
+      "round_date": "2024-07-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_eu1F2yCSTl6LFENdZ3v6gw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K4d39-3WTqO30G9EQpUkEQ",
+      "round_date": "2025-06-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_K4d39-3WTqO30G9EQpUkEQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "t8epwuiWSp6m016GFSOXZA",
+      "round_date": "2023-07-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_t8epwuiWSp6m016GFSOXZA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "uuoiPe1iTi6OGOJ3nXaQYQ",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_uuoiPe1iTi6OGOJ3nXaQYQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a.kuogasMS2arRuwJEBNyQg",
+      "round_date": "2023-10-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a_kuogasMS2arRuwJEBNyQg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "LCjMmDDCQn2KN-D.T2qaqg",
+      "round_date": "2025-09-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_LCjMmDDCQn2KN-D_T2qaqg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "NZ1D8SkiQpWWr9WShdzlDw",
+      "round_date": "2025-09-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_NZ1D8SkiQpWWr9WShdzlDw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "qvghp24aTiSVj1CY2tabKA",
+      "round_date": "2024-09-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_qvghp24aTiSVj1CY2tabKA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4bMBmqzFQKqyX5.I4OD07Q",
+      "round_date": "2026-02-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_4bMBmqzFQKqyX5_I4OD07Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "JjcGKnwYR8OsvxpvdUKb1g",
+      "round_date": "2023-03-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_JjcGKnwYR8OsvxpvdUKb1g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "fMU-nk1vT8yReV7cWEYnwA",
+      "round_date": "2026-01-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_fMU-nk1vT8yReV7cWEYnwA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "iIy8MdaUSBGaASG6QOKHAg",
+      "round_date": "2024-09-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_iIy8MdaUSBGaASG6QOKHAg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "XfDc6cAtS2KY8ZfgX.A-Ww",
+      "round_date": "2025-12-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_XfDc6cAtS2KY8ZfgX_A-Ww.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "1lFiDC5kSXSy6LG54XqzRg",
+      "round_date": "2026-02-13",
+      "group_id": "T4F.VciOT9mHBN2fpezn7g",
+      "season_id": "eOGLhnj3RtHSlypyx21L",
+      "file": "rounds/round_1lFiDC5kSXSy6LG54XqzRg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "w26CY.MpRqCQ8fSY5xnimw",
+      "round_date": "2023-05-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_w26CY_MpRqCQ8fSY5xnimw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Zuo-Ohb7QGCFxQy5b.Kn.g",
+      "round_date": "2023-09-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Zuo-Ohb7QGCFxQy5b_Kn_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0uPFUYVpSfet4PBxmB7y2A",
+      "round_date": "2022-12-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_0uPFUYVpSfet4PBxmB7y2A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "oc9ZylnnSIquWluFQoNdFQ",
+      "round_date": "2025-11-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_oc9ZylnnSIquWluFQoNdFQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MBqT1jy8QtKu1e.93.hktw",
+      "round_date": "2023-03-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_MBqT1jy8QtKu1e_93_hktw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-y.ixpMGSiWWZRvMabvMqg",
+      "round_date": "2023-06-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-y_ixpMGSiWWZRvMabvMqg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "24zFgOYoRVaJR9XTaTcrKA",
+      "round_date": "2023-06-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_24zFgOYoRVaJR9XTaTcrKA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "hwsbz6HYT9-GIqOmqnK2UA",
+      "round_date": "2024-04-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_hwsbz6HYT9-GIqOmqnK2UA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "XIxa4jbST0COkYqRKkfKyA",
+      "round_date": "2023-10-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_XIxa4jbST0COkYqRKkfKyA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "6y3yV7qaQCOz7yTL2-PyQA",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_6y3yV7qaQCOz7yTL2-PyQA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MPyKtV9dRs2hP1pE9w1sjQ",
+      "round_date": "2023-10-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_MPyKtV9dRs2hP1pE9w1sjQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "42rWwL-vT5KzkDBb7pNBNQ",
+      "round_date": "2025-12-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_42rWwL-vT5KzkDBb7pNBNQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "A2MlO2hdTyy1.-I-P0ixbg",
+      "round_date": "2024-01-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_A2MlO2hdTyy1_-I-P0ixbg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "nqnh4MbQRTqzJE9m0AXa4A",
+      "round_date": "2023-04-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_nqnh4MbQRTqzJE9m0AXa4A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Jw7jdECZ34IAI4yyDamb",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Jw7jdECZ34IAI4yyDamb.json",
+      "playerCount": 6
+    },
+    {
+      "roundId": "5pyWM-psQOug4mNAZmBC2Q",
+      "round_date": "2023-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_5pyWM-psQOug4mNAZmBC2Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "dwCSU-5GRo-3lSkICZNdJw",
+      "round_date": "2023-07-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_dwCSU-5GRo-3lSkICZNdJw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "UvdLekseRSmn66w0D4721Q",
+      "round_date": "2023-03-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_UvdLekseRSmn66w0D4721Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "35JlxlbARwaVQwRFRUlt2A",
+      "round_date": "2025-01-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_35JlxlbARwaVQwRFRUlt2A.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "zR2.cqgLSJu2PHlqglqq5Q",
+      "round_date": "2025-03-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_zR2_cqgLSJu2PHlqglqq5Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HT7yPfI3SSSnyQtjgyHrsA",
+      "round_date": "2023-02-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_HT7yPfI3SSSnyQtjgyHrsA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "dWNl6vztQZiikpjaV61K8Q",
+      "round_date": "2023-06-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_dWNl6vztQZiikpjaV61K8Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "si72lVrwTfiJLZlUcKpErQ",
+      "round_date": "2021-12-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "y9xzLEfVQPmmFa2SJlEwjQ",
+      "file": "rounds/round_si72lVrwTfiJLZlUcKpErQ.json",
+      "playerCount": 9
+    },
+    {
+      "roundId": "h1wlOvgCSOWCV1e.WMaIDQ",
+      "round_date": "2023-02-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_h1wlOvgCSOWCV1e_WMaIDQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "NQAWmm5RS1a68A.b5fbAOQ",
+      "round_date": "2024-10-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_NQAWmm5RS1a68A_b5fbAOQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4n79E0HkRESEjqAEziFTwQ",
+      "round_date": "2025-08-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_4n79E0HkRESEjqAEziFTwQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "r9YY5C5aTVSWeeDAkMXgAQ",
+      "round_date": "2025-01-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_r9YY5C5aTVSWeeDAkMXgAQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "PsASPsKARauX1-V4al1Nxg",
+      "round_date": "2024-07-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_PsASPsKARauX1-V4al1Nxg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "b4AgRTNAS1u7FTlUltU.QA",
+      "round_date": "2025-12-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_b4AgRTNAS1u7FTlUltU_QA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "copIJ1XbQBmvo2HCPY8agg",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_copIJ1XbQBmvo2HCPY8agg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "GFF0bo-ARxq3uXbY3t6-ow",
+      "round_date": "2023-03-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_GFF0bo-ARxq3uXbY3t6-ow.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "pAwOpKcfRiOHmlVziKISDA",
+      "round_date": "2026-01-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_pAwOpKcfRiOHmlVziKISDA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a.XpeYfjvQBuFp-zA6pcFGw",
+      "round_date": "2024-04-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a_XpeYfjvQBuFp-zA6pcFGw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Pheotee1TYK9kwDTJEUiFQ",
+      "round_date": "2024-04-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Pheotee1TYK9kwDTJEUiFQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "PSvCElB9STeP9VUMUiGKeg",
+      "round_date": "2026-02-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_PSvCElB9STeP9VUMUiGKeg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "wYCi0SjuQ-eN2AycJhk3aQ",
+      "round_date": "2026-01-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_wYCi0SjuQ-eN2AycJhk3aQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "3eHDzyfwTMeYMLgl8vW.rA",
+      "round_date": "2026-02-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_3eHDzyfwTMeYMLgl8vW_rA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "pg-4OpxCQ4aJHrTND0mAuw",
+      "round_date": "2024-07-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_pg-4OpxCQ4aJHrTND0mAuw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HgZCOK1yTyinbUioAWa.mw",
+      "round_date": "2024-08-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_HgZCOK1yTyinbUioAWa_mw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Aa4IkOzfTUij1rUbSkzaBw",
+      "round_date": "2023-09-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Aa4IkOzfTUij1rUbSkzaBw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "8g9OjoJORMWnLt.86TVGzg",
+      "round_date": "2025-12-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_8g9OjoJORMWnLt_86TVGzg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4xI.IfmCRFaW46BJdvY-vg",
+      "round_date": "2025-02-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_4xI_IfmCRFaW46BJdvY-vg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "tJ1QD4s2QB-bcRMQ.QXD-Q",
+      "round_date": "2024-07-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_tJ1QD4s2QB-bcRMQ_QXD-Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "cHR41NXlSyK0i.d5Ua1how",
+      "round_date": "2025-03-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_cHR41NXlSyK0i_d5Ua1how.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "IA.ecay2ReqSUIOu0de7VQ",
+      "round_date": "2023-06-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_IA_ecay2ReqSUIOu0de7VQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "CG5R4hMzQQKlidKvXCweGw",
+      "round_date": "2024-09-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_CG5R4hMzQQKlidKvXCweGw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-QwlgSEcTfivibUuaZaB-Q",
+      "round_date": "2023-01-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-QwlgSEcTfivibUuaZaB-Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mSZVesrVT0y3tlhNkT38eg",
+      "round_date": "2024-09-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_mSZVesrVT0y3tlhNkT38eg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "OQ6BU0DKRiWml1VaseLfug",
+      "round_date": "2020-12-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "Mq7kCr1XSWmWxPyCPQNpHg",
+      "file": "rounds/round_OQ6BU0DKRiWml1VaseLfug.json",
+      "playerCount": 9
+    },
+    {
+      "roundId": "L-Hq4bwHSnqLUmF6MPFyZg",
+      "round_date": "2023-08-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_L-Hq4bwHSnqLUmF6MPFyZg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "E0E1G-X6RY6sWlQ.m1KGwQ",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_E0E1G-X6RY6sWlQ_m1KGwQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "3dnNKcWVSmSvzoX3PcWEcg",
+      "round_date": "2023-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_3dnNKcWVSmSvzoX3PcWEcg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4h0SbylpRc27yqOP-SM.Nw",
+      "round_date": "2025-08-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_4h0SbylpRc27yqOP-SM_Nw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "DNfUAZg5SeimA1UqDdbCEA",
+      "round_date": "2025-06-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_DNfUAZg5SeimA1UqDdbCEA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "7cPYVWymQxaIYqWkviXixA",
+      "round_date": "2023-11-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_7cPYVWymQxaIYqWkviXixA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Ab.C8XYMQuux29JW40WvWw",
+      "round_date": "2024-06-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Ab_C8XYMQuux29JW40WvWw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "zuyc-gO4TmSWTUoMcY8x-w",
+      "round_date": "2024-08-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_zuyc-gO4TmSWTUoMcY8x-w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4-SA2jarRGOIvA3TiQf47g",
+      "round_date": "2024-09-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_4-SA2jarRGOIvA3TiQf47g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-TSSK7EPQhGUBKdLln6XiQ",
+      "round_date": "2023-05-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-TSSK7EPQhGUBKdLln6XiQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "i6sad1xwS46VHck1ODGwVQ",
+      "round_date": "2026-02-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_i6sad1xwS46VHck1ODGwVQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K22e14amTvSzicW6GjnVXQ",
+      "round_date": "2024-04-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_K22e14amTvSzicW6GjnVXQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "aMIGVwTjSg2vBhvL0yuziQ",
+      "round_date": "2024-07-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_aMIGVwTjSg2vBhvL0yuziQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ICQzMR0kRbe5YalZA9GXqg",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_ICQzMR0kRbe5YalZA9GXqg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "u0W--bPAQOuwmUPJauqN1A",
+      "round_date": "2026-02-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_u0W--bPAQOuwmUPJauqN1A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "piUC8fmnR2iP6ZzBUAiRjQ",
+      "round_date": "2025-06-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_piUC8fmnR2iP6ZzBUAiRjQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "N3KgGOS1TMibFOPjEdPztA",
+      "round_date": "2025-07-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_N3KgGOS1TMibFOPjEdPztA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HvA-yYAaSzeWwtJwwWMe0g",
+      "round_date": "2025-12-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_HvA-yYAaSzeWwtJwwWMe0g.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "ne2ZOdHRTV-pa8qJ6bLs.g",
+      "round_date": "2023-09-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_ne2ZOdHRTV-pa8qJ6bLs_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "o309SkV0TdWuNW80Tqk1DQ",
+      "round_date": "2025-07-04",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_o309SkV0TdWuNW80Tqk1DQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ZsLxIxuBRjSx2xZGU0-3ag",
+      "round_date": "2023-06-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_ZsLxIxuBRjSx2xZGU0-3ag.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Q1Lbi8t5Qr-zVNx0C7bWew",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Q1Lbi8t5Qr-zVNx0C7bWew.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "855xc2YASWSUPYpBBvReuQ",
+      "round_date": "2024-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_855xc2YASWSUPYpBBvReuQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "lGj.sqAEQsiHP1ugm0UyqQ",
+      "round_date": "2023-06-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_lGj_sqAEQsiHP1ugm0UyqQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "LTq5ZN40TLq4GfDYsh-NqQ",
+      "round_date": "2023-09-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_LTq5ZN40TLq4GfDYsh-NqQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "aolrkb27QBqSA8doTR9rRA",
+      "round_date": "2023-07-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_aolrkb27QBqSA8doTR9rRA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Ln8gyiV6TOeqMU0-PSltSQ",
+      "round_date": "2025-06-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Ln8gyiV6TOeqMU0-PSltSQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "7BppqY6vQ9CxIbCwSFInlA",
+      "round_date": "2024-01-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_7BppqY6vQ9CxIbCwSFInlA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "BSbAjGTYTsi2uMsY5SDfmQ",
+      "round_date": "2024-09-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_BSbAjGTYTsi2uMsY5SDfmQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "uagB-LljRiCi6HEGAyiLxg",
+      "round_date": "2024-11-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_uagB-LljRiCi6HEGAyiLxg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "S75aN.XGSauY7LNrgp9cmQ",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_S75aN_XGSauY7LNrgp9cmQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5XGr63cqQkGmrfvMXnpfiQ",
+      "round_date": "2025-12-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_5XGr63cqQkGmrfvMXnpfiQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "jyiZ0-roQTSIO5FfNS95tQ",
+      "round_date": "2025-11-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_jyiZ0-roQTSIO5FfNS95tQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "dtA2Xe4JSDyVPeQr9kH3qA",
+      "round_date": "2024-12-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_dtA2Xe4JSDyVPeQr9kH3qA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "eUjymLIbQF2G.VG2oIc3bg",
+      "round_date": "2024-06-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_eUjymLIbQF2G_VG2oIc3bg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "VIIQVj4IQbaEhiUifamiBg",
+      "round_date": "2024-06-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_VIIQVj4IQbaEhiUifamiBg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "cawrDnvdRgub8qqJQq7kLQ",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_cawrDnvdRgub8qqJQq7kLQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "1DhqG3hFSGK5qwDStnLlTg",
+      "round_date": "2025-04-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_1DhqG3hFSGK5qwDStnLlTg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "MfHjgZrtR5idDgX02y5WMw",
+      "round_date": "2026-01-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_MfHjgZrtR5idDgX02y5WMw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HBelWZuZSqO1l8MaazUQhQ",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_HBelWZuZSqO1l8MaazUQhQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "PH0szWUwR1W-6s22qEFxzw",
+      "round_date": "2025-11-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_PH0szWUwR1W-6s22qEFxzw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K1FSVh5yQwaPMO7JB7j6yQ",
+      "round_date": "2023-08-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_K1FSVh5yQwaPMO7JB7j6yQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a-.zixBD.TGmmtFIfJiVD1A",
+      "round_date": "2025-06-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a-_zixBD_TGmmtFIfJiVD1A.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "A2kwYs0XQI6UMgGL4w6DMQ",
+      "round_date": "2024-07-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_A2kwYs0XQI6UMgGL4w6DMQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "YJrVshu6Rv-BPBG3gcfOrw",
+      "round_date": "2025-04-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_YJrVshu6Rv-BPBG3gcfOrw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "R9956LXOQOydkNQZ3EU7Uw",
+      "round_date": "2025-05-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_R9956LXOQOydkNQZ3EU7Uw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HdWgKgNsRbuCI-wC8ZsBVw",
+      "round_date": "2023-07-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_HdWgKgNsRbuCI-wC8ZsBVw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "fCyrItJcR5245fTKUCdfYw",
+      "round_date": "2023-05-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_fCyrItJcR5245fTKUCdfYw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "lIsDkr4XQkiph1tYlEsxhQ",
+      "round_date": "2026-01-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_lIsDkr4XQkiph1tYlEsxhQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "B2F-EDnwRLCbOn3qwPtulQ",
+      "round_date": "2025-06-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_B2F-EDnwRLCbOn3qwPtulQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "8Xtf6y-iQie16O7lqNiOOQ",
+      "round_date": "2024-09-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_8Xtf6y-iQie16O7lqNiOOQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4fZeYke6SvqPozSKFQN0VQ",
+      "round_date": "2024-09-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_4fZeYke6SvqPozSKFQN0VQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Pu7rZKPKQcaIfEayJ2A5Pw",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Pu7rZKPKQcaIfEayJ2A5Pw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "PtVe4KWhQWqPeB3QwklKhA",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_PtVe4KWhQWqPeB3QwklKhA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "fv.Le35aQNq1mu8xh27lvw",
+      "round_date": "2024-03-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_fv_Le35aQNq1mu8xh27lvw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Izm-CRxnTpOs4ETfNFiLLQ",
+      "round_date": "2023-09-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Izm-CRxnTpOs4ETfNFiLLQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "4WfBrQq6TFO2Ya4xIl38mQ",
+      "round_date": "2026-02-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_4WfBrQq6TFO2Ya4xIl38mQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "D5hGbSz-R0mLA4dBSQEh4w",
+      "round_date": "2025-08-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_D5hGbSz-R0mLA4dBSQEh4w.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "CZqosMSsxJkAaG4dpC3X",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_CZqosMSsxJkAaG4dpC3X.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "QCKIKMFtTrWfGy6cAnvP8A",
+      "round_date": "2025-04-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_QCKIKMFtTrWfGy6cAnvP8A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Ht7NVkfkQQSIw9DyV6pqHw",
+      "round_date": "2024-10-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Ht7NVkfkQQSIw9DyV6pqHw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "u9CcCgr4SCizhI3JNj7oag",
+      "round_date": "2025-09-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_u9CcCgr4SCizhI3JNj7oag.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "k43e9uHFRRCnhyIisyulqw",
+      "round_date": "2025-09-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_k43e9uHFRRCnhyIisyulqw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "SJWTtia9SEOzZshYhGsAAw",
+      "round_date": "2023-01-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_SJWTtia9SEOzZshYhGsAAw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Db9dmys8Sk2.liH7yNBbBQ",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Db9dmys8Sk2_liH7yNBbBQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5PdAtb-BQxWe0V8ro8DLOA",
+      "round_date": "2025-11-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_5PdAtb-BQxWe0V8ro8DLOA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4V5f0fp9RCqLea.rNJ1QGw",
+      "round_date": "2023-06-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_4V5f0fp9RCqLea_rNJ1QGw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "L7klU-BwRHGXxshAWhs2yQ",
+      "round_date": "2024-02-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_L7klU-BwRHGXxshAWhs2yQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Wj8uo8wyQkCXXNjZ6kTtEQ",
+      "round_date": "2025-05-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Wj8uo8wyQkCXXNjZ6kTtEQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "FHa.GxeeR4a9iV92qKey7A",
+      "round_date": "2024-11-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_FHa_GxeeR4a9iV92qKey7A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ZZCA0rr1Sr6rAYWXEMlhoQ",
+      "round_date": "2023-04-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_ZZCA0rr1Sr6rAYWXEMlhoQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "msvnDDO8REe4b5GnpMtMcQ",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_msvnDDO8REe4b5GnpMtMcQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mGfumcqiQN-SvbcSGiiLfQ",
+      "round_date": "2025-06-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_mGfumcqiQN-SvbcSGiiLfQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "46Z.66wdS.qfCyW6sA.f6Q",
+      "round_date": "2023-10-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_46Z_66wdS_qfCyW6sA_f6Q.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "YLw30UOXROuoSy8ACO-n3g",
+      "round_date": "2025-04-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_YLw30UOXROuoSy8ACO-n3g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mg.SECfJRa-oHcDG17tRkA",
+      "round_date": "2023-11-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_mg_SECfJRa-oHcDG17tRkA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "bd7VPDtLTt-np98LofGsXA",
+      "round_date": "2025-10-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_bd7VPDtLTt-np98LofGsXA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "m467-xnhTT6GG3wICDsatw",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_m467-xnhTT6GG3wICDsatw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "25-gwZySR1KzpZctswPWsA",
+      "round_date": "2026-03-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_25-gwZySR1KzpZctswPWsA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Y4uhDRCeSHOOlA91stwa2w",
+      "round_date": "2023-08-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Y4uhDRCeSHOOlA91stwa2w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "x6wwS80CSW-UigxraW2CYQ",
+      "round_date": "2025-03-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_x6wwS80CSW-UigxraW2CYQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "fSIcUeWJQvOrNFRs2kXtkA",
+      "round_date": "2025-05-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_fSIcUeWJQvOrNFRs2kXtkA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "WxBlDU8hS5edZLELM-ag.g",
+      "round_date": "2023-08-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_WxBlDU8hS5edZLELM-ag_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "8X7gcmPrRlGYxqEkIuiknw",
+      "round_date": "2024-11-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_8X7gcmPrRlGYxqEkIuiknw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "VRshNSUKRpu2XcxyHENooQ",
+      "round_date": "2024-07-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_VRshNSUKRpu2XcxyHENooQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-dozmhOGSkmP9AK52uBnLg",
+      "round_date": "2023-11-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-dozmhOGSkmP9AK52uBnLg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "U9-PSXJLR0KX3WZG0.UW7Q",
+      "round_date": "2024-02-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_U9-PSXJLR0KX3WZG0_UW7Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "A5WhkhRhnxtHq5i07ndv",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_A5WhkhRhnxtHq5i07ndv.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "a-HAARibCRbSN6QhzWwKPYg",
+      "round_date": "2025-04-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a-HAARibCRbSN6QhzWwKPYg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Vzxw9yMmQPKXvONQ-JWwLw",
+      "round_date": "2024-12-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Vzxw9yMmQPKXvONQ-JWwLw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "FVZt3WBESima-FM7cDB42w",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_FVZt3WBESima-FM7cDB42w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "G.V9UPcDTn6.w1U53rYKmg",
+      "round_date": "2022-12-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_G_V9UPcDTn6_w1U53rYKmg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "eYfZ7ip2RK-hw1218BiF2w",
+      "round_date": "2023-08-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_eYfZ7ip2RK-hw1218BiF2w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "euW313zCQ5enKb5lhWj3YA",
+      "round_date": "2024-12-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_euW313zCQ5enKb5lhWj3YA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "xL2kzEoDRpyefE1o4fD1ZQ",
+      "round_date": "2023-07-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_xL2kzEoDRpyefE1o4fD1ZQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "s-iiFfjRQCa0bm-Ebk34-g",
+      "round_date": "2023-02-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_s-iiFfjRQCa0bm-Ebk34-g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "QtQ1rBlmQt-LJq4CBYybfg",
+      "round_date": "2025-03-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_QtQ1rBlmQt-LJq4CBYybfg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "kyjbrhjHTm-GJIoUvPEByw",
+      "round_date": "2026-02-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_kyjbrhjHTm-GJIoUvPEByw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "yAGmPySYRQOz7OS.mnURDg",
+      "round_date": "2023-05-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_yAGmPySYRQOz7OS_mnURDg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "pR2Du74GTIO361cw7VjhCA",
+      "round_date": "2023-05-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_pR2Du74GTIO361cw7VjhCA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "aveP4dr2ROGRHOWCnwXE8Q",
+      "round_date": "2026-01-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_aveP4dr2ROGRHOWCnwXE8Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "sH4FvgiNS7q3QreZsBiSzg",
+      "round_date": "2023-12-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_sH4FvgiNS7q3QreZsBiSzg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Kfxfn.j9Qjefd2zr.DlshA",
+      "round_date": "2023-02-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Kfxfn_j9Qjefd2zr_DlshA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "JwcLfhzuSE-XwKPIFAUqxg",
+      "round_date": "2025-04-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_JwcLfhzuSE-XwKPIFAUqxg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "nzbJyB5XRU6VNY7m7EmHUg",
+      "round_date": "2024-08-04",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_nzbJyB5XRU6VNY7m7EmHUg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "HXPFpHRNQeO-VNzPjyW-ew",
+      "round_date": "2023-12-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_HXPFpHRNQeO-VNzPjyW-ew.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "aYWlUpMLQWO5yWaN-7IqNw",
+      "round_date": "2025-07-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_aYWlUpMLQWO5yWaN-7IqNw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "aV98kbhHQzC2oA06NIJGvw",
+      "round_date": "2023-02-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_aV98kbhHQzC2oA06NIJGvw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "scAYewAaR--o9D405ruxfQ",
+      "round_date": "2025-11-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_scAYewAaR--o9D405ruxfQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "C86.mVS3RfKpINmmqRv7HA",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_C86_mVS3RfKpINmmqRv7HA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "QLpgtecoRB2EckxdMO5pGw",
+      "round_date": "2026-01-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_QLpgtecoRB2EckxdMO5pGw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "uvkvNKsVQYmoMa7AsEypTg",
+      "round_date": "2025-11-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_uvkvNKsVQYmoMa7AsEypTg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "L3LM.blASa2Bl6MR5yayyg",
+      "round_date": "2025-07-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_L3LM_blASa2Bl6MR5yayyg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "XdROVq8AQDmKf-6E-GrImA",
+      "round_date": "2025-11-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_XdROVq8AQDmKf-6E-GrImA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ElqHXBIdTJOvgLS1pTu9jg",
+      "round_date": "2023-11-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_ElqHXBIdTJOvgLS1pTu9jg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "9nrkxhZyQveB3rVKeRyCUg",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_9nrkxhZyQveB3rVKeRyCUg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "inTWqDmNSaa0Zg6WFFF95A",
+      "round_date": "2022-12-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_inTWqDmNSaa0Zg6WFFF95A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0ITYq3qlSnioBJL7SF0m2A",
+      "round_date": "2025-05-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_0ITYq3qlSnioBJL7SF0m2A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "OR9iRlxYQxOo6CREAjzNKQ",
+      "round_date": "2024-07-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_OR9iRlxYQxOo6CREAjzNKQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "O-vpbZ9pSYWsZuvi2Egl9w",
+      "round_date": "2023-12-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_O-vpbZ9pSYWsZuvi2Egl9w.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "TFgfDlBLTxG--002S.-ySQ",
+      "round_date": "2025-03-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_TFgfDlBLTxG--002S_-ySQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "JPXTOge-RN6CAs5ffc1XMg",
+      "round_date": "2024-10-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_JPXTOge-RN6CAs5ffc1XMg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Gj1Tz6CsQSeVI4Kwee.5Dg",
+      "round_date": "2025-03-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Gj1Tz6CsQSeVI4Kwee_5Dg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Lbj-9hhLTrOr6oOWD7z8-w",
+      "round_date": "2023-12-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Lbj-9hhLTrOr6oOWD7z8-w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "2flLpnVjQ-6SnotJTBCZrw",
+      "round_date": "2024-04-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_2flLpnVjQ-6SnotJTBCZrw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "6c2bZ06MSQqIHCbBSNUANg",
+      "round_date": "2024-08-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_6c2bZ06MSQqIHCbBSNUANg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "s1wYYzXrQTWNFbLGUP5pjQ",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_s1wYYzXrQTWNFbLGUP5pjQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "2kW1MSZeQq-OuMAWahnxMA",
+      "round_date": "2026-02-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_2kW1MSZeQq-OuMAWahnxMA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "LVpw6d0GTOaTjb9MkrjQGg",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_LVpw6d0GTOaTjb9MkrjQGg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "oWAbASeqQ.6TqA.ydZ-QeQ",
+      "round_date": "2023-02-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_oWAbASeqQ_6TqA_ydZ-QeQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "fDK4Z5BuSpyU8bDNJXalTw",
+      "round_date": "2025-06-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_fDK4Z5BuSpyU8bDNJXalTw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "rynDBfxHRlunqlMPTijwHg",
+      "round_date": "2026-02-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_rynDBfxHRlunqlMPTijwHg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "yeuTsUNNQHCOWqtN.xk3mg",
+      "round_date": "2023-05-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_yeuTsUNNQHCOWqtN_xk3mg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "31nnkmJIQmundaKsc5i5vQ",
+      "round_date": "2026-01-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_31nnkmJIQmundaKsc5i5vQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "R04a3dNpRROTVukXqrJZGw",
+      "round_date": "2026-03-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_R04a3dNpRROTVukXqrJZGw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a-7G1eAc3TfKx7xZpmssENw",
+      "round_date": "2023-02-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-7G1eAc3TfKx7xZpmssENw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "R47vUvfrSNKdfs.gXICEXA",
+      "round_date": "2025-05-31",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_R47vUvfrSNKdfs_gXICEXA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "6QAuVWXZTG-FqaMzaoR6.A",
+      "round_date": "2025-06-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_6QAuVWXZTG-FqaMzaoR6_A.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "npADXaNFRzmYt4ghjHif.g",
+      "round_date": "2023-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_npADXaNFRzmYt4ghjHif_g.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "HN1nRrB-TGeheIpaYqBkbg",
+      "round_date": "2025-08-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_HN1nRrB-TGeheIpaYqBkbg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "izfLxU0WTlGZuU5NDpLc1A",
+      "round_date": "2023-07-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_izfLxU0WTlGZuU5NDpLc1A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "YKuuQ03EQOWOfUGeUeDiaw",
+      "round_date": "2022-12-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_YKuuQ03EQOWOfUGeUeDiaw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "QgeABWyrT6mYHF.ZmQB74g",
+      "round_date": "2022-12-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_QgeABWyrT6mYHF_ZmQB74g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "uRz.5VgtTQqTiCAvdEVsDA",
+      "round_date": "2025-05-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_uRz_5VgtTQqTiCAvdEVsDA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "qGRBEXaAR2aGej2dij6tKQ",
+      "round_date": "2024-02-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_qGRBEXaAR2aGej2dij6tKQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "EGh9ddnxSc-c46i12iIBYw",
+      "round_date": "2025-06-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_EGh9ddnxSc-c46i12iIBYw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "IO72ZKp1TBqOWKcpQdor3w",
+      "round_date": "2024-09-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_IO72ZKp1TBqOWKcpQdor3w.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a.1qZluChTQiBD9yqqu7xmg",
+      "round_date": "2024-04-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a_1qZluChTQiBD9yqqu7xmg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "yG9ol.o9Sf-2dS-uoImUJA",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_yG9ol_o9Sf-2dS-uoImUJA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "8H4BAvR7RkOm1uBLDsyc.g",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_8H4BAvR7RkOm1uBLDsyc_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "AKfbWm2.TGGlsIGoPl8iqw",
+      "round_date": "2026-02-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_AKfbWm2_TGGlsIGoPl8iqw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "I2DomzeNTfisE3MTXpL1NQ",
+      "round_date": "2022-12-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_I2DomzeNTfisE3MTXpL1NQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "6549UO9aRNSSPsLtXrbMZA",
+      "round_date": "2024-09-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_6549UO9aRNSSPsLtXrbMZA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "CR7kPDKNQEi.kcgLpYKKvw",
+      "round_date": "2024-07-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_CR7kPDKNQEi_kcgLpYKKvw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "DpdENSnxRSeCYRrLfzqyiw",
+      "round_date": "2024-07-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_DpdENSnxRSeCYRrLfzqyiw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "W2T8KbclSZynPpASfRjI3w",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_W2T8KbclSZynPpASfRjI3w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "K5XPEN5VQmaaHFD0DH1kSA",
+      "round_date": "2023-05-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_K5XPEN5VQmaaHFD0DH1kSA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "GC.70AqWTn2oTR2sfdr1Fw",
+      "round_date": "2023-11-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_GC_70AqWTn2oTR2sfdr1Fw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "z58qv43yS-mU0PfDro30uw",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_z58qv43yS-mU0PfDro30uw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MiAF-zYvTCGQW3QdoSErbg",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_MiAF-zYvTCGQW3QdoSErbg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mKz4Wxx6STadofO4nLco.g",
+      "round_date": "2024-11-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_mKz4Wxx6STadofO4nLco_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "TJkAULTfQC6HX45wXrLhdw",
+      "round_date": "2023-10-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_TJkAULTfQC6HX45wXrLhdw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "njKat5vrQ2qto675w4ILyQ",
+      "round_date": "2024-10-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_njKat5vrQ2qto675w4ILyQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "NFLJijL7SPWp0bo9LUyqlA",
+      "round_date": "2023-11-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_NFLJijL7SPWp0bo9LUyqlA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "gsBPlGq-TvmmD7l9gA2Wgg",
+      "round_date": "2023-09-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_gsBPlGq-TvmmD7l9gA2Wgg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "IEu2OeVpRxi5O15.RVXkHA",
+      "round_date": "2025-12-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_IEu2OeVpRxi5O15_RVXkHA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "we7zGmhlRq2uyEPre2JOeA",
+      "round_date": "2025-07-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_we7zGmhlRq2uyEPre2JOeA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "9skz7N71sy8RrexkKTWH",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_9skz7N71sy8RrexkKTWH.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "qPW4XKbeT5mIXoyTn0nXLg",
+      "round_date": "2024-05-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_qPW4XKbeT5mIXoyTn0nXLg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "rvvmCZaqRlmwAU0MallOHw",
+      "round_date": "2023-04-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_rvvmCZaqRlmwAU0MallOHw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a.5sfgTbQLmCAkKgpcwrfw",
+      "round_date": "2024-04-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a_5sfgTbQLmCAkKgpcwrfw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "kIvu8T58ib2ayHOUMYYb",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_kIvu8T58ib2ayHOUMYYb.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "vJJSLt0ESAuugBD7L6NWGg",
+      "round_date": "2022-12-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_vJJSLt0ESAuugBD7L6NWGg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "WPCIpLbFTGG99EEg6Ud5XA",
+      "round_date": "2024-07-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_WPCIpLbFTGG99EEg6Ud5XA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MRrbxJphQcCiKDh21QSuMw",
+      "round_date": "2026-03-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_MRrbxJphQcCiKDh21QSuMw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "bs9WuqJARpuLlDg9TusmVg",
+      "round_date": "2024-04-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_bs9WuqJARpuLlDg9TusmVg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "B3tiHxqfTd2sGcqpOgkDkA",
+      "round_date": "2024-03-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_B3tiHxqfTd2sGcqpOgkDkA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "mX61UFydSOqDvsxoEsA.EA",
+      "round_date": "2025-09-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_mX61UFydSOqDvsxoEsA_EA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "gOy.XyM4TOaqySzuE0jJDg",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_gOy_XyM4TOaqySzuE0jJDg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "gkuekWsGQL2xYfR.Sp7iww",
+      "round_date": "2023-06-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_gkuekWsGQL2xYfR_Sp7iww.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "waSSji8-SVSxPaMrZG16qQ",
+      "round_date": "2023-05-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_waSSji8-SVSxPaMrZG16qQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "AmgipJzMShWxrTgFfOgIwg",
+      "round_date": "2024-07-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_AmgipJzMShWxrTgFfOgIwg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "jaTzZZpPQcKMM0XOmzFU7w",
+      "round_date": "2025-08-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_jaTzZZpPQcKMM0XOmzFU7w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0yqskTsDRnKIbUVS5ewQBQ",
+      "round_date": "2024-09-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_0yqskTsDRnKIbUVS5ewQBQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "0S3.OJ3YSsO0N3vY5tsiSQ",
+      "round_date": "2023-05-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_0S3_OJ3YSsO0N3vY5tsiSQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "aU03dUdlQOa5xFu6-NUVVw",
+      "round_date": "2025-11-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_aU03dUdlQOa5xFu6-NUVVw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "o5QFT7OkSS-W7lcu8SEsow",
+      "round_date": "2024-03-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_o5QFT7OkSS-W7lcu8SEsow.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "oEHCNwsJTMGMdZIBRWRJbg",
+      "round_date": "2025-03-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_oEHCNwsJTMGMdZIBRWRJbg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "6Wiu7THbQl-wyec7iFIIog",
+      "round_date": "2026-02-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_6Wiu7THbQl-wyec7iFIIog.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "DRbrEfggTHSA6KNE8jmFZw",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_DRbrEfggTHSA6KNE8jmFZw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "zoN.C33PRTSgpn4lUa11JA",
+      "round_date": "2024-11-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_zoN_C33PRTSgpn4lUa11JA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a.FUpj74EQiG3Z8piCuJ5AA",
+      "round_date": "2025-04-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a_FUpj74EQiG3Z8piCuJ5AA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "p975zBB7TpeGjHZAlzk-lA",
+      "round_date": "2023-07-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_p975zBB7TpeGjHZAlzk-lA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "xBuZrDbQRmyD9sCUiejTmA",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_xBuZrDbQRmyD9sCUiejTmA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-J-tGw3mT26CBD0wyNkRpw",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a-J-tGw3mT26CBD0wyNkRpw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "sf1ODybURNGWUvmyIsx3-A",
+      "round_date": "2023-02-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_sf1ODybURNGWUvmyIsx3-A.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "IcELVaRISf-KB1YgbvKLjw",
+      "round_date": "2024-06-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_IcELVaRISf-KB1YgbvKLjw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "dPYCDZ-gRMWMzeiMKsxB2g",
+      "round_date": "2023-12-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_dPYCDZ-gRMWMzeiMKsxB2g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "bVh8R.RdRoyOqxhH0ja3Sg",
+      "round_date": "2024-12-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_bVh8R_RdRoyOqxhH0ja3Sg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "m8WGgeTXSwuIiqUTrdhshg",
+      "round_date": "2025-06-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_m8WGgeTXSwuIiqUTrdhshg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "F.XkxxPORXGpSzQbgieZOg",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_F_XkxxPORXGpSzQbgieZOg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "9IJjaDehSY-dOk0GRwW0yw",
+      "round_date": "2024-05-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_9IJjaDehSY-dOk0GRwW0yw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "zj1k218SRjylWd29IZzlkQ",
+      "round_date": "2025-08-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_zj1k218SRjylWd29IZzlkQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "YMJuK-NkQeWILgEOtBJFzA",
+      "round_date": "2025-05-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_YMJuK-NkQeWILgEOtBJFzA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "U64-c9xLTa-c-vF-ebQxSA",
+      "round_date": "2023-10-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_U64-c9xLTa-c-vF-ebQxSA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "q50OkA5wS-qqOpr8sb-vXg",
+      "round_date": "2024-04-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_q50OkA5wS-qqOpr8sb-vXg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "sp-KRUWSQLmkxnTqRMxXBg",
+      "round_date": "2026-01-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_sp-KRUWSQLmkxnTqRMxXBg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "2tDjvfcKRhmoIf6NtdHFIg",
+      "round_date": "2023-02-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_2tDjvfcKRhmoIf6NtdHFIg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Q5nrL363R.qslNFaODjJ.g",
+      "round_date": "2023-02-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Q5nrL363R_qslNFaODjJ_g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "SeYs5pqVQbeLvs69iqwt7w",
+      "round_date": "2025-11-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_SeYs5pqVQbeLvs69iqwt7w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Jv0RWXwLSAuW0WQhdNqutg",
+      "round_date": "2025-02-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Jv0RWXwLSAuW0WQhdNqutg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "6QADjmurSsinJCs8t-MBWg",
+      "round_date": "2023-09-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_6QADjmurSsinJCs8t-MBWg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "l4jNN1ASQqKrXHX3HLv.lA",
+      "round_date": "2023-08-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_l4jNN1ASQqKrXHX3HLv_lA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "sNartJ7tRj2Z5Ur-KZMRag",
+      "round_date": "2024-04-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_sNartJ7tRj2Z5Ur-KZMRag.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "HzqBZ0aATH-hcCTe11ViQQ",
+      "round_date": "2026-03-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_HzqBZ0aATH-hcCTe11ViQQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "JncEPfo1TQGMUVK3fkK.2w",
+      "round_date": "2024-04-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_JncEPfo1TQGMUVK3fkK_2w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MRWfatCTRvyKDu3eNPQVGA",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_MRWfatCTRvyKDu3eNPQVGA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-6bTsGHKT7CboHxxeVwhpQ",
+      "round_date": "2025-07-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a-6bTsGHKT7CboHxxeVwhpQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "UFX36a92T323rfNHBMu25g",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_UFX36a92T323rfNHBMu25g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "uWgjTI43QlOzebHI7g2pkQ",
+      "round_date": "2025-01-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_uWgjTI43QlOzebHI7g2pkQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "R2HtRstmQCqrxstKKRD..w",
+      "round_date": "2023-06-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_R2HtRstmQCqrxstKKRD__w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "jqGqa8tyR9uNollU2ra3WQ",
+      "round_date": "2024-08-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_jqGqa8tyR9uNollU2ra3WQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "y9-hVpR9QT-YqcNDOweEaw",
+      "round_date": "2023-12-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_y9-hVpR9QT-YqcNDOweEaw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "kr4Xm9zERh-7qRxjcZQ-pQ",
+      "round_date": "2025-04-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_kr4Xm9zERh-7qRxjcZQ-pQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "F9bBYXV3RJCM9C1yipqkHw",
+      "round_date": "2025-11-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_F9bBYXV3RJCM9C1yipqkHw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "g9yb7XiDQ9C6tkWeZW7wWA",
+      "round_date": "2024-08-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_g9yb7XiDQ9C6tkWeZW7wWA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "gXj3vWE6R4iYmmuq8cAVqQ",
+      "round_date": "2024-04-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_gXj3vWE6R4iYmmuq8cAVqQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "CWR7TCagQpKjsA3L2cZd4g",
+      "round_date": "2023-11-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_CWR7TCagQpKjsA3L2cZd4g.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "56zirr77QXKSxHkO9wgd9Q",
+      "round_date": "2024-03-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_56zirr77QXKSxHkO9wgd9Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "08kFvnU-S--JLhsuzuawiQ",
+      "round_date": "2023-12-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_08kFvnU-S--JLhsuzuawiQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "rpjTsRFRNbrtS6EbYh5O",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_rpjTsRFRNbrtS6EbYh5O.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "kZPrIpe8Qfal6QdyHCylXg",
+      "round_date": "2024-01-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_kZPrIpe8Qfal6QdyHCylXg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "1Ml-8iA5QvKnSQyn0n6xiQ",
+      "round_date": "2025-12-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_1Ml-8iA5QvKnSQyn0n6xiQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "yUJ4GK2nRQOuNZGdU9qmQw",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_yUJ4GK2nRQOuNZGdU9qmQw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5MUj1G.IRrKQjq0lTOD6-Q",
+      "round_date": "2025-08-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_5MUj1G_IRrKQjq0lTOD6-Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "Q2uY3BWJTQehgJNrzw7Tiw",
+      "round_date": "2024-01-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Q2uY3BWJTQehgJNrzw7Tiw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "vH8P9IOqT7GT8GF3uA657Q",
+      "round_date": "2023-12-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_vH8P9IOqT7GT8GF3uA657Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "rhxuDUEXSyOcLTi06dbjEA",
+      "round_date": "2025-06-10",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_rhxuDUEXSyOcLTi06dbjEA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "tudNHAPrTQWKGbbEG01MUQ",
+      "round_date": "2024-01-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_tudNHAPrTQWKGbbEG01MUQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "RreW9E9vQaS7Ksi-qP8evw",
+      "round_date": "2023-06-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_RreW9E9vQaS7Ksi-qP8evw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "JnhActnUSnqA7zVNJTpwvw",
+      "round_date": "2025-01-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_JnhActnUSnqA7zVNJTpwvw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "IeJr815CSYGjtJ9z-1NsiQ",
+      "round_date": "2024-04-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_IeJr815CSYGjtJ9z-1NsiQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "pX5590OOQzSqCecC7eyH2g",
+      "round_date": "2024-08-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_pX5590OOQzSqCecC7eyH2g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "CBDSd5TaSFyhTgeRSXA4Pw",
+      "round_date": "2025-04-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_CBDSd5TaSFyhTgeRSXA4Pw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "vXZ0HsXVROytu3uulycKEA",
+      "round_date": "2023-05-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_vXZ0HsXVROytu3uulycKEA.json",
+      "playerCount": 5
+    },
+    {
+      "roundId": "oxMTyBFDSiWbGA2xoe8STQ",
+      "round_date": "2026-02-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_oxMTyBFDSiWbGA2xoe8STQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "7Ut.0xhSRVmjQXoC58HfDw",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_7Ut_0xhSRVmjQXoC58HfDw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-GB5lqqJTNCXPkgfNiihOg",
+      "round_date": "2023-11-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_a-GB5lqqJTNCXPkgfNiihOg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "W9vvtyPuRLSuxP5L.LeStA",
+      "round_date": "2024-03-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_W9vvtyPuRLSuxP5L_LeStA.json",
+      "playerCount": 5
+    },
+    {
+      "roundId": "aqbXTCIkQPGKF7W.iPQMzQ",
+      "round_date": "2024-12-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_aqbXTCIkQPGKF7W_iPQMzQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a.W6DUllIRYeCbBPe.OfoQQ",
+      "round_date": "2024-06-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a_W6DUllIRYeCbBPe_OfoQQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "RrCesItkfmPAHpXlIovh",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_RrCesItkfmPAHpXlIovh.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "iKyujb4sTRC2Qxo5MkSC2g",
+      "round_date": "2023-03-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_iKyujb4sTRC2Qxo5MkSC2g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "suJn.PXgSgG.PzlQWEYUxA",
+      "round_date": "2024-01-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_suJn_PXgSgG_PzlQWEYUxA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "X6T.JiPNSqiRTyxHRNmEHA",
+      "round_date": "2019-12-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "Cpc.JST0Qx-UpHyj-jNO0Q",
+      "file": "rounds/round_X6T_JiPNSqiRTyxHRNmEHA.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "0UZ1pHfjTzu7QiRSqKFiTQ",
+      "round_date": "2024-03-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_0UZ1pHfjTzu7QiRSqKFiTQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5reP4PEQ1uzJS7FcFQ5L",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_5reP4PEQ1uzJS7FcFQ5L.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "LWE.66feSu2iNSVwznPhWg",
+      "round_date": "2024-08-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_LWE_66feSu2iNSVwznPhWg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "UFdDrf3fSeC2tm3pY19Jmw",
+      "round_date": "2025-08-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_UFdDrf3fSeC2tm3pY19Jmw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "agUtASACQCezLIUad3Cj2g",
+      "round_date": "2025-12-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_agUtASACQCezLIUad3Cj2g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "vC-6v5mwTDuGl9LHdyMCtQ",
+      "round_date": "2023-04-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_vC-6v5mwTDuGl9LHdyMCtQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "ak8q3yOTRGGJtSSD33Nfag",
+      "round_date": "2025-01-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_ak8q3yOTRGGJtSSD33Nfag.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "EMae46MSTRiHr1KMdM27SA",
+      "round_date": "2025-12-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_EMae46MSTRiHr1KMdM27SA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "z3pfxROzSPC9dMdYCM1dWg",
+      "round_date": "2025-03-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_z3pfxROzSPC9dMdYCM1dWg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5cca.hMJSq-nGZaBb5p5jg",
+      "round_date": "2025-11-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_5cca_hMJSq-nGZaBb5p5jg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "wMBUuBknR1-5spsy6dHEoA",
+      "round_date": "2023-06-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_wMBUuBknR1-5spsy6dHEoA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Cb7KWg5ESf-mNtV7Z.z5aA",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Cb7KWg5ESf-mNtV7Z_z5aA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "7gnsAINKQHeHY1KQWC0.ng",
+      "round_date": "2023-11-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_7gnsAINKQHeHY1KQWC0_ng.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "qr7bmLx3QB-tFxB68JFe2Q",
+      "round_date": "2024-04-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_qr7bmLx3QB-tFxB68JFe2Q.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "cNRUjS5PQ7eOh5D1k5QiJw",
+      "round_date": "2024-03-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_cNRUjS5PQ7eOh5D1k5QiJw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "qmm.hxRASGy-rhZ5ltHM2w",
+      "round_date": "2025-10-12",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_qmm_hxRASGy-rhZ5ltHM2w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "88eSF3w1Ti-IG75cnjV12Q",
+      "round_date": "2023-01-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_88eSF3w1Ti-IG75cnjV12Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "I3XA7EHCTiuAtT2ApfJa1w",
+      "round_date": "2025-08-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_I3XA7EHCTiuAtT2ApfJa1w.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "XoFzBsZHRv6vr7STr-zH0g",
+      "round_date": "2024-11-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_XoFzBsZHRv6vr7STr-zH0g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "E7RawQI1QFWZxctk2liYVg",
+      "round_date": "2024-05-02",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_E7RawQI1QFWZxctk2liYVg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-tjoVILQqublnaS9nDkXw",
+      "round_date": "2025-06-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a-tjoVILQqublnaS9nDkXw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ZGzm-j84RT-yGWsnBTSOug",
+      "round_date": "2025-09-28",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_ZGzm-j84RT-yGWsnBTSOug.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "gp4uWHY2Rpa6lkN3REDR7g",
+      "round_date": "2024-08-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_gp4uWHY2Rpa6lkN3REDR7g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "m3aJt3qZQuCvOlktkV3ZSg",
+      "round_date": "2026-02-14",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_m3aJt3qZQuCvOlktkV3ZSg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "6-YPEHMOQWKA-ZFK0pPz.g",
+      "round_date": "2023-01-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_6-YPEHMOQWKA-ZFK0pPz_g.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "f3DgnIq.TICACJgTDmE0aA",
+      "round_date": "2022-12-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_f3DgnIq_TICACJgTDmE0aA.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "drqEpIp7T5aQPU0MfRnMig",
+      "round_date": "2024-03-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_drqEpIp7T5aQPU0MfRnMig.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0JZIZhiMRFiKI6UoM5L3Hw",
+      "round_date": "2023-01-25",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_0JZIZhiMRFiKI6UoM5L3Hw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "qjLvf6btQs-2j6.XgyE28Q",
+      "round_date": "2025-06-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_qjLvf6btQs-2j6_XgyE28Q.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ltFUIkvvSpa.XfVp9bxT1g",
+      "round_date": "2024-08-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_ltFUIkvvSpa_XfVp9bxT1g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "4a5f4stOR0yWA82ksi67Yw",
+      "round_date": "2024-04-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_4a5f4stOR0yWA82ksi67Yw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "IkLxsY9pTyiXmTWktn3FIw",
+      "round_date": "2024-05-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_IkLxsY9pTyiXmTWktn3FIw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "cHgxYpN5QgSUfwwjYR3etw",
+      "round_date": "2024-10-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_cHgxYpN5QgSUfwwjYR3etw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "Z7DVkVHYRail03gM-Mzklw",
+      "round_date": "2024-11-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Z7DVkVHYRail03gM-Mzklw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "0-b6ZMdfRr69MPUyw4WO.w",
+      "round_date": "2026-03-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_0-b6ZMdfRr69MPUyw4WO_w.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "lwBWfYVlQTGionOGHXnssA",
+      "round_date": "2026-01-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+      "file": "rounds/round_lwBWfYVlQTGionOGHXnssA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "k4arstFvT.G5L3U02jd8.A",
+      "round_date": "2024-09-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_k4arstFvT_G5L3U02jd8_A.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "LexkbxtHRRSHB2J386dNMA",
+      "round_date": "2025-02-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_LexkbxtHRRSHB2J386dNMA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "DWfPhdk6QGG78OZC6Z55jg",
+      "round_date": "2025-07-26",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_DWfPhdk6QGG78OZC6Z55jg.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "NtxNBzyUT1WWx.XDz0C3lg",
+      "round_date": "2025-08-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_NtxNBzyUT1WWx_XDz0C3lg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "F2awtW1WTdivlzusACwzkQ",
+      "round_date": "2025-02-22",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_F2awtW1WTdivlzusACwzkQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "a-J0a2TL4RiyFlH1Loj53Dw",
+      "round_date": "2025-05-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_a-J0a2TL4RiyFlH1Loj53Dw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "RpY0v42mQziuMdiKkmOTvQ",
+      "round_date": "2024-04-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_RpY0v42mQziuMdiKkmOTvQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "5TYh2-94QkKG8ekfZ.zp7Q",
+      "round_date": "2025-11-23",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_5TYh2-94QkKG8ekfZ_zp7Q.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "1AhEVkWgTAuTwZzT7C3r5g",
+      "round_date": "2025-06-18",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_1AhEVkWgTAuTwZzT7C3r5g.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "XGiJSuQxQ-qlw-crsaPUqg",
+      "round_date": "2024-10-05",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_XGiJSuQxQ-qlw-crsaPUqg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "a-RAPUCMrQv64TTaF6eInMw",
+      "round_date": "2024-08-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_a-RAPUCMrQv64TTaF6eInMw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "LfNLGwP.TIe4DixdKEn8XA",
+      "round_date": "2025-05-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_LfNLGwP_TIe4DixdKEn8XA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "lhuM2BIsSe2fnsenEk3HVw",
+      "round_date": "2023-05-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_lhuM2BIsSe2fnsenEk3HVw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "Q1va1EbSQNG91PUaeBwRUw",
+      "round_date": "2023-08-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_Q1va1EbSQNG91PUaeBwRUw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "z7nHg7Z5QuW6tWQnZj4Xeg",
+      "round_date": "2025-02-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_z7nHg7Z5QuW6tWQnZj4Xeg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "oYQsx7OMS2KpLTZWh5PUUg",
+      "round_date": "2025-03-29",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_oYQsx7OMS2KpLTZWh5PUUg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "6zAMvnNiTrGYx4p.KedMWw",
+      "round_date": "2024-08-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_6zAMvnNiTrGYx4p_KedMWw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "Ni2IaViqTlIIyZEDgQpY",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_Ni2IaViqTlIIyZEDgQpY.json",
+      "playerCount": 7
+    },
+    {
+      "roundId": "AxzYn8kzQCSIEi.3ET.Hdw",
+      "round_date": "2024-12-16",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_AxzYn8kzQCSIEi_3ET_Hdw.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "3fyfLeX.TmmV00M1JmxHfQ",
+      "round_date": "2025-06-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_3fyfLeX_TmmV00M1JmxHfQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "GuVjPvY7SD67jSCac5hJew",
+      "round_date": "2025-02-01",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_GuVjPvY7SD67jSCac5hJew.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "36r66o-9QMiWA25oL.vVHQ",
+      "round_date": "2023-10-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_36r66o-9QMiWA25oL_vVHQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "THkby5gJRu258u969xLyXg",
+      "round_date": "2023-12-09",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_THkby5gJRu258u969xLyXg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "xa2zf6T3SG2Pz1NSX7fWqg",
+      "round_date": "2025-03-17",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_xa2zf6T3SG2Pz1NSX7fWqg.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "k25VhYNpQbCy.5956-3GGA",
+      "round_date": "2025-11-30",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_k25VhYNpQbCy_5956-3GGA.json",
+      "playerCount": 8
+    },
+    {
+      "roundId": "Hn396ydKSoON.0L5KdJcyg",
+      "round_date": "2024-06-27",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_Hn396ydKSoON_0L5KdJcyg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "gUs8P9bfQr21QFFnqkNqTQ",
+      "round_date": "2024-10-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_gUs8P9bfQr21QFFnqkNqTQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "MEqUv8X8SbOAoE01mM-E6Q",
+      "round_date": "2023-10-03",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_MEqUv8X8SbOAoE01mM-E6Q.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "47BHuV2iSiGDNPsMz34hyQ",
+      "round_date": "2024-04-15",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_47BHuV2iSiGDNPsMz34hyQ.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "IypnqP6gTperrgEbdWGNaA",
+      "round_date": "2025-04-06",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_IypnqP6gTperrgEbdWGNaA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "ZSkxHbNsS52WcxFmZM.nxw",
+      "round_date": "2024-08-08",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_ZSkxHbNsS52WcxFmZM_nxw.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "AzD5jTKtSkag3aeJ1a9gBA",
+      "round_date": "2025-09-07",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_AzD5jTKtSkag3aeJ1a9gBA.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "B0vqUPxqSNWDWl.DHuNECg",
+      "round_date": "2023-05-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_B0vqUPxqSNWDWl_DHuNECg.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "T4Ic1LQIQSKxPNYW7H9x0w",
+      "round_date": "2025-08-24",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_T4Ic1LQIQSKxPNYW7H9x0w.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "m0rulFpFToyJbTtZnAZGNw",
+      "round_date": "2023-10-20",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+      "file": "rounds/round_m0rulFpFToyJbTtZnAZGNw.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "HUrjepg7Qxmmcx1RPVtXJA",
+      "round_date": "2024-04-21",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_HUrjepg7Qxmmcx1RPVtXJA.json",
+      "playerCount": 4
+    },
+    {
+      "roundId": "MR6.EQSgSm6RTys2TAtBsQ",
+      "round_date": "2025-05-13",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_MR6_EQSgSm6RTys2TAtBsQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "oAuZ93pcR6ODefO2a8x-SQ",
+      "round_date": "2024-01-04",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_oAuZ93pcR6ODefO2a8x-SQ.json",
+      "playerCount": 3
+    },
+    {
+      "roundId": "WpQxfxewQEWLkidY3meNlQ",
+      "round_date": "2024-12-11",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+      "file": "rounds/round_WpQxfxewQEWLkidY3meNlQ.json",
+      "playerCount": 2
+    },
+    {
+      "roundId": "H6QS6s.FQYWYKOY0g8zeRQ",
+      "round_date": "2024-04-19",
+      "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+      "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+      "file": "rounds/round_H6QS6s_FQYWYKOY0g8zeRQ.json",
+      "playerCount": 2
+    }
+  ]
+}

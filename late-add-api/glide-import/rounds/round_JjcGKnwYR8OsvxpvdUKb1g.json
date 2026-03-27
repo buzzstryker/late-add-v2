@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+  "round_date": "2023-03-19",
+  "scores_override": true,
+  "submitted_at": "2023-03-19T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "JjcGKnwYR8OsvxpvdUKb1g",
+  "scores": [
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": 31,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": -31,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    }
+  ]
+}

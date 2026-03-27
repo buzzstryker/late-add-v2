@@ -1,0 +1,27 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2026-02-07",
+  "scores_override": false,
+  "submitted_at": "2026-02-07T12:06:47.038Z",
+  "source_app": "glide",
+  "external_event_id": "2kW1MSZeQq-OuMAWahnxMA",
+  "scores": [
+    {
+      "source_player_ref": "YytMRmEEFc5bFdo6vPMA",
+      "source_player_name": "Colm",
+      "score_value": 11,
+      "source_email": "colm.moran8@gmail.com",
+      "source_venmo_handle": "ColmMoran",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "xHaogjo0SibeROMZBr5g",
+      "source_player_name": "Pat",
+      "score_value": -11,
+      "source_email": "pmcallahan_1@yahoo.com",
+      "source_venmo_handle": "cal2269",
+      "source_is_active": true
+    }
+  ]
+}

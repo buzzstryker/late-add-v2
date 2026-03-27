@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2025-12-09",
+  "scores_override": true,
+  "submitted_at": "2025-12-09T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "1Ml-8iA5QvKnSQyn0n6xiQ",
+  "scores": [
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -20,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "a4SKiEpE8tWxPptWvXNU",
+      "source_player_name": "Chris",
+      "score_value": 20,
+      "source_email": "cbradburn@me.com",
+      "source_venmo_handle": "Chris-Bradburn-1",
+      "source_is_active": true
+    }
+  ]
+}

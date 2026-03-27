@@ -1,12 +1,17 @@
-import { apiFetch } from './client';
+import { apiFetch, ApiError } from './client';
 import type { AttributionItem } from '../types';
 
 /**
- * List unresolved attribution items. Assumes GET /review/attribution or equivalent.
+ * List unresolved attribution items. GET /review/attribution. If missing (404), returns [].
  */
 export async function listAttributionQueue(): Promise<AttributionItem[]> {
-  const data = await apiFetch<{ items?: AttributionItem[]; data?: AttributionItem[] }>('/review/attribution');
-  return (data as { items?: AttributionItem[] })?.items ?? (data as { data?: AttributionItem[] })?.data ?? [];
+  try {
+    const data = await apiFetch<{ items?: AttributionItem[]; data?: AttributionItem[] }>('/review/attribution');
+    return (data as { items?: AttributionItem[] })?.items ?? (data as { data?: AttributionItem[] })?.data ?? [];
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 404) return [];
+    throw e;
+  }
 }
 
 /**

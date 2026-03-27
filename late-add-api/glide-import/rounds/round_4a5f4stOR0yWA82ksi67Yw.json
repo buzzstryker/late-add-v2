@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+  "round_date": "2024-04-20",
+  "scores_override": true,
+  "submitted_at": "2024-04-20T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "4a5f4stOR0yWA82ksi67Yw",
+  "scores": [
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": -7,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "YytMRmEEFc5bFdo6vPMA",
+      "source_player_name": "Colm",
+      "score_value": 7,
+      "source_email": "colm.moran8@gmail.com",
+      "source_venmo_handle": "ColmMoran",
+      "source_is_active": true
+    }
+  ]
+}

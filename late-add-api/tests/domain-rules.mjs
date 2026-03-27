@@ -188,7 +188,7 @@ async function runTests() {
     ok("Standings use effective result (override)", p1Standing != null && p1Standing.total_points >= 3);
   }
 
-  console.log("\n--- 7. win_loss_override: result_type win/loss/tie, system derives points ---");
+  console.log("\n--- 7. win_loss_override: result_type win/loss/tie accepted and stored as points ---");
   const rWinLoss = await ingest(token, {
     group_id: GROUP_WINLOSS,
     season_id: SEASON_WINLOSS,
@@ -205,7 +205,7 @@ async function runTests() {
     const { data: wlScores } = await admin.from("league_scores").select("player_id, score_value, result_type").eq("league_round_id", rWinLoss.league_round_id);
     const w = (wlScores ?? []).find((s) => s.player_id === "player-1");
     const l = (wlScores ?? []).find((s) => s.player_id === "player-2");
-    ok("Derived points: win=1, loss=0", w?.score_value === 1 && w?.result_type === "win" && l?.score_value === 0 && l?.result_type === "loss");
+    ok("Stored points: win=1, loss=0", w?.score_value === 1 && w?.result_type === "win" && l?.score_value === 0 && l?.result_type === "loss");
     const st = await getStandings(token, SEASON_WINLOSS, GROUP_WINLOSS);
     ok("Standings derive from event results (not settlements)", Array.isArray(st.standings) && st.standings.length >= 2);
   }

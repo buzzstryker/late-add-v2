@@ -1,0 +1,10 @@
+{
+  "event_id": "adapter-test-round-001",
+  "round_date": "2025-07-01",
+  "scores": [
+    { "player_id": "player-1", "points": 3 },
+    { "player_id": "player-2", "points": -1 },
+    { "source_player_name": "Alice From Export", "points": 2 },
+    { "source_player_name": "Bob Unmapped", "points": 0 }
+  ]
+}

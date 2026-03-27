@@ -1,0 +1,27 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+  "round_date": "2023-12-30",
+  "scores_override": true,
+  "submitted_at": "2023-12-30T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "08kFvnU-S--JLhsuzuawiQ",
+  "scores": [
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": 12,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "YytMRmEEFc5bFdo6vPMA",
+      "source_player_name": "Colm",
+      "score_value": -12,
+      "source_email": "colm.moran8@gmail.com",
+      "source_venmo_handle": "ColmMoran",
+      "source_is_active": true
+    }
+  ]
+}

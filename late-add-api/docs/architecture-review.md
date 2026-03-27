@@ -1,6 +1,6 @@
 # Late Add v2 Backend — Architectural Review
 
-Technical summary of the current implementation after domain-rule tests pass. For verifying the architecture before adding payout logic.
+Technical summary of the current implementation after domain-rule tests pass. Late Add v2 operates as a **points ledger + standings aggregation platform**: atomic point records in `league_scores` are the single source of truth; standings are derived only from those records and are never edited directly. See [POINTS_LEDGER_ARCHITECTURE.md](./POINTS_LEDGER_ARCHITECTURE.md) for the full design.
 
 ---
 
@@ -15,7 +15,7 @@ Technical summary of the current implementation after domain-rule tests pass. Fo
 | **group_members** | id (TEXT) | group_id, player_id, role, is_active, joined_at | group_id → groups(id) | UNIQUE(group_id, player_id) |
 | **seasons** | id (TEXT) | group_id, start_date, end_date, created_at, updated_at | group_id → groups(id) | — |
 | **league_rounds** (events) | id (TEXT) | user_id, group_id, season_id, round_date, submitted_at, scores_override, **source_app**, **external_event_id** | user_id → auth.users(id), group_id → groups(id), season_id → seasons(id) | UNIQUE INDEX (group_id, source_app, external_event_id) WHERE both non-null |
-| **league_scores** (event_results) | id (TEXT) | league_round_id, player_id, **score_value**, **score_override**, **result_type**, **override_actor**, **override_reason**, **override_at**, **money_delta** | league_round_id → league_rounds(id) | UNIQUE(league_round_id, player_id), CHECK result_type IN ('win','loss','tie') OR NULL |
+| **league_scores** (points ledger) | id (TEXT) | league_round_id, player_id, **score_value**, **score_override**, **result_type**, **override_actor**, **override_reason**, **override_at**, **money_delta** | league_round_id → league_rounds(id) | UNIQUE(league_round_id, player_id), CHECK result_type IN ('win','loss','tie') OR NULL. One atomic point record per player per round; effective points = COALESCE(score_override, score_value). |
 
 **money_delta:** On league_scores, nullable DOUBLE PRECISION. For settlement requests / Venmo insert generation only. Not used in season_standings. Left null by ingest until settlement rules exist.
 
@@ -25,11 +25,13 @@ Technical summary of the current implementation after domain-rule tests pass. Fo
 
 ---
 
-## 2. Standings implementation
+## 2. Standings implementation (derived from ledger only)
+
+Standings are **never** stored in a mutable table. They are computed on read from the points ledger (`league_scores`) joined with `league_rounds`. No direct editing of standings; corrections are made by updating atomic point rows in `league_scores` (e.g. via round edit/override).
 
 ### Aggregation
 
-**Location:** PostgreSQL view `season_standings` (defined in `001_core_schema.sql`).
+**Location:** PostgreSQL view `season_standings` (defined in `001_core_schema.sql`). Read-only.
 
 **Exact SQL:**
 
@@ -111,7 +113,7 @@ Optional override (actor/reason required):
 ```
 
 - **result_type** required per score: `"win"` | `"loss"` | `"tie"`.  
-- System derives points: win=1, loss=0, tie=0.5; stored in **score_value**; **result_type** stored on league_scores.
+- API accepts this input and stores equivalent points (win=1, loss=0, tie=0.5) in **score_value**; **result_type** stored on league_scores. Outcome is determined by the source or admin; Late Add does not compute match-play or other format logic.
 
 ### Validation steps (order in code)
 
@@ -159,7 +161,7 @@ Optional override (actor/reason required):
 | Active group membership | group_members.is_active | ingest: filter group_members by group_id, is_active=1; reject if any score player_id not in set | Invalid player → 400 invalid_player_ids | Non-member → 400 invalid_player_ids |
 | Idempotency by external_event_id | UNIQUE (group_id, source_app, external_event_id) | ingest: lookup before insert; on 23505 re-fetch and 200 | Same body twice → 200, same id | First 201, second 200, no duplicate row |
 | Override: actor, reason, timestamp | override_actor, override_reason, override_at columns | ingest: require actor+reason when score_override set; set override_at | — | Override stored; standings use override; reject override without metadata |
-| Scoring modes points / win_loss_override | groups.scoring_mode CHECK | ingest: read group; points vs result_type validation and derivation | — | win_loss derives points; result_type stored |
+| Scoring modes points / win_loss_override | groups.scoring_mode CHECK | ingest: read group; points vs result_type validation; win_loss stores equivalent points from result_type | — | win_loss accepts result_type and stores equivalent points; result_type stored |
 | Standings from event_results only | View on league_rounds + league_scores only | get-standings reads view | Standings 2 and -1 | Standings derive from events, not settlements |
 | Multi-group: one result per group | league_rounds.group_id | Ingest targets single group_id | — | Submit to A and B → one round per group; standings per group |
 
@@ -169,7 +171,7 @@ Optional override (actor/reason required):
 
 - **Payout / money_delta:** Not implemented. No column or table for monetary deltas or payouts per event or per player.
 - **Settlement tracking:** No settlements table. No concept of “settlement” or “settled at” for rounds or players.
-- **Group-configurable scoring rules:** Points range (-10..10) and stroke-like range (20..130) are hardcoded in the ingest function. win_loss point mapping (1/0/0.5) is hardcoded. No group-level or season-level config for these.
+- **Group-configurable scoring rules:** Points range (-10..10) and stroke-like range (20..130) are hardcoded in the ingest function. win_loss input mapping (result_type → 1/0/0.5) is hardcoded; this is input normalization only—Late Add does not compute golf format (e.g. match-play) logic. No group-level or season-level config for these.
 - **Primary standings metric:** Standings are always total_points (sum of effective score), ordered descending. No configurable “primary metric” (e.g. net_winnings vs total_points).
 - **Ambiguous multi-group ingest:** Not applicable. Each ingest has a single group_id; no ambiguity. Multi-group is “same player in multiple groups, separate events per group.”
 

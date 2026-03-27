@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2026-02-28",
+  "scores_override": false,
+  "submitted_at": "2026-02-28T11:38:55.483Z",
+  "source_app": "glide",
+  "external_event_id": "oxMTyBFDSiWbGA2xoe8STQ",
+  "scores": [
+    {
+      "source_player_ref": "tnaFbk6bp7z1qFHbcgBN",
+      "source_player_name": "BK",
+      "score_value": 23,
+      "source_email": "bknight91@aol.com",
+      "source_venmo_handle": "BrianKnight91",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": -23,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    }
+  ]
+}

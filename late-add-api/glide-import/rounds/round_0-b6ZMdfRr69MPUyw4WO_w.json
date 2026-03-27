@@ -1,0 +1,44 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2026-03-08",
+  "scores_override": false,
+  "submitted_at": "2026-03-08T11:49:21.279Z",
+  "source_app": "glide",
+  "external_event_id": "0-b6ZMdfRr69MPUyw4WO.w",
+  "scores": [
+    {
+      "source_player_ref": "xHaogjo0SibeROMZBr5g",
+      "source_player_name": "Pat",
+      "score_value": -38,
+      "source_email": "pmcallahan_1@yahoo.com",
+      "source_venmo_handle": "cal2269",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "tnaFbk6bp7z1qFHbcgBN",
+      "source_player_name": "BK",
+      "score_value": 6,
+      "source_email": "bknight91@aol.com",
+      "source_venmo_handle": "BrianKnight91",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "YytMRmEEFc5bFdo6vPMA",
+      "source_player_name": "Colm",
+      "score_value": -26,
+      "source_email": "colm.moran8@gmail.com",
+      "source_venmo_handle": "ColmMoran",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": 58,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    }
+  ]
+}

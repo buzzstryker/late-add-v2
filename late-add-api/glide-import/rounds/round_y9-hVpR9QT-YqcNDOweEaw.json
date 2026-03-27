@@ -1,0 +1,36 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+  "round_date": "2023-12-10",
+  "scores_override": true,
+  "submitted_at": "2023-12-10T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "y9-hVpR9QT-YqcNDOweEaw",
+  "scores": [
+    {
+      "source_player_ref": "IQbIh7IOspmrmIHHDnfQ",
+      "source_player_name": "Cal",
+      "score_value": 19,
+      "source_email": "calvin.lyford@gmail.com",
+      "source_venmo_handle": "Cal-Lyford",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": 43,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "TDyewdoZ6LIAsKTLfYUG",
+      "source_player_name": "Dietz",
+      "score_value": -62,
+      "source_email": "spdietz@me.com",
+      "source_venmo_handle": "Stephen-Dietz-5",
+      "source_is_active": true
+    }
+  ]
+}

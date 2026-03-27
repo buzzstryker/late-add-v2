@@ -4,8 +4,10 @@ import { PageHeader } from '../components/PageHeader';
 import { FormSection } from '../components/FormSection';
 import { ConfirmToast } from '../components/ConfirmToast';
 import { listGroups, listSeasons } from '../api/groups';
+import { listPlayers } from '../api/players';
 import { ingestEvent } from '../api/events';
-import type { Group, Season } from '../types';
+import type { Group, Season, Player } from '../types';
+import { seasonLabel } from '../types';
 
 interface ScoreRow {
   player_id: string;
@@ -16,9 +18,9 @@ export function RoundEntry() {
   const navigate = useNavigate();
   const [groups, setGroups] = useState<Group[]>([]);
   const [seasons, setSeasons] = useState<Season[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [groupId, setGroupId] = useState('');
   const [seasonId, setSeasonId] = useState('');
-  const [eventName, setEventName] = useState('');
   const [roundDate, setRoundDate] = useState('');
   const [scores, setScores] = useState<ScoreRow[]>([{ player_id: '', score_value: 0 }]);
   const [loading, setLoading] = useState(true);
@@ -36,10 +38,12 @@ export function RoundEntry() {
   useEffect(() => {
     if (!groupId) {
       setSeasons([]);
+      setPlayers([]);
       setSeasonId('');
       return;
     }
     listSeasons(groupId).then(setSeasons).catch(() => setSeasons([]));
+    listPlayers(groupId).then(setPlayers).catch(() => setPlayers([]));
   }, [groupId]);
 
   const addRow = () => setScores((s) => [...s, { player_id: '', score_value: 0 }]);
@@ -56,7 +60,7 @@ export function RoundEntry() {
     }
     const validScores = scores.filter((r) => r.player_id.trim() !== '').map((r) => ({ player_id: r.player_id.trim(), score_value: r.score_value }));
     if (validScores.length === 0) {
-      setError('At least one player with a score is required.');
+      setError('At least one player with points is required.');
       return;
     }
     setSaving(true);
@@ -98,24 +102,35 @@ export function RoundEntry() {
             <select value={seasonId} onChange={(e) => setSeasonId(e.target.value)}>
               <option value="">—</option>
               {seasons.map((s) => (
-                <option key={s.id} value={s.id}>{s.name || `${s.start_date} – ${s.end_date}`}</option>
+                <option key={s.id} value={s.id}>{seasonLabel(s)}</option>
               ))}
             </select>
-            <label style={{ marginTop: 12 }}>Event name (optional)</label>
-            <input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="e.g. Week 3" />
             <label style={{ marginTop: 12 }}>Played date (required)</label>
             <input type="date" value={roundDate} onChange={(e) => setRoundDate(e.target.value)} required />
           </FormSection>
-          <FormSection title="Players &amp; scores">
-            <p style={{ fontSize: 12, color: '#666' }}>Source app is set to &quot;manual&quot;. Enter player IDs (UUIDs) and points.</p>
+          <FormSection title="Players &amp; points">
+            <p style={{ fontSize: 12, color: '#666' }}>Source app is set to &quot;manual&quot;. Enter awarded point totals per player (not golf scorecard data). {players.length > 0 ? 'Select players from the group or enter a player ID.' : 'Enter player IDs and points.'}</p>
             {scores.map((row, i) => (
               <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-                <input
-                  placeholder="Player ID (UUID)"
-                  value={row.player_id}
-                  onChange={(e) => updateRow(i, 'player_id', e.target.value)}
-                  style={{ flex: 1, maxWidth: 320 }}
-                />
+                {players.length > 0 ? (
+                  <select
+                    value={row.player_id}
+                    onChange={(e) => updateRow(i, 'player_id', e.target.value)}
+                    style={{ flex: 1, maxWidth: 320 }}
+                  >
+                    <option value="">— Select player —</option>
+                    {players.map((p) => (
+                      <option key={p.id} value={p.id}>{p.display_name}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    placeholder="Player ID"
+                    value={row.player_id}
+                    onChange={(e) => updateRow(i, 'player_id', e.target.value)}
+                    style={{ flex: 1, maxWidth: 320 }}
+                  />
+                )}
                 <input
                   type="number"
                   placeholder="Points"

@@ -1,10 +1,17 @@
 # Late Add v2
 
-**Late Add v2 and Scorekeeper are separate apps.** Late Add v2 is its own product: a **standalone competition and standings engine** for golf, with its own API and (in progress) UI. Scorekeeper is a separate golf scoring app and may use the Late Add API to submit rounds; that is Scorekeeper’s only relation to Late Add v2. **This directory** (`Desktop\late-add-v2`) holds the Late Add v2 documentation, admin UI, and API: **`late-add-api/`** (Supabase backend), **`late-add-admin/`** (admin web UI), root-level product docs, **`patches/`** (WIP patches), and **`glide-export/`** (e.g. Late Add Golf .ods export).
+**Late Add v2 and Scorekeeper are separate apps.** Late Add v2 is its own product: a **points ledger + standings aggregation platform** for golf, with its own API and (in progress) UI. Late Add does not compute golf competition formats (e.g. Stableford, match play, best ball, skins); external systems or human admins determine points. Scorekeeper is a separate golf scoring app and may use the Late Add API to submit rounds; that is Scorekeeper’s only relation to Late Add v2. **This directory** (`Desktop\late-add-v2`) holds the Late Add v2 documentation, admin UI, API, and mobile app: **`late-add-api/`** (Supabase backend), **`late-add-admin/`** (Vite + React admin web UI), **`late-add-expo/`** (Expo app — web via `expo start --web`, iOS/iPad via Expo Go), root-level product docs, **`patches/`** (WIP patches), and **`glide-export/`** (Glide ODS export).
 
 Late Add v2 exposes an API so that **any** third-party golf app (e.g. Scorekeeper, 18Birdies, or others) can submit round results and consume standings and settlement data. Late Add does not run the round or capture scores itself; it ingests **points and results** from external sources and maintains groups, seasons, standings, and optional payout/settlement outputs.
 
 **Status:** Project is in progress. Backend and API are implemented; the team is moving into **UI work** for the Late Add app experience.
+
+### Recommended testing order
+
+1. **Web admin UI first** — Run **`late-add-admin/`** against your API (local or hosted). Confirm flows, data, and auth there before moving on.
+2. **Then mobile (iPad / iPhone)** — After the web UI checks out, exercise the same backend through **`late-add-expo/`** (Expo Go). The mobile app is a thinner client; fixing issues in admin first avoids chasing device-only problems when the API or data is wrong.
+
+**Mobile (Expo Go):** From this repo folder run `npm install` once inside `late-add-expo`, then from **there** run `npx expo start --tunnel` to open the app on iPhone/iPad with Expo Go. Details: [late-add-expo/README.md](./late-add-expo/README.md).
 
 ### How the docs are organized
 
@@ -29,8 +36,8 @@ Full doc index: [Doc index (this folder)](#doc-index-this-folder) at the end of 
 ## What Late Add v2 is
 
 - **Standalone product** — Its own app and API; a separate codebase from Scorekeeper and from any source app that calls the API.
-- **API-first ingestion** — External golf apps (sources) POST event results to the API; Late Add stores them and derives standings and, when configured, money deltas and payment requests.
-- **Competition/standings engine** — Groups, seasons, events (rounds), and results; points-only standings; optional group-level payout config and round-scoped payment request generation. Late Add does **not** track payment completion or maintain a settlement ledger.
+- **API-first ingestion** — External golf apps (sources) or admins submit event results (final point totals per player); Late Add stores them, attributes them to groups/seasons, and aggregates them into standings; when configured, computes money deltas and generates payment requests.
+- **Points ledger + standings aggregation platform** — Atomic point records (one per player per round in `league_scores`) are the single source of truth; standings are **derived** from those records only and are never edited directly. Groups, seasons, events (rounds), and results; points-only standings from the ledger; optional group-level payout config and round-scoped payment request generation. Late Add does **not** compute golf formats (Stableford, match play, best ball, skins, etc.) and does **not** track payment completion or maintain a settlement ledger.
 
 ---
 
@@ -39,7 +46,7 @@ Full doc index: [Doc index (this folder)](#doc-index-this-folder) at the end of 
 | Concept | Description |
 |--------|--------------|
 | **Source app** | Any client that can call the Late Add API (e.g. Scorekeeper, 18Birdies). Submits results for a **group** and **round date**; optionally identifies the event for idempotency. |
-| **Late Add** | Holds groups, seasons, events (rounds), and results; computes points-only standings; optionally computes per-round money deltas and generates payment requests. Does not run rounds or capture scores itself. |
+| **Late Add** | Points ledger + standings aggregation platform. Atomic point records (one per player per round) in `league_scores`; standings are derived from those records only (never edited directly). Holds groups, seasons, events (rounds), and results; optionally computes per-round money deltas and generates payment requests. Does not compute golf competition formats; does not run rounds or capture scores. |
 | **Attribution** | Each ingested event can carry `source_app` and `external_event_id` so rounds are attributable and idempotent when the same event is submitted again. |
 
 ---
@@ -48,8 +55,8 @@ Full doc index: [Doc index (this folder)](#doc-index-this-folder) at the end of 
 
 - **Backend / API** — In **`late-add-api/`** in this directory. Supabase (Postgres, Auth, Edge Functions). Endpoints: ingest event results, get standings, compute money deltas (round-scoped), generate payment requests (round-scoped). Full contract: [late-add-api/docs/api.md](./late-add-api/docs/api.md).
 - **Ingestion** — Accept POSTs with `group_id`, `round_date`, and `scores[]` (points or win/loss/tie); validate membership and domain rules; create one event (league_round) and one result row per player (league_score). `money_delta` is left to a separate, round-scoped computation step.
-- **Standings / competition logic** — Points-only: effective result = `COALESCE(score_override, score_value)`. Standings view: rounds_played, total_points per player per season. No money in standings. Payout and payment-request logic are separate and do not affect standings.
-- **UI / front end** — Late Add app screens (dashboard, events, round entry, round edit, attribution review, player mapping, standings). A first usable admin UI is implemented in this directory under **`late-add-admin/`** (Vite + React); see that folder’s README to run it. It supports **API ingestion**, **manual round entry**, and **round edit/override**; see [Screen Map](./Late_Add_V2_Screen_Map.md) and [UI Architecture](./Late_Add_V2_UI_Architecture.md).
+- **Standings aggregation** — Standings are **derived only** from the points ledger (`league_scores`); there is no separate mutable standings table. Effective result per ledger row = `COALESCE(score_override, score_value)`. View: rounds_played, total_points per player per season. No money in standings. Payout and payment-request logic are separate and do not affect standings.
+- **UI / front end** — Late Add app screens: Dashboard, Rounds, Round Entry, Round Edit, Standings, Groups, Players, Points Analysis, Attribution Review, Player Mapping. Admin UI in **`late-add-admin/`** (Vite + React); see that folder’s README. Supports API ingestion, manual round entry, round edit/override, player management, game points analysis (all-vs-all matrix, head-to-head drill-down, Signature Events filtering), and Glide data import. See [Screen Map](./Late_Add_V2_Screen_Map.md) and [UI Architecture](./Late_Add_V2_UI_Architecture.md).
 
 ---
 
@@ -103,8 +110,8 @@ Screens and navigation can be designed around these flows; the API contract and 
 
 ## Developer setup
 
-- **late-add-api** (Late Add v2 backend): See [late-add-api/README.md](./late-add-api/README.md) and [late-add-api/docs/](./late-add-api/docs/). Typical flow: `cd late-add-api`, `npm install`, copy `.env` from `.env.example`, `supabase link`, `supabase start`, `supabase db push`, `supabase functions serve`. Run integration/domain tests as documented there.
-- **late-add-admin** (admin UI): See [late-add-admin/README.md](./late-add-admin/README.md) to run.
+- **late-add-api** (Late Add v2 backend): See [late-add-api/README.md](./late-add-api/README.md) and [late-add-api/docs/](./late-add-api/docs/). Typical flow: `cd late-add-api`, `npm install`, copy `.env` from `.env.example`, `supabase login --token <token>`, `supabase link --project-ref ftmqzxykwcccocogkjhc`, `supabase db push`, `supabase functions deploy --no-verify-jwt`. We use **Supabase Cloud exclusively** (no local Supabase). The `--no-verify-jwt` flag is required because functions handle auth internally. Run integration/domain tests against the cloud project as documented there.
+- **late-add-admin** (admin UI): See [late-add-admin/README.md](./late-add-admin/README.md) for first-time setup and per-session instructions (JWT generation, dev server).
 - **Source apps** (e.g. any golf app that calls the Late Add API): Separate codebases; each implements its own client and auth to call the API.
 - **Full API contract, validation rules, and error codes**: [late-add-api/docs/](./late-add-api/docs/) (api.md, payout-configuration-design.md, settlement-calculation-design.md).
 
@@ -112,7 +119,7 @@ Screens and navigation can be designed around these flows; the API contract and 
 
 ## Testing
 
-- **late-add-api**: Integration tests (`npm run test:integration`) and domain-rule tests (`npm run test:domain`) in **late-add-api/**; require local Supabase and function serve (see that folder’s README).
+- **late-add-api**: Integration tests (`npm run test:integration`) and domain-rule tests (`npm run test:domain`) in **late-add-api/**; run against Supabase Cloud (see that folder’s README).
 - **late-add-admin** and **source apps**: Each has its own test setup.
 
 ---
@@ -134,7 +141,7 @@ Screens and navigation can be designed around these flows; the API contract and 
 | [Late_Add_V2_Data_Model.md](./Late_Add_V2_Data_Model.md) | Entities and schema summary. |
 | [Late_Add_V2_API_Spec.md](./Late_Add_V2_API_Spec.md) | Endpoint summary; full contract in [late-add-api/docs/](./late-add-api/docs/). |
 | [Late_Add_V2_Screen_Map.md](./Late_Add_V2_Screen_Map.md) | Screens and flows. |
-| **late-add-api/** | Backend/API (Supabase). See [late-add-api/README.md](./late-add-api/README.md) to run. |
+| **late-add-api/** | Backend/API (Supabase). See [late-add-api/README.md](./late-add-api/README.md) to run. Points ledger design: [late-add-api/docs/POINTS_LEDGER_ARCHITECTURE.md](./late-add-api/docs/POINTS_LEDGER_ARCHITECTURE.md). |
 | [Late_Add_V2_UI_Architecture.md](./Late_Add_V2_UI_Architecture.md) | Front-end structure: goals, areas, routing, API usage, data flow, state, errors, principles. |
 | [LATE_ADD_V2_UI_IMPLEMENTATION_SUMMARY.md](./LATE_ADD_V2_UI_IMPLEMENTATION_SUMMARY.md) | Admin UI implementation summary: routes, components, forms, API assumptions, backend gaps. |
 | [Late_Add_V2_Migration_Notes.md](./Late_Add_V2_Migration_Notes.md) | Migration/rollout notes (to be filled when applicable). |

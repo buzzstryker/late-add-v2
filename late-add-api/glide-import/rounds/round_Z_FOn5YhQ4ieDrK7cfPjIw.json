@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2026-03-11",
+  "scores_override": false,
+  "submitted_at": "2026-03-11T21:46:10.174Z",
+  "source_app": "glide",
+  "external_event_id": "Z.FOn5YhQ4ieDrK7cfPjIw",
+  "scores": [
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -55,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "TDyewdoZ6LIAsKTLfYUG",
+      "source_player_name": "Dietz",
+      "score_value": 55,
+      "source_email": "spdietz@me.com",
+      "source_venmo_handle": "Stephen-Dietz-5",
+      "source_is_active": true
+    }
+  ]
+}

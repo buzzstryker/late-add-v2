@@ -1,0 +1,21 @@
+{
+  "group_id": "T4F.VciOT9mHBN2fpezn7g",
+  "season_id": "eOGLhnj3RtHSlypyx21L",
+  "round_date": "2026-02-13",
+  "scores_override": false,
+  "submitted_at": "2026-02-12T20:38:33.379Z",
+  "source_app": "glide",
+  "external_event_id": "1lFiDC5kSXSy6LG54XqzRg",
+  "scores": [
+    {
+      "source_player_ref": "HxkAa9H7SAKtghDjPjiO9Q",
+      "source_player_name": "HxkAa9H7SAKtghDjPjiO9Q",
+      "score_value": 25
+    },
+    {
+      "source_player_ref": "P7qlpYMYRBunUe0Qx6npzg",
+      "source_player_name": "P7qlpYMYRBunUe0Qx6npzg",
+      "score_value": -25
+    }
+  ]
+}

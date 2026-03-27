@@ -1,0 +1,90 @@
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import 'react-native-reanimated';
+
+import { Drawer } from '@/components/Drawer';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { DrawerProvider, useDrawer } from '@/contexts/DrawerContext';
+import { GroupProvider } from '@/contexts/GroupContext';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
+export const unstable_settings = {
+  anchor: '(tabs)',
+};
+
+function RootNavigator() {
+  const colorScheme = useColorScheme();
+  const { ready, signedIn } = useAuth();
+  const { drawerOpen, closeDrawer } = useDrawer();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!ready) return;
+    const first = segments[0];
+    const onLogin = first === 'login';
+    if (!signedIn && !onLogin) {
+      router.replace('/login');
+    } else if (signedIn && onLogin) {
+      router.replace('/(tabs)/standings');
+    }
+  }, [ready, signedIn, segments, router]);
+
+  if (!ready) {
+    return (
+      <View style={[styles.boot, { backgroundColor: colorScheme === 'dark' ? '#151718' : '#fff' }]}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const handleDrawerNavigate = (route: string) => {
+    closeDrawer();
+    if (route === 'signout') {
+      // signout is handled by the AuthContext — screens can call useAuth().signOut()
+      // For now, navigate to login which will trigger signOut flow
+      router.replace('/login');
+    } else if (route === 'groups') {
+      router.push('/groups');
+    }
+  };
+
+  return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="round/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="groups" options={{ headerShown: false }} />
+        <Stack.Screen name="group/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="group-members" options={{ headerShown: false }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+      </Stack>
+      <Drawer
+        visible={drawerOpen}
+        onClose={closeDrawer}
+        onNavigate={handleDrawerNavigate}
+      />
+      <StatusBar style="auto" />
+    </ThemeProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <DrawerProvider>
+        <GroupProvider>
+          <RootNavigator />
+        </GroupProvider>
+      </DrawerProvider>
+    </AuthProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  boot: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});

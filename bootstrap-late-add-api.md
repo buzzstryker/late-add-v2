@@ -232,24 +232,13 @@ API for Late Add Golf: groups, seasons, league rounds, and scores. Backed by Sup
    supabase db push
    ```
 
-## Run locally
+## Development (Supabase Cloud)
 
-- Database and Auth (local Supabase):
-  ```bash
-  supabase start
-  supabase db push
-  ```
-
-- Edge Functions (dev):
-  ```bash
-  supabase functions serve
-  ```
-  Then call `http://localhost:54321/functions/v1/health` (or the URLs shown by the CLI).
-
-## Deploy
+We use **Supabase Cloud exclusively** (no local Supabase).
 
 - Push migrations: `supabase db push`
 - Deploy functions: `supabase functions deploy`
+- API base: `https://ftmqzxykwcccocogkjhc.supabase.co/functions/v1/`
 
 ## Docs
 

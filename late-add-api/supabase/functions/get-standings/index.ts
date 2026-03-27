@@ -70,7 +70,7 @@ serve(async (req) => {
     query = query.eq("group_id", groupId);
   }
 
-  const { data, error } = await query;
+  const { data: rows, error } = await query;
 
   if (error) {
     return new Response(
@@ -79,7 +79,36 @@ serve(async (req) => {
     );
   }
 
-  return new Response(JSON.stringify({ standings: data ?? [] }), {
+  const standings = (rows ?? []) as { season_id: string; group_id: string; player_id: string; rounds_played: number; total_points: number }[];
+  if (standings.length === 0) {
+    return new Response(JSON.stringify({ standings: [] }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const standingsGroupId = standings[0].group_id;
+  const { data: groupRow } = await supabase.from("groups").select("user_id").eq("id", standingsGroupId).maybeSingle();
+  const userId = (groupRow as { user_id?: string } | null)?.user_id;
+  const playerIds = [...new Set(standings.map((r) => r.player_id))];
+  let playerNames: Record<string, string> = {};
+  if (userId && playerIds.length > 0) {
+    const { data: playerRows } = await supabase
+      .from("players")
+      .select("id, display_name")
+      .eq("user_id", userId)
+      .in("id", playerIds);
+    for (const p of playerRows ?? []) {
+      playerNames[(p as { id: string }).id] = (p as { display_name: string }).display_name;
+    }
+  }
+
+  const standingsWithNames = standings.map((r) => ({
+    ...r,
+    player_name: playerNames[r.player_id] ?? null,
+  }));
+
+  return new Response(JSON.stringify({ standings: standingsWithNames }), {
     status: 200,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });

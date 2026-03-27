@@ -7,7 +7,7 @@
 - **`late-add-api/`** — Supabase backend, migrations, Edge Functions, tests. See [../late-add-api/README.md](../late-add-api/README.md).
 - **`late-add-admin/`** — Admin web UI (Vite + React).
 - **`docs/`** (this folder) — High-level architecture and product notes; canonical API is in **late-add-api/docs/**.
-- **`mobile/`** — (If present) user-facing mobile app.
+- **`late-add-expo/`** — Expo app (web via `expo start --web`, iOS/iPad via Expo Go).
 
 
 

@@ -6,9 +6,10 @@ Front-end structure for the Late Add admin UI. For screens and flows see [Screen
 
 ## 1. UI Goals
 
-- **Admin-focused interface** — For league/competition admins who manage groups, seasons, events, and standings.
+- **Admin-focused interface** — For league admins who manage groups, seasons, events, and standings (points ingestion, attribution, correction, aggregation).
 - **Manage groups, seasons, events, standings** — Create and edit groups and seasons; view and manage events (rounds); view points-only standings.
-- **Three ways events enter** — (1) **API ingestion** from external apps (Scorekeeper, 18Birdies, etc.); (2) **Manual round entry** as a first-class workflow; (3) **Round edit / override** to correct bad ingests or adjust results. All converge into the same canonical event/result model in the backend.
+- **Product requirement:** Late Add v2 must support: (1) **API-ingested results** from external apps such as Scorekeeper or 18Birdies; (2) **Manual round entry** as a first-class workflow; (3) **Round edit / override / correction** by an admin. The UI cannot be limited to passive review; it must support operational round creation and correction.
+- **Three ways events enter** — All converge into the same canonical event/result model in the backend. No separate "manual-only" data model; source labeling and input workflow only.
 - **Resolve attribution conflicts** — Surface events that cannot be assigned cleanly to group/season; support resolution (choose canonical, merge, or reject).
 - **Resolve player mapping** — Map source-player identities to canonical Late Add players.
 - **Operational, not passive** — The UI supports active round creation and correction, not only review of ingested data.
@@ -38,20 +39,42 @@ Main UI areas (aligned with [Screen Map](./Late_Add_V2_Screen_Map.md)):
 
 | Route | Purpose |
 |-------|---------|
-| `/dashboard` | Home / dashboard. |
-| `/events` | Events list (optional query: group, season, source, status). |
-| `/events/new` | Manual round entry. |
-| `/events/:eventId` | Event detail. |
+| `/login` | Sign in (email/password or paste JWT). |
+| `/dashboard` | Home / dashboard. Dev tools: Reset & Import All, Import New Rounds. |
+| `/events` | Rounds list (sortable by date/game points; filterable by group, source, status, date). Signature Event flag toggle. |
+| `/events/new` | Round Entry — manual round creation. |
+| `/events/:eventId` | Round detail. |
 | `/events/:eventId/edit` | Round edit / override. |
-| `/review/attribution` | Attribution conflict queue and resolution. |
-| `/review/player-mapping` | Player mapping queue and resolution. |
-| `/standings` | Standings (Group + Season selectors in UI; optional `/standings/:groupId`, `/standings/:groupId/:seasonId`). |
+| `/review/attribution` | Attribution Review — queue and resolution. |
+| `/review/player-mapping` | Player Mapping — queue and resolution. |
+| `/standings` | Standings — Group + Season selectors; points-only table with player drilldown. |
 | `/groups` | Groups list. |
 | `/groups/:groupId` | Group detail. |
-| `/seasons/:seasonId` | Season detail (if needed). |
-| `/admin` or `/settings` | Admin / app settings. |
+| `/players` | Players — view and edit player data by group (name, email, Venmo, role, active). |
+| `/analytics/points` | Points Analysis — all-vs-all matrix via `GET /get-points-matrix`, head-to-head drill-down via `GET /get-points-analysis`. All computation server-side. Season filter (2023+), Signature Events toggle. |
 
 Auth (sign-in) is a separate flow (e.g. `/login`) before the above.
+
+### Expo app (late-add-expo) — 3-tab structure
+
+| Tab / Route | Purpose |
+|-------------|---------|
+| **Standings** (tab) | Shared group/season context; group selector in header (tap → modal); standings table with medals, dollar/point amounts, alternating rows. |
+| **Rounds** (tab) | Shared group/season context; group selector in header; round cards with date, score pills. Tap → Round detail. |
+| **Analysis** (tab) | All-vs-all matrix (`GET /get-points-matrix`), worst matchups, drill-down via `GET /get-points-analysis`. Exclude Signature Events toggle. All computation server-side. |
+| Round detail (`/round/[id]`) | Pushed screen: PLAYER / GAME PTS / +/- table; edit scores inline, delete round. **Quick Payout** (minimized transactions: match biggest loser→winner) and **Payout** (every loser pays every winner the game_points difference × dollars_per_point). Venmo deep links: `https://venmo.com/{handle}?txn=pay&amount=X&note={group}%20Golf%20-%20{date}`. Only shown when group has dollars_per_point. |
+| Groups (`/groups`) | From drawer: groups listed by section with logo thumbnails. Tap → Group detail. |
+| Group detail (`/group/[id]`) | Banner, stats grid, current season, previous seasons with champion. Tap Active Members → member list with inline editing. |
+| Group members (`/group-members`) | Member list with edit modal (display name, full name, Venmo, active toggle). |
+| Drawer | Hamburger menu (top-left on every tab). **Group selection lives here**: "My Groups" section with logo thumbnails + checkmark on selected group. "Other Groups" section below divider. Group Details link, Sign out. User info at bottom. |
+
+**Shared GroupContext:** All three tabs share a `GroupContext` with selected group and season. Changing group in the drawer updates all tabs. Current season auto-resolved. Default group = most recently active.
+
+**Tab headers:** Simple olive green bar with tab name ("Standings", "Rounds", "Analysis") + hamburger icon. No group selector in headers — all group switching via the drawer.
+
+**Season selector:** Compact pill/dropdown within each tab's content area (below banner, above data).
+
+Visual design matches Late Add v1 (Glide): olive green headers (#4B5E2A), white tab bar, light gray background, white cards, green/pink score pills.
 
 ---
 
@@ -78,8 +101,8 @@ UI → API → Canonical Event → Attribution → Results → Points → Standi
 ```
 
 - **UI** submits or inspects data only via the API. Manual entry and ingested rounds both produce the same canonical event/result model.
-- **API** validates and persists; recalculates standings and downstream effects. Round edit/override flows through the API; the client does not simulate recalculation.
-- **Standings** are always derived on the backend; the UI never computes them locally.
+- **API** validates and persists; aggregates standings from stored points. Round edit/override flows through the API; the client does not simulate aggregation.
+- **Standings** are always computed on the backend from stored event results; the UI never computes them locally. Late Add does not compute golf competition formats (e.g. Stableford, match play); it stores and aggregates point totals.
 
 ---
 
@@ -118,7 +141,7 @@ Use a shared error state component and consistent messaging.
 
 ## 9. Shared UI Requirements
 
-- **Routing** — Clear routes per section above; e.g. `/dashboard`, `/events`, `/events/new`, `/events/:eventId`, `/events/:eventId/edit`, `/review/attribution`, `/review/player-mapping`, `/standings`.
+- **Routing** — Clear routes per section above; e.g. `/login`, `/dashboard`, `/events`, `/events/new`, `/events/:eventId`, `/events/:eventId/edit`, `/review/attribution`, `/review/player-mapping`, `/standings`, `/groups`, `/players`, `/analytics/points`.
 - **Shared components** — Page header, status badge, data table, filter bar, empty state, error state, loading spinner/skeleton, confirmation toast/banner, form section, player/result row editor for round entry and edit where useful.
 - **Status design** — Normalize status across screens: processed, pending attribution, pending player mapping, validation error, duplicate/ignored. Use one shared status badge component.
 - **Navigation** — Dashboard links to Events, Attribution Review, Player Mapping, Standings; Events links to event detail and Round Entry; event detail links to Edit/Override and review flows; Standings and Round Entry in primary nav.

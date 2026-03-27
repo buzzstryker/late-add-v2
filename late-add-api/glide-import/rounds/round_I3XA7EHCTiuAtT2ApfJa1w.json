@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+  "round_date": "2025-08-20",
+  "scores_override": true,
+  "submitted_at": "2025-08-20T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "I3XA7EHCTiuAtT2ApfJa1w",
+  "scores": [
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": 7,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": -7,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    }
+  ]
+}

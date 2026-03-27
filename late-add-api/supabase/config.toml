@@ -55,3 +55,9 @@ verify_jwt = false
 
 [functions.generate-payment-requests]
 verify_jwt = false
+
+[functions.review]
+verify_jwt = false
+
+[functions.standings-player-history]
+verify_jwt = false

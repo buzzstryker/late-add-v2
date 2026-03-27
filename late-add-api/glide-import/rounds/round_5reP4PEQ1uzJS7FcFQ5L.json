@@ -1,0 +1,44 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+  "round_date": "2025-11-30",
+  "scores_override": true,
+  "submitted_at": "2025-11-30T00:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "5reP4PEQ1uzJS7FcFQ5L",
+  "scores": [
+    {
+      "source_player_ref": "XWE9ZQ4F8xKPAxTgtrWX",
+      "source_player_name": "X",
+      "score_value": 20,
+      "source_email": "todd.achondo@gmail.com",
+      "source_venmo_handle": "Todd-Achondo",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "bqlxMT63OrpmLySa7nix",
+      "source_player_name": "Atrain",
+      "score_value": -20,
+      "source_email": "alanjmiller123@gmail.com",
+      "source_venmo_handle": "Alan-Miller-105",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "a4SKiEpE8tWxPptWvXNU",
+      "source_player_name": "Chris",
+      "score_value": 20,
+      "source_email": "cbradburn@me.com",
+      "source_venmo_handle": "Chris-Bradburn-1",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -20,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    }
+  ]
+}

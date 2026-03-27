@@ -8,19 +8,22 @@ Screens and flows for the Late Add app. For terminology (Group, Season, Event, R
 
 Late Add v2 supports events (rounds) from three paths. All converge into the same canonical event/result model in the backend; the UI does not maintain separate "manual-only" logic beyond source labeling and input workflow.
 
+**Core product rule:** Manual entry and ingested rounds must converge into the same canonical event/result model in the backend. The UI must not create separate "manual-only" logic beyond source labeling and the input workflow. Standings aggregation, attribution, validation, and correction remain backend responsibilities. Late Add does not compute golf competition formats (e.g. Stableford, match play); it ingests and aggregates point totals. The UI is operational (round creation and correction), not limited to passive review.
+
 | Source | Description |
 |--------|-------------|
 | **API ingestion** | External apps (e.g. Scorekeeper, 18Birdies) POST event results to the Late Add API. Events appear in the system with `source_app` and optional `external_event_id` for attribution and idempotency. |
 | **Manual round entry** | Admins create a round/event directly in the UI when no external app supplied results or when direct entry is faster. Treated as a first-class workflow; submitted to the same backend path as ingestion (e.g. manual as `source_app`). |
-| **Round edit / override** | Admins correct bad ingests, adjust entered rounds, and override round details or results. Changes flow through the backend; standings and recalculation remain backend responsibilities. |
+| **Round edit / override** | Admins correct bad ingests, adjust entered rounds, and override round details or results. Changes flow through the backend; standings aggregation remains a backend responsibility. |
 
 ---
 
 ## App entry and navigation
 
-- **Dashboard** — Top-level entry; summary cards and recent events; links to Events, Attribution Review, Player Mapping, Standings.
-- **Primary nav** — Dashboard, Events, Round Entry (e.g. Events → New), Standings, Review (Attribution, Player Mapping), Settings if needed.
-- **Event-centric** — Event detail links to Edit/Override, Attribution Review, and Player Mapping where relevant.
+- **Dashboard** — Top-level entry; summary cards and recent rounds; links to Rounds, Attribution Review, Player Mapping, Standings. Dev tools: Reset & Import Glide Data, Import New Rounds.
+- **Expo app (late-add-expo) tab bar** — 3 tabs: Standings, Rounds, Analysis. Olive green headers with tab name only. Hamburger drawer for group selection (My Groups / Other Groups with logo thumbnails + checkmark), Group Details, Sign out.
+- **Admin web UI (late-add-admin) nav** — Dashboard, Rounds, Round Entry, Standings, Groups, Players, Points Analysis, Attribution Review, Player Mapping.
+- **Round-centric** — Round detail links to Edit/Override, Attribution Review, and Player Mapping where relevant.
 
 ---
 
@@ -28,16 +31,18 @@ Late Add v2 supports events (rounds) from three paths. All converge into the sam
 
 | Screen | Purpose |
 |--------|---------|
-| **Auth / sign-in** | Supabase Auth; obtain JWT for API calls. |
-| **Dashboard** | Operational snapshot: recent events (ingested + manual), pending attribution count, pending player mapping count, standings summary; Recent Events table; Attention Required section with links to review queues. |
-| **Events** | Audit trail for all rounds/events (API-ingested and manual). Filterable/sortable list; columns: internal id, external id, source app, played date, group, season, status, received/created timestamp. Event detail: source metadata, processing status, players/results, attribution status, validation/mapping issues; links to attribution review, player mapping, edit/override. |
-| **Event detail** | Single event: metadata, results, status, links to edit and review flows. |
-| **Round entry (events/new)** | Manual round creation. Form: group, season, event name, played date, source_app = manual, players, scores. First-class workflow; submits to canonical backend event creation. |
-| **Round edit / override** | Correction of existing round. Entry from event detail; route e.g. `/events/:eventId/edit`. Edit event metadata, players, scores per backend contract; optional override reason if supported. |
-| **Attribution review** | Queue of events with unresolved attribution; list + detail; admin chooses correct group/season and submits resolution. |
-| **Player mapping** | Queue of unmapped source players; list + detail; admin maps to existing Late Add player and confirms. |
-| **Standings** | Group + Season selectors; points-only table (player, rounds_played, total_points, rank); read-only from API; optional player drilldown. |
-| **Groups** | List and manage groups (and sections if used). |
+| **Auth / sign-in** | Email/password login via Supabase Auth; also supports pasting a JWT. Route: `/login`. |
+| **Dashboard** | Operational snapshot: recent rounds, pending attribution count, pending player mapping count; Attention Required section with links to review queues. Dev tools card: Reset & Import All, Import New Rounds. |
+| **Rounds** | All rounds (API-ingested and manual). 🏆 for tournament rounds. "+ Add Round" visible for active season (all users) or past season (admin only). "Season ended" label shown on past seasons. Add Round form: date, tournament toggle + buy-in + pool validation, player chips, score entry with live +/- preview. Submits via `POST /ingest-event-results`. Route: `/events`. |
+| **Round detail** | Single round: metadata, PLAYER / GAME PTS / +/- table, Quick Payout / Payout with Venmo. **Edit/delete: super admin and group admin only** — buttons hidden for members (client-side check + RLS backend enforcement). **Quick Payout** = minimized transactions. **Payout** = every loser pays every winner the game_points difference × dollars_per_point. Venmo deep links to `https://venmo.com/{handle}?txn=pay&amount=X&note={group}%20Golf%20-%20{date}`. Route: `/events/:eventId` (admin), `/round/[id]` (expo). |
+| **Round Entry** | Manual round creation. Form: group, season, played date, players, scores. Route: `/events/new`. |
+| **Round edit / override** | Correction of existing round. Entry from round detail; route: `/events/:eventId/edit`. Edit metadata, players, scores; optional override reason. |
+| **Attribution Review** | Queue of rounds with unresolved attribution; admin chooses correct group/season and submits resolution. Route: `/review/attribution`. |
+| **Player Mapping** | Queue of unmapped source players; admin maps to existing Late Add player and confirms. Route: `/review/player-mapping`. |
+| **Standings** | Shared group/season context with group selector modal (tap header → bottom sheet with groups by section, season pills). Points-only table with medals, dollar/point amounts, alternating rows. Default group = most recently active. Route: `/standings`. |
+| **Groups** | List groups. Route: `/groups`. |
+| **Players** | View and edit player data by group: display name, full name, email, Venmo, role, active status. Inline editing. Route: `/players`. |
+| **Points Analysis** | Game points differential analysis. All-vs-all matrix via `GET /get-points-matrix`, head-to-head drill-down via `GET /get-points-analysis`. All computation server-side; both late-add-admin and late-add-expo render the same API responses. Season filter (2023+), Exclude Signature Events toggle. Worst matchups table with player filter. Click any cell or row to drill into detail. Admin route: `/analytics/points`. Expo: Analysis tab. |
 | **Seasons** | List and manage seasons per group. |
 | **Payout config** | Group-level payout (e.g. dollars_per_point) if exposed. |
 | **Payment requests** | For a round: compute-money-deltas then generate-payment-requests; display payer→payee list. |

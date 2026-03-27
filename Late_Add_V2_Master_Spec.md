@@ -6,14 +6,14 @@ Product goals and scope. For status, architecture, UI direction, and terminology
 
 ## Goals
 
-- Provide a **standalone competition and standings engine** for golf that any compliant app can use as a backend.
-- Ingest **points and results** from external golf apps via a well-defined API; maintain groups, seasons, events, and results; expose **points-only standings**.
+- Provide a **points ledger + standings aggregation platform** for golf that any compliant app or admin can use as a backend.
+- Ingest or accept **final point totals per player** from external apps or manual admin entry; store them as **atomic point records** (one per player per round); derive **standings only** from those records (no direct editing of standings).
 - Support optional **payout configuration** and **round-scoped payment request generation** for settlement workflows, without tracking payment completion in the product.
 
 ## Scope
 
-- **In scope:** API-first ingestion; groups, seasons, events (rounds), results; points-only standings; group-level payout config; round-scoped money_delta computation and payment-request generation; Late Add app UI (in progress).
-- **Out of scope (current):** Running rounds or capturing scores inside Late Add; settlement ledger or payment-completion tracking; stroke-play or handicap calculation inside the API (sources send points or derived results).
+- **In scope:** API-first ingestion; groups, seasons, events (rounds), **points ledger** (atomic point records per player per round), **standings derived only from the ledger** (no mutable standings table); group-level payout config; round-scoped money_delta computation and payment-request generation; Late Add app UI (in progress). Late Add is a **points ledger + standings aggregation platform**—not a competition rules engine.
+- **Out of scope (current):** Running rounds or capturing scores inside Late Add; settlement ledger or payment-completion tracking; stroke-play or handicap calculation inside the API; any internal scoring logic for golf formats (Stableford, match play, best ball, skins, etc.). External systems or human admins determine points; Late Add stores, maps, attributes, corrects, audits, and aggregates them. **Do not add rules-engine or format-calculation roadmap items for v2.**
 
 ## Success criteria
 

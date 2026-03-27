@@ -1,0 +1,27 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "W8etdIH-RvC7TcJQz8k-hQ",
+  "round_date": "2025-06-21",
+  "scores_override": true,
+  "submitted_at": "2025-06-21T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "Ln8gyiV6TOeqMU0-PSltSQ",
+  "scores": [
+    {
+      "source_player_ref": "mGOrrykGEwNu44EBsj0z",
+      "source_player_name": "Scott",
+      "score_value": -3,
+      "source_email": "scottroseman@outlook.com",
+      "source_venmo_handle": "Scott-Roseman-2",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "TDyewdoZ6LIAsKTLfYUG",
+      "source_player_name": "Dietz",
+      "score_value": 3,
+      "source_email": "spdietz@me.com",
+      "source_venmo_handle": "Stephen-Dietz-5",
+      "source_is_active": true
+    }
+  ]
+}

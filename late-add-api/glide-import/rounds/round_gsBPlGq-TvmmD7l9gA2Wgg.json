@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "AUE4-xpZRyeLb8zGE6vRcA",
+  "round_date": "2023-09-10",
+  "scores_override": true,
+  "submitted_at": "2023-09-10T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "gsBPlGq-TvmmD7l9gA2Wgg",
+  "scores": [
+    {
+      "source_player_ref": "a4SKiEpE8tWxPptWvXNU",
+      "source_player_name": "Chris",
+      "score_value": 6,
+      "source_email": "cbradburn@me.com",
+      "source_venmo_handle": "Chris-Bradburn-1",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "qMStshNBGyuEfGxDTzHD",
+      "source_player_name": "FJ",
+      "score_value": -6,
+      "source_email": "jmbmiller1@yahoo.com",
+      "source_venmo_handle": "jmbmiller",
+      "source_role": "Admin",
+      "source_is_active": true
+    }
+  ]
+}

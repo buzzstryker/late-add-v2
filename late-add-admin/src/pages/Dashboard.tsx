@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { StatusBadge } from '../components/StatusBadge';
@@ -8,6 +8,7 @@ import { ErrorState } from '../components/ErrorState';
 import { listEvents } from '../api/events';
 import { listAttributionQueue } from '../api/attribution';
 import { listPlayerMappingQueue } from '../api/playerMapping';
+import { resetAndSeed, importNewRounds, type SeedProgress } from '../api/adminSeed';
 import type { EventSummary } from '../types';
 
 export function Dashboard() {
@@ -18,6 +19,37 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [partialEventCount, setPartialEventCount] = useState<number>(0);
+  const [seedProgress, setSeedProgress] = useState<SeedProgress | null>(null);
+  const [seeding, setSeeding] = useState(false);
+
+  const handleResetAndSeed = useCallback(async () => {
+    if (!window.confirm('This will DELETE all data and re-import from Glide. Continue?')) return;
+    setSeeding(true);
+    setSeedProgress({ step: 'Starting...', done: false });
+    try {
+      await resetAndSeed((p) => setSeedProgress(p));
+      load();
+    } catch (e: unknown) {
+      setSeedProgress({ step: `Error: ${e instanceof Error ? e.message : String(e)}`, done: true });
+    } finally {
+      setSeeding(false);
+    }
+  }, []);
+
+  const handleImportNew = useCallback(async () => {
+    setSeeding(true);
+    setSeedProgress({ step: 'Starting...', done: false });
+    try {
+      await importNewRounds((p) => setSeedProgress(p));
+      load();
+    } catch (e: unknown) {
+      setSeedProgress({ step: `Error: ${e instanceof Error ? e.message : String(e)}`, done: true });
+    } finally {
+      setSeeding(false);
+    }
+  }, []);
+
   const load = async () => {
     setLoading(true);
     setError(null);
@@ -27,8 +59,14 @@ export function Dashboard() {
         listAttributionQueue(),
         listPlayerMappingQueue(),
       ]);
-      if (evts.status === 'fulfilled') setEvents(evts.value.slice(0, 15));
-      else setEvents([]);
+      if (evts.status === 'fulfilled') {
+        const list = evts.value;
+        setEvents(list.slice(0, 15));
+        setPartialEventCount(list.filter((e) => e.status === 'partial_unresolved_players').length);
+      } else {
+        setEvents([]);
+        setPartialEventCount(0);
+      }
       if (attr.status === 'fulfilled') setAttributionCount(attr.value.length);
       else setAttributionCount(0);
       if (map.status === 'fulfilled') setMappingCount(map.value.length);
@@ -60,8 +98,8 @@ export function Dashboard() {
       <PageHeader title="Dashboard" subtitle="Operational snapshot" />
       <div className="card">
         <h2>Summary</h2>
-        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-          <div><strong>Recent events</strong>: {events.length}</div>
+        <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div><strong>Showing latest 15 events</strong></div>
           <div><strong>Pending attribution</strong>: {attributionCount} <Link to="/review/attribution">Review</Link></div>
           <div><strong>Pending player mapping</strong>: {mappingCount} <Link to="/review/player-mapping">Review</Link></div>
         </div>
@@ -77,6 +115,12 @@ export function Dashboard() {
             <span>Player mapping queue</span>
             <Link to="/review/player-mapping">{mappingCount} item(s)</Link>
           </li>
+          {partialEventCount > 0 && (
+            <li>
+              <span>Events with unresolved players</span>
+              <Link to="/events?status=partial_unresolved_players">{partialEventCount} event(s)</Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className="card">
@@ -92,8 +136,41 @@ export function Dashboard() {
           />
         )}
         <p style={{ marginTop: 12 }}>
-          <Link to="/events">View all events</Link>
+          <Link to="/events" className="btn btn-secondary" style={{ display: 'inline-block' }}>View all events</Link>
         </p>
+      </div>
+      <div className="card" style={{ borderTop: '2px solid #c62828' }}>
+        <h2>Dev Tools</h2>
+        <p style={{ marginBottom: 12, color: '#666' }}>
+          Clear all data and re-import from Glide ODS export. This is destructive.
+        </p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <button
+            className="btn btn-primary"
+            onClick={handleImportNew}
+            disabled={seeding}
+          >
+            {seeding ? 'Importing...' : 'Import New Rounds'}
+          </button>
+          <button
+            className="btn btn-primary"
+            style={{ background: '#c62828' }}
+            onClick={handleResetAndSeed}
+            disabled={seeding}
+          >
+            Reset & Import All
+          </button>
+        </div>
+        {seedProgress && (
+          <div style={{ marginTop: 12, padding: 12, background: '#f5f5f5', borderRadius: 4, fontFamily: 'monospace', fontSize: 13 }}>
+            <div>{seedProgress.step}</div>
+            {seedProgress.roundsOk != null && (
+              <div style={{ marginTop: 4, color: '#666' }}>
+                OK: {seedProgress.roundsOk} | Failed: {seedProgress.roundsFailed}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

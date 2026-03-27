@@ -1,0 +1,27 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "EL3Iy8WMR7COX0FSuaLV1Q",
+  "round_date": "2025-12-13",
+  "scores_override": true,
+  "submitted_at": "2025-12-13T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "IEu2OeVpRxi5O15.RVXkHA",
+  "scores": [
+    {
+      "source_player_ref": "xHaogjo0SibeROMZBr5g",
+      "source_player_name": "Pat",
+      "score_value": 14,
+      "source_email": "pmcallahan_1@yahoo.com",
+      "source_venmo_handle": "cal2269",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "YytMRmEEFc5bFdo6vPMA",
+      "source_player_name": "Colm",
+      "score_value": -14,
+      "source_email": "colm.moran8@gmail.com",
+      "source_venmo_handle": "ColmMoran",
+      "source_is_active": true
+    }
+  ]
+}

@@ -63,6 +63,12 @@ BEGIN
   VALUES (v_group_id, v_user_id, 'Seed Group', v_section_id, 1, 'points', NOW(), NOW())
   ON CONFLICT (id) DO UPDATE SET scoring_mode = 'points';
 
+  INSERT INTO players (id, user_id, display_name, is_active, created_at, updated_at)
+  VALUES
+    ('player-1', v_user_id, 'Player 1', 1, NOW(), NOW()),
+    ('player-2', v_user_id, 'Player 2', 1, NOW(), NOW())
+  ON CONFLICT (id, user_id) DO UPDATE SET display_name = EXCLUDED.display_name, updated_at = NOW();
+
   INSERT INTO group_members (id, group_id, player_id, role, is_active, joined_at)
   VALUES
     ('gm-1', v_group_id, 'player-1', 'member', 1, NOW()),
@@ -86,5 +92,20 @@ BEGIN
 
   INSERT INTO seasons (id, group_id, start_date, end_date, created_at, updated_at)
   VALUES ('season-seed-002', 'group-seed-002', '2025-01-01', '2025-12-31', NOW(), NOW())
+  ON CONFLICT (id) DO NOTHING;
+
+  -- One pending player-mapping queue item for testing review flow
+  INSERT INTO player_mapping_queue (id, user_id, source_app, source_player_name, source_player_ref, related_league_round_id, status, created_at, updated_at)
+  VALUES (
+    'a1000000-0000-0000-0000-000000000001',
+    v_user_id,
+    'test_app',
+    'Unknown Golfer',
+    NULL,
+    NULL,
+    'pending',
+    NOW(),
+    NOW()
+  )
   ON CONFLICT (id) DO NOTHING;
 END $$;

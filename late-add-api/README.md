@@ -1,6 +1,6 @@
 # late-add-api
 
-API for Late Add Golf v2: groups, seasons, league rounds, scores, and standings. Backed by Supabase (Postgres, Auth, Edge Functions).
+API for Late Add Golf v2: points-ingestion and standings. Groups, seasons, league rounds, scores, and standings. Late Add does not compute golf competition formats; it accepts final point totals and stores/aggregates them. Backed by Supabase (Postgres, Auth, Edge Functions).
 
 ## Prerequisites
 
@@ -26,29 +26,18 @@ API for Late Add Golf v2: groups, seasons, league rounds, scores, and standings.
    supabase db push
    ```
 
-## Run locally
+## Development (Supabase Cloud)
 
-**Order matters:** start the local stack first so the functions runtime gets local keys (not a linked remote project).
+We use **Supabase Cloud exclusively** — no local Supabase (`supabase start` is not used).
 
-```bash
-supabase start
-supabase db reset   # apply migrations + seed (test user + section, group, season, 2 players)
-supabase functions serve
-```
+- **API base:** `https://ftmqzxykwcccocogkjhc.supabase.co/functions/v1/`
+- **Seed user:** `test@lateadd.local` / `testpass123` (for integration tests).
 
-- API base: `http://127.0.0.1:54321/functions/v1/` (or see `supabase start` output).
-- Seed user: `test@lateadd.local` / `testpass123` (for integration tests).
-
-**If you see "Invalid JWT" (401) when running tests:** the runtime may be using a *linked* remote project’s keys instead of local. For local-only testing, unlink then restart:
+After linking and pushing migrations, deploy functions:
 
 ```bash
-supabase unlink
-supabase start
-supabase db reset
-supabase functions serve
+supabase functions deploy
 ```
-
-Then run `npm run test:integration` again. `supabase/config.toml` sets `verify_jwt = false` for the two functions so verification happens in code with the same env as your test client.
 
 ## Tests
 
@@ -58,12 +47,14 @@ Then run `npm run test:integration` again. `supabase/config.toml` sets `verify_j
 npm run test:local
 ```
 
-**Integration (full happy path):** requires local Supabase + functions running. Uses seed user and asserts ingest → league_rounds, league_scores, season_standings, idempotency, and invalid-player rejection.
+**Integration (full happy path):** requires deployed functions on Supabase Cloud. Uses seed user and asserts ingest → league_rounds, league_scores, season_standings, idempotency, and invalid-player rejection.
 
-**Domain rules:** `npm run test:domain` — asserts business rules: points vs raw scores, season-group match, membership, idempotency, override metadata, win_loss_override, multi-group, standings from event results.
+**Domain rules:** `npm run test:domain` — asserts business rules: points only (stroke-like values rejected), season-group match, membership, idempotency, override metadata, win_loss_override, multi-group, standings from event results.
 
-1. From project root: `supabase start`, then `supabase db reset`, then `supabase functions serve`.
-2. Copy `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` from the `supabase start` output into `.env` (or export them).
+**Adapter ingest:** `npm run test:adapter` — loads fixture from `tests/fixtures/external-round.json`, normalizes via `adapters/normalize.mjs`, POSTs to ingest-event-results, and verifies league_rounds, league_scores, player_mapping_queue, and standings. Requires deployed functions on Supabase Cloud (same as integration test). See `docs/SOURCE_ADAPTERS.md`.
+
+1. Ensure functions are deployed to Supabase Cloud: `supabase functions deploy`.
+2. Copy `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` from the Supabase Dashboard into `.env` (or export them).
 3. Run:
 
 ```bash
@@ -77,6 +68,20 @@ npm run test:integration
 supabase db push
 supabase functions deploy
 ```
+
+## Glide ODS import
+
+To import a Glide app export (`.ods`) into Late Add v2:
+
+1. **Convert** the ODS to ingest payloads (use your Late Add v2 group and season IDs):
+   ```bash
+   node scripts/convert-glide-ods-to-ingest.mjs "path/to/f35a60.Late Add Golf.ods" --group-id=group-seed-001 --season-id=season-seed-001
+   ```
+2. **Import** (with functions deployed and auth in env):
+   ```bash
+   node scripts/run-glide-import.mjs
+   ```
+   See `docs/SOURCE_ADAPTERS.md` (Glide ODS import) for details. Unresolved players go to the player-mapping queue.
 
 ## Docs
 

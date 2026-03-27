@@ -127,3 +127,24 @@ So: Venmo export **reads** league_scores (and related tables) and uses **money_d
 - **Schema:** No new tables or columns for this step.
 - **Venmo:** Export reads league_scores.money_delta (and related data); no DB writes in export.
 - **Standings:** Unchanged; remain points-only.
+
+---
+
+## 9. Client-side payout modes (Expo app)
+
+The Expo Round Detail screen computes payouts client-side from `score_value` and `game_points`:
+
+### Quick Payout (minimized transactions)
+Fewest possible payments: sort players by net position, match biggest loser with biggest winner first, work inward. Same algorithm as `generate-payment-requests` endpoint.
+
+### Full Payout (every loser pays every winner)
+Each player pays every player who scored higher the difference in raw game points:
+`payment = (game_points_higher - game_points_lower) × dollars_per_point`
+
+Requires `game_points` in `league_scores`. For legacy rounds without `game_points`, falls back to proportional splitting of `score_value`.
+
+### Venmo deep links
+Each payment row includes a Venmo button that opens:
+`https://venmo.com/{payee_venmo_handle}?txn=pay&amount={amount}&note={group_name}%20Golf%20-%20{round_date}`
+
+`venmo_handle` from `players.venmo_handle`. Button hidden if player has no handle.

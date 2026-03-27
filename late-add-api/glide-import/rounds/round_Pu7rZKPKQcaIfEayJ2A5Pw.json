@@ -1,0 +1,28 @@
+{
+  "group_id": "4kKh0sk1QpSvjPE6p8VNKA",
+  "season_id": "iFDXNJN8Tc2a4tii7kZxQg",
+  "round_date": "2024-08-05",
+  "scores_override": true,
+  "submitted_at": "2024-08-05T12:00:00.000Z",
+  "source_app": "glide",
+  "external_event_id": "Pu7rZKPKQcaIfEayJ2A5Pw",
+  "scores": [
+    {
+      "source_player_ref": "rkzvcxQz6y4cbEG9Ja88",
+      "source_player_name": "Buzz",
+      "score_value": -55,
+      "source_email": "buzzstryker67@gmail.com",
+      "source_venmo_handle": "Buzz-Stryker",
+      "source_role": "Admin",
+      "source_is_active": true
+    },
+    {
+      "source_player_ref": "XWE9ZQ4F8xKPAxTgtrWX",
+      "source_player_name": "X",
+      "score_value": 55,
+      "source_email": "todd.achondo@gmail.com",
+      "source_venmo_handle": "Todd-Achondo",
+      "source_is_active": true
+    }
+  ]
+}

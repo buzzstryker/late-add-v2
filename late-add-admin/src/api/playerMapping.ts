@@ -1,12 +1,17 @@
-import { apiFetch } from './client';
+import { apiFetch, ApiError } from './client';
 import type { PlayerMappingItem } from '../types';
 
 /**
- * List unresolved player mapping items. Assumes GET /review/player-mapping or equivalent.
+ * List unresolved player mapping items. GET /review/player-mapping. If missing (404), returns [].
  */
 export async function listPlayerMappingQueue(): Promise<PlayerMappingItem[]> {
-  const data = await apiFetch<{ items?: PlayerMappingItem[]; data?: PlayerMappingItem[] }>('/review/player-mapping');
-  return (data as { items?: PlayerMappingItem[] })?.items ?? (data as { data?: PlayerMappingItem[] })?.data ?? [];
+  try {
+    const data = await apiFetch<{ items?: PlayerMappingItem[]; data?: PlayerMappingItem[] }>('/review/player-mapping');
+    return (data as { items?: PlayerMappingItem[] })?.items ?? (data as { data?: PlayerMappingItem[] })?.data ?? [];
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 404) return [];
+    throw e;
+  }
 }
 
 /**

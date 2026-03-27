@@ -9,19 +9,19 @@ Entities and schema summary. Implemented in **late-add-api/** (Supabase/Postgres
 | Entity | Description |
 |--------|-------------|
 | **Section** | Optional parent for groups (e.g. organization). |
-| **Group** | League/competition unit. Has name, optional section, optional logo; has `scoring_mode` (points vs win_loss_override) and optional `dollars_per_point` for payout. Owned by a user (user_id). |
+| **Group** | League unit (group of players). Has name, optional section, optional logo; has `scoring_mode` (accepts numeric points or win_loss_override input; no internal format calculation) and optional `dollars_per_point` for payout. Owned by a user (user_id). |
 | **Group member** | Membership of a player in a group (player_id, role, is_active). |
 | **Season** | Time-bounded window for a group (start_date, end_date). Standings are per season. |
 | **League round (event)** | One round/event. Has group_id, optional season_id, round_date; optional source_app and external_event_id for idempotency and attribution. Owned by a user (user_id). |
-| **League score (result)** | One player’s result for an event. player_id, score_value, optional score_override; optional result_type (win/loss/tie). Optional money_delta (for settlement; not used in standings). |
-| **Season standings** | View: per season and player, rounds_played and total_points (effective points only). No money. |
+| **League score (points ledger row)** | One **atomic point record** per player per event. `game_points` = raw game points entered by user (positive integer). `score_value` = computed differential: **regular rounds** use h2h formula (`N × game_points - round_total`, zero-sum); **tournament rounds** use `game_points - tournament_buyin` (zero-sum when pool is balanced). `score_override` optional. Effective points = `COALESCE(score_override, score_value)`. For legacy rounds (pre-2026), `game_points` is NULL. Standings are derived only from these rows. |
+| **Season standings** | **Read-only view**: per season and player, rounds_played and total_points aggregated from league_scores (effective points only). Never edited directly; change ledger rows to change totals. No money. |
 
 ## Relationships
 
 - Section → Groups (optional).
 - Group → Group members, Seasons, League rounds.
 - Season → League rounds (optional link).
-- League round → League scores (one per player in the round).
+- League round → League scores / points ledger (one atomic point record per player in the round). Standings view reads from league_rounds + league_scores only; no direct standings table.
 
 ## Schema (physical)
 

@@ -9,20 +9,25 @@ Summary of the first usable admin UI in **`late-add-admin/`** (Vite + React) in 
 | Route | Purpose |
 |-------|---------|
 | `/` | Redirects to `/dashboard`. |
-| `/dashboard` | Operational snapshot: summary cards, recent events table, Attention Required (attribution + player mapping links). |
-| `/events` | Events list with filters (source_app, status, group_id, from_date, to_date). |
-| `/events/new` | Manual round entry form. |
-| `/events/:eventId` | Event detail: source metadata, status, results, links to edit and review flows. |
+| `/login` | Sign-in: email/password (default) or paste JWT tab. |
+| `/dashboard` | Operational snapshot: summary cards, recent rounds, Attention Required. Dev tools: Reset & Import All, Import New Rounds. |
+| `/events` | **Rounds** list with filters and sorting (played date, game points). Signature Event star toggle per round. |
+| `/events/new` | **Round Entry** — manual round creation form. |
+| `/events/:eventId` | Round detail: metadata, status, results, links to edit and review. |
 | `/events/:eventId/edit` | Round edit / override form. |
-| `/review/attribution` | Attribution review queue and resolution (select group/season, submit). |
-| `/review/player-mapping` | Player mapping queue and resolution (select Late Add player, confirm). |
-| `/standings` | Group + Season selectors; standings table (read-only from API). |
+| `/review/attribution` | **Attribution Review** — queue and resolution. |
+| `/review/player-mapping` | **Player Mapping** — queue and resolution. |
+| `/standings` | Standings — Group + Season selectors; points-only table with player drilldown. |
+| `/groups` | Groups list. |
+| `/groups/:groupId` | Group detail with seasons list. |
+| `/players` | **Players** — view and edit player data by group (name, email, Venmo, role, active). |
+| `/analytics/points` | **Points Analysis** — all-vs-all matrix via `GET /get-points-matrix`, head-to-head drill-down via `GET /get-points-analysis`. All computation server-side. Worst matchups with player filter. Season filter (2023+), Exclude Signature Events toggle. |
 
 ---
 
 ## 2. Components added
 
-- **Layout** — Nav bar (Dashboard, Events, Round entry, Standings, Attribution review, Player mapping) + outlet.
+- **Layout** — Nav bar (Dashboard, Rounds, Round Entry, Standings, Groups, Players, Points Analysis, Attribution Review, Player Mapping) + Sign in / Sign out + outlet.
 - **PageHeader** — Title, optional subtitle, optional action slot.
 - **StatusBadge** — Normalized status (processed, pending_attribution, pending_player_mapping, validation_error, duplicate_ignored).
 - **DataTable** — Generic table with columns (key, label, optional render), row click optional.
@@ -37,7 +42,7 @@ Summary of the first usable admin UI in **`late-add-admin/`** (Vite + React) in 
 
 ## 3. Forms added
 
-- **Round entry** (`/events/new`) — Group (required), Season (optional), Event name (optional), Played date (required), Source app fixed as `manual`, dynamic list of player_id + score_value; submit calls `POST /ingest-event-results`.
+- **Round entry** (`/events/new`) — Group (required), Season (optional), Played date (required), Source app `manual`, dynamic list of player_id + game_points; server computes score_value via head-to-head formula (`N × game_points - round_total`). Submit calls `POST /ingest-event-results`. Expo app: Add Round bottom sheet on Rounds tab with player chip selector.
 - **Round edit** (`/events/:eventId/edit`) — Played date, Season ID, results table (score_value, score_override); submit calls `PATCH /events/:eventId` (see backend gaps).
 - **Attribution resolution** — Inline on Attribution Review: Group ID (required), Season ID (optional); submit calls `POST /review/attribution/:id/resolve`.
 - **Player mapping resolution** — Inline on Player Mapping: Late Add player ID (required), optional suggestions; submit calls `POST /review/player-mapping/:id/resolve`.
@@ -46,7 +51,7 @@ Summary of the first usable admin UI in **`late-add-admin/`** (Vite + React) in 
 
 ## 4. API assumptions
 
-- **Base URL** — From `VITE_LATE_ADD_API_URL` (default `http://127.0.0.1:54321/functions/v1`). All requests use `Authorization: Bearer <JWT>` when token is set (see `api/client.ts`).
+- **Base URL** — From `VITE_LATE_ADD_API_URL` (default `https://ftmqzxykwcccocogkjhc.supabase.co/functions/v1`). All requests use `Authorization: Bearer <JWT>` when token is set (see `api/client.ts`).
 - **Documented and used**  
   - `POST /ingest-event-results` — Used for manual round entry and matches late-add-api contract.  
   - `GET /get-standings?season_id=&group_id=` — Used for Standings screen.
@@ -88,9 +93,22 @@ Recommendation: Add the above endpoints (or equivalent PostgREST usage) in late-
 ## 7. Where the code lives
 
 - **App and routing:** `late-add-admin/src/App.tsx`, `main.tsx`, `components/Layout.tsx`
-- **Pages:** `late-add-admin/src/pages/` (Dashboard, Events, EventDetail, RoundEntry, RoundEdit, AttributionReview, PlayerMapping, Standings)
+- **Pages:** `late-add-admin/src/pages/` (Login, Dashboard, Events, EventDetail, RoundEntry, RoundEdit, AttributionReview, PlayerMapping, Standings, Groups, GroupDetail)
 - **API:** `late-add-admin/src/api/` (client, events, standings, groups, attribution, playerMapping)
 - **Types:** `late-add-admin/src/types/index.ts`
 - **Shared components:** `late-add-admin/src/components/`
 
 To run: `cd late-add-admin && npm install && npm run dev` (see `late-add-admin/README.md`).
+
+---
+
+## 8. Deliverables summary (product requirement alignment)
+
+| Deliverable | Status |
+|-------------|--------|
+| **1. Admin UI screens** | Dashboard, Events (list + detail), Attribution Review, Player Mapping, Standings, Round Entry (`/events/new`), Round Edit/Override (`/events/:eventId/edit`). Plus Login, Groups, Group detail. |
+| **2. Shared components** | PageHeader, StatusBadge, DataTable, FilterBar, EmptyState, ErrorState, LoadingSpinner, ConfirmToast, FormSection. |
+| **3. Routing** | `/dashboard`, `/events`, `/events/new`, `/events/:eventId`, `/events/:eventId/edit`, `/review/attribution`, `/review/player-mapping`, `/standings`, `/groups`, `/groups/:groupId`, `/login`. |
+| **4. API assumptions** | See section 4 above. Ingest and get-standings are documented; list/detail/review/update are assumed and documented as backend gaps if missing. |
+| **5. Backend gaps** | See section 5 above. GET events, GET event detail, GET groups, GET seasons, review endpoints, PATCH event must exist or be added for full UI operation. |
+| **Product rule** | Manual entry and ingested rounds converge into the same canonical event/result model; no manual-only logic in UI beyond source labeling. Standings, attribution, validation, recalculation remain backend responsibilities. Docs updated: Screen Map (core product rule), UI Architecture (product requirement). |

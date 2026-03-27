@@ -57,6 +57,117 @@ async function runTests() {
     if (ok("ingest-event-results validation (reachable)", false, String(e))) passed++; else failed++;
   }
 
+  // GET /groups without auth → 401
+  try {
+    const r5 = await fetch(`${FUNCTIONS}/groups`, { method: "GET" });
+    if (ok("groups without auth → 401", r5.status === 401, `got ${r5.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("groups (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /seasons without auth → 401
+  try {
+    const r6 = await fetch(`${FUNCTIONS}/seasons`, { method: "GET" });
+    if (ok("seasons without auth → 401", r6.status === 401, `got ${r6.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("seasons (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /events without auth → 401
+  try {
+    const r7 = await fetch(`${FUNCTIONS}/events`, { method: "GET" });
+    if (ok("events without auth → 401", r7.status === 401, `got ${r7.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("events (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /events/:id without auth → 401
+  try {
+    const r8 = await fetch(`${FUNCTIONS}/events/00000000-0000-0000-0000-000000000001`, { method: "GET" });
+    if (ok("events/:id without auth → 401", r8.status === 401, `got ${r8.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("events/:id (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // PATCH /events/:id without auth → 401
+  try {
+    const r9 = await fetch(`${FUNCTIONS}/events/00000000-0000-0000-0000-000000000001`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ round_date: "2025-01-15" }),
+    });
+    if (ok("PATCH events/:id without auth → 401", r9.status === 401, `got ${r9.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("PATCH events/:id (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /players without auth → 401
+  try {
+    const r10 = await fetch(`${FUNCTIONS}/players`, { method: "GET" });
+    if (ok("players without auth → 401", r10.status === 401, `got ${r10.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("players (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /players?group_id= without auth → 401
+  try {
+    const r11 = await fetch(`${FUNCTIONS}/players?group_id=group-seed-001`, { method: "GET" });
+    if (ok("players?group_id= without auth → 401", r11.status === 401, `got ${r11.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("players?group_id= (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /review/player-mapping without auth → 401
+  try {
+    const r12 = await fetch(`${FUNCTIONS}/review/player-mapping`, { method: "GET" });
+    if (ok("review/player-mapping without auth → 401", r12.status === 401, `got ${r12.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("review/player-mapping (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // POST /review/player-mapping/:id/resolve without auth → 401
+  try {
+    const r13 = await fetch(`${FUNCTIONS}/review/player-mapping/a1000000-0000-0000-0000-000000000001/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_id: "player-1" }),
+    });
+    if (ok("review/player-mapping/:id/resolve without auth → 401", r13.status === 401, `got ${r13.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("review/player-mapping resolve (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /review/attribution without auth → 401
+  try {
+    const r14 = await fetch(`${FUNCTIONS}/review/attribution`, { method: "GET" });
+    if (ok("review/attribution without auth → 401", r14.status === 401, `got ${r14.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("review/attribution (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // POST /review/attribution/:id/resolve without auth → 401
+  try {
+    const r15 = await fetch(`${FUNCTIONS}/review/attribution/00000000-0000-0000-0000-000000000001/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ group_id: "group-seed-001", season_id: "season-seed-001" }),
+    });
+    if (ok("review/attribution/:id/resolve without auth → 401", r15.status === 401, `got ${r15.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("review/attribution resolve (reachable)", false, String(e))) passed++; else failed++;
+  }
+
+  // GET /standings-player-history without auth → 401
+  try {
+    const r16 = await fetch(
+      `${FUNCTIONS}/standings-player-history?group_id=group-seed-001&season_id=season-seed-001&player_id=player-1`,
+      { method: "GET" }
+    );
+    if (ok("standings-player-history without auth → 401", r16.status === 401, `got ${r16.status}`)) passed++; else failed++;
+  } catch (e) {
+    if (ok("standings-player-history (reachable)", false, String(e))) passed++; else failed++;
+  }
+
   console.log("\n" + (failed === 0 ? "All checks passed." : `${failed} check(s) failed.`));
   Deno.exit(failed > 0 ? 1 : 0);
 }

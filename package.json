@@ -1,0 +1,11 @@
+{
+  "name": "late-add-v2-repo",
+  "private": true,
+  "description": "Monorepo root — mobile app lives in mobile/late-add-v2",
+  "scripts": {
+    "mobile": "npm run start --prefix mobile/late-add-v2",
+    "start": "npm run start --prefix mobile/late-add-v2",
+    "start:tunnel": "npm run start:tunnel --prefix mobile/late-add-v2",
+    "start:lan": "npm run start:lan --prefix mobile/late-add-v2"
+  }
+}

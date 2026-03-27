@@ -1,5 +1,7 @@
 /**
  * Full happy-path integration test: seed user → auth → ingest → assert DB and standings.
+ * Verifies points-ledger architecture: ingest creates atomic point records (league_scores);
+ * round edit (PATCH) updates those records; standings are derived from the ledger only (step 5b).
  * Requires: supabase start, supabase db reset, supabase functions serve.
  * Env: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY (from `supabase start` output).
  * Loads .env from project root if dotenv is installed.
@@ -106,7 +108,7 @@ async function main() {
   const { data: scores } = await admin.from("league_scores").select("player_id, score_value").eq("league_round_id", leagueRoundId);
   assert(Array.isArray(scores) && scores.length === 2, `Expected 2 league_scores rows, got ${scores?.length ?? 0}`);
   const byPlayer = Object.fromEntries(scores.map((s) => [s.player_id, s.score_value]));
-  assert(byPlayer["player-1"] === 2 && byPlayer["player-2"] === -1, "Score values must be 2 and -1 (points mode)");
+  assert(byPlayer["player-1"] === 2 && byPlayer["player-2"] === -1, "Point values must be 2 and -1 (points mode)");
 
   console.log("5. GET get-standings and assert rounds_played and total_points…");
   const rStandings = await fetch(
@@ -119,7 +121,66 @@ async function main() {
   const pts = standings.map((s) => ({ player_id: s.player_id, rounds_played: s.rounds_played, total_points: s.total_points }));
   assert(pts.every((p) => p.rounds_played === 1), "Each player should have rounds_played = 1");
   const totalSet = new Set(pts.map((p) => p.total_points));
-  assert(totalSet.has(2) && totalSet.has(-1), "total_points should be 2 and -1 (standings from event results)");
+  assert(totalSet.has(2) && totalSet.has(-1), "total_points should be 2 and -1 (standings derived from ledger)");
+
+  console.log("5b. Points ledger: round edit (PATCH) updates atomic point records; standings reflect ledger…");
+  const rPatch = await fetch(`${FUNCTIONS}/events/${leagueRoundId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      results: [
+        { player_id: "player-1", score_value: 2, score_override: 5 },
+        { player_id: "player-2", score_value: -1 },
+      ],
+      override_actor: "integration-test",
+      override_reason: "ledger test",
+    }),
+  });
+  assert(rPatch.status === 200, `PATCH events/:id expected 200, got ${rPatch.status}: ${await rPatch.text().catch(() => "")}`);
+  const rDetail = await fetch(`${FUNCTIONS}/events/${leagueRoundId}`, { headers: { Authorization: `Bearer ${token}` } });
+  assert(rDetail.status === 200, `GET event detail expected 200, got ${rDetail.status}`);
+  const detailBody = await rDetail.json().catch(() => ({}));
+  const p1Result = (detailBody.results ?? []).find((r) => r.player_id === "player-1");
+  assert(p1Result?.score_override === 5, `Event detail results must show player-1 score_override 5, got ${JSON.stringify(p1Result)}`);
+  assert(p1Result?.override_reason === "ledger test", `Event detail must return override_reason for overridden score, got ${JSON.stringify(p1Result?.override_reason)}`);
+  assert(p1Result?.override_actor === "integration-test", `Event detail must return override_actor for overridden score, got ${JSON.stringify(p1Result?.override_actor)}`);
+  assert(typeof p1Result?.override_at === "string" && p1Result.override_at.length > 0, `Event detail must return override_at for overridden score, got ${JSON.stringify(p1Result?.override_at)}`);
+  const { data: scoresAfterPatch } = await admin.from("league_scores").select("player_id, score_value, score_override").eq("league_round_id", leagueRoundId);
+  const p1After = scoresAfterPatch?.find((s) => s.player_id === "player-1");
+  assert(p1After?.score_override === 5, `Ledger row must have score_override 5 after PATCH, got ${JSON.stringify(p1After)}`);
+  const rStandings2 = await fetch(
+    `${FUNCTIONS}/get-standings?season_id=${SEASON_ID}&group_id=${GROUP_ID}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  const { standings: standings2 } = await rStandings2.json();
+  const p1Standing = standings2?.find((s) => s.player_id === "player-1");
+  assert(p1Standing?.total_points === 5, `Standings must reflect ledger (player-1 total_points 5), got ${p1Standing?.total_points}`);
+  const rPatchRestore = await fetch(`${FUNCTIONS}/events/${leagueRoundId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      results: [
+        { player_id: "player-1", score_value: 2 },
+        { player_id: "player-2", score_value: -1 },
+      ],
+    }),
+  });
+  assert(rPatchRestore.status === 200, `PATCH restore expected 200, got ${rPatchRestore.status}`);
+
+  console.log("5c. Standings player history: round-level point records; total matches sum of effective_points…");
+  const rHistory = await fetch(
+    `${FUNCTIONS}/standings-player-history?group_id=${GROUP_ID}&season_id=${SEASON_ID}&player_id=player-1`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  assert(rHistory.status === 200, `standings-player-history expected 200, got ${rHistory.status}: ${await rHistory.text().catch(() => "")}`);
+  const bodyHistory = await rHistory.json().catch(() => ({}));
+  assert(Array.isArray(bodyHistory.history), "Response must include history array");
+  assert(bodyHistory.player_id === "player-1", "player_id must be player-1");
+  const sumEffective = (bodyHistory.history ?? []).reduce((s, row) => s + (row.effective_points ?? 0), 0);
+  assert(bodyHistory.total_points === sumEffective, `total_points (${bodyHistory.total_points}) must equal sum of effective_points (${sumEffective})`);
+  assert((bodyHistory.history ?? []).length >= 1, "player-1 must have at least one round in history");
+  const firstRow = bodyHistory.history[0];
+  assert(firstRow.event_id && firstRow.round_date != null && firstRow.effective_points != null, "Each history row must have event_id, round_date, effective_points");
 
   console.log("6. Idempotency: POST same (source_app + external_event_id) again → 200…");
   const r2 = await fetch(`${FUNCTIONS}/ingest-event-results`, {
@@ -195,7 +256,7 @@ async function main() {
   const deltasRerun = Object.fromEntries((scoresRerun ?? []).map((s) => [s.player_id, s.money_delta]));
   assert(deltasRerun["player-1"] === 3 && deltasRerun["player-2"] === -3, `After rerun expected 3 and -3, got ${JSON.stringify(deltasRerun)}`);
 
-  console.log("11. Override player-1 score to 1, recompute → new deltas (1, -1 mean 0 → 2, -2)…");
+  console.log("11. Override player-1 points to 1, recompute → new deltas (1, -1 mean 0 → 2, -2)…");
   const { data: scoreRows } = await admin.from("league_scores").select("id").eq("league_round_id", leagueRoundId).eq("player_id", "player-1");
   assert(scoreRows?.length === 1, "Need one league_scores row for player-1");
   await admin.from("league_scores").update({ score_override: 1 }).eq("id", scoreRows[0].id);
@@ -297,6 +358,166 @@ async function main() {
     Array.isArray(body3.invalid_player_ids) && body3.invalid_player_ids.includes("non-member-player"),
     "Response must include invalid_player_ids with non-member-player"
   );
+
+  console.log("14. Player mapping: GET queue → resolve first item → queue shrinks…");
+  const rQueue = await fetch(`${FUNCTIONS}/review/player-mapping`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  assert(rQueue.status === 200, `GET review/player-mapping expected 200, got ${rQueue.status}`);
+  const bodyQueue = await rQueue.json().catch(() => ({}));
+  assert(Array.isArray(bodyQueue.items), "Response must include items array");
+  const queueBefore = bodyQueue.items.length;
+  const mappingId = bodyQueue.items[0]?.id;
+  if (mappingId) {
+    const rResolve = await fetch(`${FUNCTIONS}/review/player-mapping/${mappingId}/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ player_id: "player-1" }),
+    });
+    assert(rResolve.status === 200, `POST resolve expected 200, got ${rResolve.status}: ${await rResolve.text()}`);
+    const rQueue2 = await fetch(`${FUNCTIONS}/review/player-mapping`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const bodyQueue2 = await rQueue2.json().catch(() => ({}));
+    assert(bodyQueue2.items.length === queueBefore - 1, `After resolve pending queue should have one fewer item, got ${bodyQueue2.items.length}`);
+    const { data: mappingRow } = await admin.from("player_mappings").select("canonical_player_id").eq("user_id", signIn.user.id).eq("source_player_ref", "Unknown Golfer").maybeSingle();
+    assert(mappingRow?.canonical_player_id === "player-1", `player_mappings must store canonical_player_id player-1, got ${mappingRow?.canonical_player_id}`);
+  }
+
+  console.log("15. Ingest with source identity: resolved mapping used, unresolved → queue…");
+  const rIngestMapping = await fetch(`${FUNCTIONS}/ingest-event-results`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      group_id: GROUP_ID,
+      season_id: SEASON_ID,
+      round_date: "2025-06-18",
+      source_app: "integration-test",
+      external_event_id: "ingest-mapping-001",
+      scores: [
+        { source_player_name: "Unknown Golfer", score_value: 2 },
+        { source_player_name: "Newcomer", score_value: -1 },
+      ],
+    }),
+  });
+  assert(rIngestMapping.status === 201, `ingest with source identity expected 201, got ${rIngestMapping.status}: ${await rIngestMapping.text()}`);
+  const bodyIngestMapping = await rIngestMapping.json().catch(() => ({}));
+  const roundMappingId = bodyIngestMapping.league_round_id;
+  assert(roundMappingId, "Response must include league_round_id");
+  const { data: roundRow } = await admin.from("league_rounds").select("processing_status, unresolved_player_count").eq("id", roundMappingId).maybeSingle();
+  assert(roundRow?.processing_status === "partial_unresolved_players", `Expected processing_status partial_unresolved_players, got ${roundRow?.processing_status}`);
+  assert(roundRow?.unresolved_player_count === 1, `Expected unresolved_player_count 1, got ${roundRow?.unresolved_player_count}`);
+  const { data: scoresMapping } = await admin.from("league_scores").select("player_id, score_value").eq("league_round_id", roundMappingId);
+  assert(Array.isArray(scoresMapping) && scoresMapping.length === 1, `Expected 1 league_score (only resolved), got ${scoresMapping?.length ?? 0}`);
+  assert(scoresMapping[0].player_id === "player-1" && scoresMapping[0].score_value === 2, `Expected player-1 with 2, got ${JSON.stringify(scoresMapping[0])}`);
+  const { data: queueNewcomer } = await admin.from("player_mapping_queue").select("id").eq("user_id", signIn.user.id).eq("status", "pending").eq("source_app", "integration-test").eq("source_player_name", "Newcomer");
+  assert(Array.isArray(queueNewcomer) && queueNewcomer.length === 1, `Expected one pending queue row for Newcomer (integration-test), got ${queueNewcomer?.length ?? 0}`);
+
+  console.log("16. Re-ingest with same unresolved identity → no duplicate pending queue row…");
+  const rIngestMapping2 = await fetch(`${FUNCTIONS}/ingest-event-results`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      group_id: GROUP_ID,
+      season_id: SEASON_ID,
+      round_date: "2025-06-19",
+      source_app: "integration-test",
+      external_event_id: "ingest-mapping-002",
+      scores: [
+        { source_player_name: "Unknown Golfer", score_value: 0 },
+        { source_player_name: "Newcomer", score_value: 1 },
+      ],
+    }),
+  });
+  assert(rIngestMapping2.status === 201, `second ingest with source identity expected 201, got ${rIngestMapping2.status}`);
+  const { data: pendingNewcomerAfter } = await admin.from("player_mapping_queue").select("id").eq("user_id", signIn.user.id).eq("status", "pending").eq("source_app", "integration-test").eq("source_player_name", "Newcomer");
+  assert(Array.isArray(pendingNewcomerAfter) && pendingNewcomerAfter.length === 1, `Duplicate prevention: expected exactly 1 pending row for Newcomer, got ${pendingNewcomerAfter?.length ?? 0}`);
+
+  console.log("17. Fully resolved ingest → processed; GET events list/detail return status…");
+  const rIngestFull = await fetch(`${FUNCTIONS}/ingest-event-results`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      group_id: GROUP_ID,
+      season_id: SEASON_ID,
+      round_date: "2025-06-20",
+      source_app: "integration-test",
+      external_event_id: "ingest-status-001",
+      scores: [
+        { player_id: "player-1", score_value: 1 },
+        { player_id: "player-2", score_value: -1 },
+      ],
+    }),
+  });
+  assert(rIngestFull.status === 201, `fully resolved ingest expected 201, got ${rIngestFull.status}`);
+  const bodyFull = await rIngestFull.json().catch(() => ({}));
+  const roundFullId = bodyFull.league_round_id;
+  const { data: roundFull } = await admin.from("league_rounds").select("processing_status, unresolved_player_count").eq("id", roundFullId).maybeSingle();
+  assert(roundFull?.processing_status === "processed", `Expected processing_status processed for full ingest, got ${roundFull?.processing_status}`);
+  assert(roundFull?.unresolved_player_count === 0, `Expected unresolved_player_count 0, got ${roundFull?.unresolved_player_count}`);
+
+  const rList = await fetch(`${FUNCTIONS}/events?status=partial_unresolved_players`, { headers: { Authorization: `Bearer ${token}` } });
+  assert(rList.status === 200, `GET events?status=partial_unresolved_players expected 200, got ${rList.status}`);
+  const bodyList = await rList.json().catch(() => ({}));
+  assert(Array.isArray(bodyList.events), "Response must include events array");
+  const partialEvent = bodyList.events.find((e) => e.id === roundMappingId);
+  assert(partialEvent?.status === "partial_unresolved_players" && partialEvent?.unresolved_player_count === 1, `Event list must return status and count for partial round, got ${JSON.stringify(partialEvent)}`);
+
+  const rDetail = await fetch(`${FUNCTIONS}/events/${roundMappingId}`, { headers: { Authorization: `Bearer ${token}` } });
+  assert(rDetail.status === 200, `GET events/:id expected 200, got ${rDetail.status}`);
+  const bodyDetail = await rDetail.json().catch(() => ({}));
+  assert(bodyDetail.status === "partial_unresolved_players" && bodyDetail.unresolved_player_count === 1, `Event detail must return status and count, got ${JSON.stringify({ status: bodyDetail.status, count: bodyDetail.unresolved_player_count })}`);
+  assert(Array.isArray(bodyDetail.mapping_issues) && bodyDetail.mapping_issues.length > 0, "Event detail must include mapping_issues for partial round");
+
+  console.log("18. Attribution: ingest without season_id → pending; resolve → attribution_resolved; events show attribution_status…");
+  const rIngestNoSeason = await fetch(`${FUNCTIONS}/ingest-event-results`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      group_id: GROUP_ID,
+      round_date: "2025-06-21",
+      source_app: "integration-test",
+      external_event_id: "ingest-attribution-001",
+      scores: [
+        { player_id: "player-1", score_value: 0 },
+        { player_id: "player-2", score_value: 0 },
+      ],
+    }),
+  });
+  assert(rIngestNoSeason.status === 201, `ingest without season_id expected 201, got ${rIngestNoSeason.status}`);
+  const bodyNoSeason = await rIngestNoSeason.json().catch(() => ({}));
+  const roundAttribId = bodyNoSeason.league_round_id;
+  const { data: roundAttrib } = await admin.from("league_rounds").select("attribution_status").eq("id", roundAttribId).maybeSingle();
+  assert(roundAttrib?.attribution_status === "pending_attribution", `Expected attribution_status pending_attribution, got ${roundAttrib?.attribution_status}`);
+
+  const rAttrQueue = await fetch(`${FUNCTIONS}/review/attribution`, { headers: { Authorization: `Bearer ${token}` } });
+  assert(rAttrQueue.status === 200, `GET review/attribution expected 200, got ${rAttrQueue.status}`);
+  const bodyAttrQueue = await rAttrQueue.json().catch(() => ({}));
+  assert(Array.isArray(bodyAttrQueue.items), "Response must include items array");
+  const attribItem = bodyAttrQueue.items.find((i) => i.id === roundAttribId);
+  assert(attribItem, "Pending attribution queue must include the round");
+
+  const rAttrResolve = await fetch(`${FUNCTIONS}/review/attribution/${roundAttribId}/resolve`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ group_id: GROUP_ID, season_id: SEASON_ID }),
+  });
+  assert(rAttrResolve.status === 200, `POST resolve attribution expected 200, got ${rAttrResolve.status}: ${await rAttrResolve.text()}`);
+
+  const { data: roundAfter } = await admin.from("league_rounds").select("attribution_status, group_id, season_id").eq("id", roundAttribId).maybeSingle();
+  assert(roundAfter?.attribution_status === "attribution_resolved", `Expected attribution_resolved, got ${roundAfter?.attribution_status}`);
+  assert(roundAfter?.group_id === GROUP_ID && roundAfter?.season_id === SEASON_ID, "Round must have updated group_id and season_id");
+
+  const rAttrQueue2 = await fetch(`${FUNCTIONS}/review/attribution`, { headers: { Authorization: `Bearer ${token}` } });
+  const bodyAttrQueue2 = await rAttrQueue2.json().catch(() => ({}));
+  const stillPending = bodyAttrQueue2.items?.filter((i) => i.id === roundAttribId) ?? [];
+  assert(stillPending.length === 0, "Resolved round must no longer be in attribution queue");
+
+  const rEventDetail = await fetch(`${FUNCTIONS}/events/${roundMappingId}`, { headers: { Authorization: `Bearer ${token}` } });
+  const bodyEventDetail = await rEventDetail.json().catch(() => ({}));
+  assert(bodyEventDetail.attribution_status != null, "Event detail must include attribution_status");
 
   console.log("\nAll integration checks passed.");
 }

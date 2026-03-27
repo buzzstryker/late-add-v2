@@ -1,16 +1,16 @@
-import { apiFetch } from './client';
+import { apiFetch, ApiError } from './client';
 import type { EventSummary, EventDetail, IngestEventRequest } from '../types';
 
 /**
- * List events. Assumes late-add-api exposes GET /events or equivalent
- * (query params: group_id?, season_id?, source_app?, status?, from_date?, to_date?).
- * If not implemented, backend must add this endpoint; UI composes from existing data where possible.
+ * List events. GET /events (query: group_id?, season_id?, source_app?, status?, from_date?, to_date?).
+ * If endpoint missing (404), returns [] so UI remains navigable.
  */
 export async function listEvents(params: {
   group_id?: string;
   season_id?: string;
   source_app?: string;
   status?: string;
+  attribution_status?: string;
   from_date?: string;
   to_date?: string;
 }): Promise<EventSummary[]> {
@@ -20,8 +20,13 @@ export async function listEvents(params: {
   });
   const query = q.toString();
   const path = query ? `/events?${query}` : '/events';
-  const data = await apiFetch<{ events?: EventSummary[]; data?: EventSummary[] }>(path);
-  return (data as { events?: EventSummary[] })?.events ?? (data as { data?: EventSummary[] })?.data ?? [];
+  try {
+    const data = await apiFetch<{ events?: EventSummary[]; data?: EventSummary[] }>(path);
+    return (data as { events?: EventSummary[] })?.events ?? (data as { data?: EventSummary[] })?.data ?? [];
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 404) return [];
+    throw e;
+  }
 }
 
 /**
@@ -47,7 +52,13 @@ export async function ingestEvent(body: IngestEventRequest): Promise<{ id: strin
  */
 export async function updateEvent(
   eventId: string,
-  body: Partial<{ round_date: string; season_id: string | null; results: { player_id: string; score_value?: number; score_override?: number | null }[] }>
+  body: Partial<{
+    round_date: string;
+    season_id: string | null;
+    results: { player_id: string; score_value?: number; score_override?: number | null }[];
+    override_actor?: string | null;
+    override_reason?: string | null;
+  }>
 ): Promise<EventDetail> {
   return apiFetch<EventDetail>(`/events/${eventId}`, {
     method: 'PATCH',
