@@ -17,7 +17,7 @@ export const unstable_settings = {
 
 function RootNavigator() {
   const colorScheme = useColorScheme();
-  const { ready, signedIn } = useAuth();
+  const { ready, signedIn, signOut } = useAuth();
   const { drawerOpen, closeDrawer } = useDrawer();
   const segments = useSegments();
   const router = useRouter();
@@ -41,12 +41,10 @@ function RootNavigator() {
     );
   }
 
-  const handleDrawerNavigate = (route: string) => {
+  const handleDrawerNavigate = async (route: string) => {
     closeDrawer();
     if (route === 'signout') {
-      // signout is handled by the AuthContext — screens can call useAuth().signOut()
-      // For now, navigate to login which will trigger signOut flow
-      router.replace('/login');
+      await signOut();
     } else if (route === 'groups') {
       router.push('/groups');
     }
