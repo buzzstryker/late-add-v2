@@ -1,5 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Platform } from 'react-native';
 
 import { getSupabaseAnonKey, getSupabaseUrl, hasSupabaseAuthConfig } from '@/lib/config';
 import { setAccessTokenGetter } from '@/lib/api';
@@ -11,6 +12,7 @@ type AuthContextValue = {
   ready: boolean;
   signedIn: boolean;
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>;
+  signInWithOtp: (email: string) => Promise<{ error: string | null }>;
   signInWithJwt: (jwt: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
@@ -26,7 +28,7 @@ function createSupabase(): SupabaseClient | null {
       storage: authPersistence,
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: false,
+      detectSessionInUrl: Platform.OS === 'web',
     },
   });
 }
@@ -90,6 +92,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
+  const signInWithOtp = useCallback(
+    async (email: string) => {
+      if (!supabase) return { error: 'Magic link needs EXPO_PUBLIC_SUPABASE_URL and ANON_KEY in .env' };
+      await authPersistence.removeItem(JWT_KEY);
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: Platform.OS === 'web' ? window.location.origin : undefined },
+      });
+      if (error) return { error: error.message };
+      return { error: null };
+    },
+    [supabase]
+  );
+
   const signInWithJwt = useCallback(async (jwt: string) => {
     const t = jwt.trim();
     if (!t) return;
@@ -109,10 +125,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ready,
       signedIn,
       signInWithPassword,
+      signInWithOtp,
       signInWithJwt,
       signOut,
     }),
-    [ready, signedIn, signInWithPassword, signInWithJwt, signOut]
+    [ready, signedIn, signInWithPassword, signInWithOtp, signInWithJwt, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

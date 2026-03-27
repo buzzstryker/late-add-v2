@@ -24,8 +24,10 @@ export default function LoginScreen() {
   const muted = Colors[colorScheme ?? 'light'].icon;
   const border = colorScheme === 'dark' ? '#444' : '#ccc';
   const inputBg = colorScheme === 'dark' ? '#1c1c1e' : '#f5f5f5';
-  const { signInWithPassword, signInWithJwt } = useAuth();
+  const { signInWithPassword, signInWithOtp, signInWithJwt } = useAuth();
 
+  const [magicEmail, setMagicEmail] = useState('');
+  const [magicSent, setMagicSent] = useState(false);
   const [email, setEmail] = useState('dev@lateaddgolf.com');
   const [password, setPassword] = useState('testpass123');
   const [jwt, setJwt] = useState('');
@@ -33,6 +35,23 @@ export default function LoginScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const supabaseReady = hasSupabaseAuthConfig();
+
+  async function onMagicLink() {
+    setError(null);
+    setMagicSent(false);
+    if (!magicEmail.trim()) {
+      setError('Enter your email address.');
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error: err } = await signInWithOtp(magicEmail);
+      if (err) setError(err);
+      else setMagicSent(true);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function onEmailSignIn() {
     setError(null);
@@ -85,8 +104,56 @@ export default function LoginScreen() {
             Late Add v2
           </ThemedText>
           <ThemedText type="subtitle" style={[styles.lead, { color: muted }]}>
-            Sign in with the email and password for your Supabase user, or paste a JWT.
+            Enter your email to receive a login link.
           </ThemedText>
+
+          <View style={styles.section}>
+            <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+              Magic link
+            </ThemedText>
+            <TextInput
+              style={inputStyle}
+              placeholder="Your email address"
+              placeholderTextColor={muted}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              autoComplete="email"
+              textContentType="emailAddress"
+              value={magicEmail}
+              onChangeText={(t) => { setMagicEmail(t); setMagicSent(false); }}
+            />
+            <Pressable
+              style={[styles.buttonPrimary, busy && styles.buttonDisabled]}
+              onPress={onMagicLink}
+              disabled={busy}>
+              {busy ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <ThemedText style={styles.buttonText}>Send Login Link</ThemedText>
+              )}
+            </Pressable>
+            {magicSent ? (
+              <View
+                style={[
+                  styles.callout,
+                  {
+                    borderColor: '#2e7d32',
+                    backgroundColor: colorScheme === 'dark' ? '#1a2e1a' : '#e8f5e9',
+                    marginTop: 12,
+                  },
+                ]}>
+                <ThemedText style={[styles.calloutText, { color: colorScheme === 'dark' ? '#a5d6a7' : '#2e7d32' }]}>
+                  Check your email for a login link. Tap it to sign in automatically.
+                </ThemedText>
+              </View>
+            ) : null}
+          </View>
+
+          <View style={styles.divider}>
+            <View style={[styles.dividerLine, { backgroundColor: border }]} />
+            <ThemedText style={[styles.dividerText, { color: muted }]}>or</ThemedText>
+            <View style={[styles.dividerLine, { backgroundColor: border }]} />
+          </View>
 
           <View style={styles.section}>
             <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
