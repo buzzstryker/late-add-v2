@@ -1,31 +1,16 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Platform } from 'react-native';
 
 import { getSupabaseAnonKey, getSupabaseUrl, hasSupabaseAuthConfig } from '@/lib/config';
 import { setAccessTokenGetter, setOnUnauthorized } from '@/lib/api';
 import { authPersistence } from '@/lib/authPersistence';
 
-const JWT_KEY = 'late_add_mobile_jwt';
-
-// ── Capture PKCE auth code from URL at module load time ────────────────────
-// Expo Router strips query params during rendering (before useEffect runs).
-// We must grab ?code= synchronously before that happens.
-let _pendingAuthCode: string | null = null;
-if (Platform.OS === 'web' && typeof window !== 'undefined') {
-  const params = new URLSearchParams(window.location.search);
-  _pendingAuthCode = params.get('code');
-  if (_pendingAuthCode) {
-    // Clean the URL so Supabase's detectSessionInUrl doesn't also try to exchange it
-    window.history.replaceState({}, '', window.location.pathname + window.location.hash);
-  }
-}
-
 type AuthContextValue = {
   ready: boolean;
   signedIn: boolean;
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>;
-  signInWithOtp: (email: string) => Promise<{ error: string | null }>;
+  sendOtp: (email: string) => Promise<{ error: string | null }>;
+  verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -40,8 +25,7 @@ function createSupabase(): SupabaseClient | null {
       storage: authPersistence,
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: false, // We handle URL codes explicitly above
-      flowType: 'pkce',
+      detectSessionInUrl: false,
     },
   });
 }
@@ -55,8 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Wire up the access-token getter for api.ts
   useEffect(() => {
     setAccessTokenGetter(async () => {
-      const manual = await authPersistence.getItem(JWT_KEY);
-      if (manual?.trim()) return manual.trim();
       if (supabase) {
         const { data } = await supabase.auth.getSession();
         return data.session?.access_token ?? null;
@@ -65,77 +47,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, [supabase]);
 
-  // Main auth initialization + ongoing state listener
+  // Auth state listener — single source of truth for signedIn + ready
   useEffect(() => {
     let cancelled = false;
-    // If a PKCE code exchange is pending, delay setting ready until it resolves
-    let exchangePending = Boolean(_pendingAuthCode);
-
-    function markReady() {
-      if (!readyRef.current && !cancelled) {
-        readyRef.current = true;
-        setReady(true);
-      }
-    }
 
     if (supabase) {
-      // Listen for ongoing auth events (token refresh, sign-out, etc.)
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        async (_event, session) => {
+        (_event, session) => {
           if (cancelled) return;
-          // While a PKCE code exchange is in-flight, the exchange callback
-          // handles signedIn/ready directly. Skip here to prevent the
-          // INITIAL_SESSION (null) handler from racing and overwriting
-          // signedIn=true set by the exchange callback.
-          if (exchangePending) return;
-
-          const manual = await authPersistence.getItem(JWT_KEY);
-          if (manual?.trim()) {
-            setSignedIn(true);
-          } else {
-            setSignedIn(Boolean(session?.access_token));
+          setSignedIn(Boolean(session?.access_token));
+          if (!readyRef.current) {
+            readyRef.current = true;
+            setReady(true);
           }
-          markReady();
         }
       );
-
-      // Explicit PKCE code exchange (captured at module load time)
-      if (_pendingAuthCode) {
-        const code = _pendingAuthCode;
-        _pendingAuthCode = null; // Consume so it's not reused
-        supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
-          exchangePending = false;
-          if (!cancelled) {
-            setSignedIn(Boolean(data.session?.access_token) && !error);
-            markReady();
-          }
-        }).catch(() => {
-          exchangePending = false;
-          if (!cancelled) markReady();
-        });
-      }
-
       return () => {
         cancelled = true;
         subscription.unsubscribe();
       };
     }
 
-    // No Supabase client — check for manual JWT only
-    (async () => {
-      const manual = await authPersistence.getItem(JWT_KEY);
-      if (!cancelled) {
-        setSignedIn(Boolean(manual?.trim()));
-        markReady();
-      }
-    })();
+    // No Supabase client — mark ready with no session
+    if (!cancelled) {
+      readyRef.current = true;
+      setReady(true);
+    }
     return () => { cancelled = true; };
   }, [supabase]);
 
   const signInWithPassword = useCallback(
     async (email: string, password: string) => {
-      if (!supabase) return { error: 'Email sign-in needs EXPO_PUBLIC_SUPABASE_URL and ANON_KEY in .env' };
-      await authPersistence.removeItem(JWT_KEY);
+      if (!supabase) return { error: 'Supabase not configured' };
       const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (error) return { error: error.message };
       return { error: null };
@@ -143,13 +86,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
-  const signInWithOtp = useCallback(
+  // Send a 6-digit OTP code to the user's email
+  const sendOtp = useCallback(
     async (email: string) => {
-      if (!supabase) return { error: 'Magic link needs EXPO_PUBLIC_SUPABASE_URL and ANON_KEY in .env' };
-      await authPersistence.removeItem(JWT_KEY);
+      if (!supabase) return { error: 'Supabase not configured' };
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: Platform.OS === 'web' ? window.location.origin : undefined },
+        options: { shouldCreateUser: false },
       });
       if (error) return { error: error.message };
       return { error: null };
@@ -157,35 +100,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
+  // Verify the 6-digit OTP code → establishes session
+  const verifyOtp = useCallback(
+    async (email: string, token: string) => {
+      if (!supabase) return { error: 'Supabase not configured' };
+      const { error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: token.trim(),
+        type: 'email',
+      });
+      if (error) return { error: error.message };
+      // Session is established — onAuthStateChange will fire SIGNED_IN
+      return { error: null };
+    },
+    [supabase]
+  );
+
   const signOut = useCallback(async () => {
-    await authPersistence.removeItem(JWT_KEY);
     if (supabase) await supabase.auth.signOut();
     setSignedIn(false);
   }, [supabase]);
 
-  // Auto-sign-out on server 401 (expired/invalid JWT).
-  // Skip 401s in the first few seconds after ready — gives the fresh session
-  // time to propagate (avoids sign-out immediately after magic link sign-in).
-  const readyAtRef = useRef<number>(0);
+  // Auto-sign-out on server 401 (expired/invalid JWT)
   useEffect(() => {
-    if (ready && !readyAtRef.current) readyAtRef.current = Date.now();
-  }, [ready]);
-  useEffect(() => {
-    setOnUnauthorized(() => {
-      if (Date.now() - readyAtRef.current < 3000) return; // grace period
-      signOut();
-    });
+    setOnUnauthorized(() => { signOut(); });
   }, [signOut]);
 
   const value = useMemo(
-    () => ({
-      ready,
-      signedIn,
-      signInWithPassword,
-      signInWithOtp,
-      signOut,
-    }),
-    [ready, signedIn, signInWithPassword, signInWithOtp, signOut]
+    () => ({ ready, signedIn, signInWithPassword, sendOtp, verifyOtp, signOut }),
+    [ready, signedIn, signInWithPassword, sendOtp, verifyOtp, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
