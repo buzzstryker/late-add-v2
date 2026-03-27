@@ -1,5 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
 import { getSupabaseAnonKey, getSupabaseUrl, hasSupabaseAuthConfig } from '@/lib/config';
@@ -13,7 +13,6 @@ type AuthContextValue = {
   signedIn: boolean;
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>;
   signInWithOtp: (email: string) => Promise<{ error: string | null }>;
-  signInWithJwt: (jwt: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -29,6 +28,7 @@ function createSupabase(): SupabaseClient | null {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: Platform.OS === 'web',
+      flowType: 'pkce',
     },
   });
 }
@@ -37,20 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const supabase = useMemo(() => (hasSupabaseAuthConfig() ? createSupabase() : null), []);
+  const readyRef = useRef(false);
 
-  const refreshSignedIn = useCallback(async () => {
-    let token: string | null = null;
-    const manual = await authPersistence.getItem(JWT_KEY);
-    if (manual?.trim()) {
-      token = manual.trim();
-    } else if (supabase) {
-      const { data } = await supabase.auth.getSession();
-      token = data.session?.access_token ?? null;
-    }
-    setSignedIn(Boolean(token));
-    return token;
-  }, [supabase]);
-
+  // Wire up the access-token getter for api.ts
   useEffect(() => {
     setAccessTokenGetter(async () => {
       const manual = await authPersistence.getItem(JWT_KEY);
@@ -63,22 +52,51 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, [supabase]);
 
+  // Listen for auth state changes — this is the ONLY place that sets ready + signedIn.
+  // Supabase v2 emits INITIAL_SESSION once the client finishes initialization
+  // (including processing any magic-link / PKCE tokens in the URL).
+  // By waiting for that event to set `ready`, we avoid the race where the router
+  // redirects to /login before the URL token exchange completes.
   useEffect(() => {
     let cancelled = false;
+
+    if (supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          if (cancelled) return;
+
+          // If a manual JWT is stored, it takes precedence
+          const manual = await authPersistence.getItem(JWT_KEY);
+          if (manual?.trim()) {
+            setSignedIn(true);
+          } else {
+            setSignedIn(Boolean(session?.access_token));
+          }
+
+          // Mark ready after initial session is resolved (URL tokens processed)
+          if (!readyRef.current) {
+            readyRef.current = true;
+            setReady(true);
+          }
+        }
+      );
+      return () => {
+        cancelled = true;
+        subscription.unsubscribe();
+      };
+    }
+
+    // No Supabase client — check for manual JWT only
     (async () => {
-      await refreshSignedIn();
-      if (!cancelled) setReady(true);
+      const manual = await authPersistence.getItem(JWT_KEY);
+      if (!cancelled) {
+        setSignedIn(Boolean(manual?.trim()));
+        readyRef.current = true;
+        setReady(true);
+      }
     })();
-    const sub = supabase?.auth.onAuthStateChange(() => {
-      authPersistence.getItem(JWT_KEY).then((j) => {
-        if (!j?.trim()) refreshSignedIn();
-      });
-    });
-    return () => {
-      cancelled = true;
-      sub?.data.subscription.unsubscribe();
-    };
-  }, [supabase, refreshSignedIn]);
+    return () => { cancelled = true; };
+  }, [supabase]);
 
   const signInWithPassword = useCallback(
     async (email: string, password: string) => {
@@ -86,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await authPersistence.removeItem(JWT_KEY);
       const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (error) return { error: error.message };
-      setSignedIn(true);
+      // signedIn will be set by onAuthStateChange
       return { error: null };
     },
     [supabase]
@@ -106,14 +124,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase]
   );
 
-  const signInWithJwt = useCallback(async (jwt: string) => {
-    const t = jwt.trim();
-    if (!t) return;
-    if (supabase) await supabase.auth.signOut();
-    await authPersistence.setItem(JWT_KEY, t);
-    setSignedIn(true);
-  }, [supabase]);
-
   const signOut = useCallback(async () => {
     await authPersistence.removeItem(JWT_KEY);
     if (supabase) await supabase.auth.signOut();
@@ -131,10 +141,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signedIn,
       signInWithPassword,
       signInWithOtp,
-      signInWithJwt,
       signOut,
     }),
-    [ready, signedIn, signInWithPassword, signInWithOtp, signInWithJwt, signOut]
+    [ready, signedIn, signInWithPassword, signInWithOtp, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
