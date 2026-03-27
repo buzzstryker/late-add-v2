@@ -92,7 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!supabase) return { error: 'Supabase not configured' };
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { shouldCreateUser: false },
+        options: { shouldCreateUser: false, emailRedirectTo: undefined },
       });
       if (error) return { error: error.message };
       return { error: null };
