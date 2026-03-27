@@ -1,9 +1,15 @@
 import { getApiBase, getSupabaseAnonKey } from './config';
 
 let getAccessToken: () => Promise<string | null> = async () => null;
+let onUnauthorized: (() => void) | null = null;
 
 export function setAccessTokenGetter(fn: () => Promise<string | null>) {
   getAccessToken = fn;
+}
+
+/** Register a callback invoked when the server returns 401 (expired/invalid JWT). */
+export function setOnUnauthorized(fn: () => void) {
+  onUnauthorized = fn;
 }
 
 /** Expose the stored token getter for direct REST calls. */
@@ -46,6 +52,9 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
       if (j?.error) msg = j.error;
     } catch {
       /* keep text */
+    }
+    if (res.status === 401 && onUnauthorized) {
+      onUnauthorized();
     }
     throw new ApiError(res.status, msg, path);
   }

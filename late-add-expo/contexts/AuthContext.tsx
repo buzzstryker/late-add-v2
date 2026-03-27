@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { Platform } from 'react-native';
 
 import { getSupabaseAnonKey, getSupabaseUrl, hasSupabaseAuthConfig } from '@/lib/config';
-import { setAccessTokenGetter } from '@/lib/api';
+import { setAccessTokenGetter, setOnUnauthorized } from '@/lib/api';
 import { authPersistence } from '@/lib/authPersistence';
 
 const JWT_KEY = 'late_add_mobile_jwt';
@@ -119,6 +119,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (supabase) await supabase.auth.signOut();
     setSignedIn(false);
   }, [supabase]);
+
+  // Auto-sign-out on server 401 (expired/invalid JWT) so user is redirected to login
+  useEffect(() => {
+    setOnUnauthorized(() => { signOut(); });
+  }, [signOut]);
 
   const value = useMemo(
     () => ({
