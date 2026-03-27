@@ -87,16 +87,12 @@ serve(async (req) => {
     });
   }
 
-  const standingsGroupId = standings[0].group_id;
-  const { data: groupRow } = await supabase.from("groups").select("user_id").eq("id", standingsGroupId).maybeSingle();
-  const userId = (groupRow as { user_id?: string } | null)?.user_id;
   const playerIds = [...new Set(standings.map((r) => r.player_id))];
   let playerNames: Record<string, string> = {};
-  if (userId && playerIds.length > 0) {
+  if (playerIds.length > 0) {
     const { data: playerRows } = await supabase
       .from("players")
       .select("id, display_name")
-      .eq("user_id", userId)
       .in("id", playerIds);
     for (const p of playerRows ?? []) {
       playerNames[(p as { id: string }).id] = (p as { display_name: string }).display_name;

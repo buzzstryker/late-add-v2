@@ -152,14 +152,11 @@ serve(async (req) => {
   history.sort((a, b) => a.round_date.localeCompare(b.round_date));
 
   let playerName: string | null = null;
-  const { data: groupRow } = await supabase.from("groups").select("user_id").eq("id", groupId).maybeSingle();
-  const userId = (groupRow as { user_id?: string } | null)?.user_id;
-  if (userId) {
+  {
     const { data: playerRow } = await supabase
       .from("players")
       .select("display_name")
       .eq("id", playerId)
-      .eq("user_id", userId)
       .maybeSingle();
     playerName = (playerRow as { display_name?: string } | null)?.display_name ?? null;
   }

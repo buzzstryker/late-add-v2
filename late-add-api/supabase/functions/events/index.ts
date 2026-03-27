@@ -173,11 +173,10 @@ serve(async (req) => {
 
     const playerIds = [...new Set((scoresRes.data ?? []).map((sc: Record<string, unknown>) => sc.player_id as string))];
     let playerNames: Record<string, string> = {};
-    if (playerIds.length > 0 && (round as { user_id: string }).user_id) {
+    if (playerIds.length > 0) {
       const { data: playerRows } = await supabase
         .from("players")
         .select("id, display_name")
-        .eq("user_id", (round as { user_id: string }).user_id)
         .in("id", playerIds);
       for (const p of playerRows ?? []) {
         playerNames[(p as { id: string }).id] = (p as { display_name: string }).display_name;
@@ -339,11 +338,10 @@ serve(async (req) => {
 
     const playerIds = [...new Set((scoresRes.data ?? []).map((sc: Record<string, unknown>) => sc.player_id as string))];
     let playerNames: Record<string, string> = {};
-    if (playerIds.length > 0 && (updated as { user_id: string }).user_id) {
+    if (playerIds.length > 0) {
       const { data: playerRows } = await supabase
         .from("players")
         .select("id, display_name")
-        .eq("user_id", (updated as { user_id: string }).user_id)
         .in("id", playerIds);
       for (const p of playerRows ?? []) {
         playerNames[(p as { id: string }).id] = (p as { display_name: string }).display_name;
