@@ -83,14 +83,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         async (_event, session) => {
           if (cancelled) return;
+          // While a PKCE code exchange is in-flight, the exchange callback
+          // handles signedIn/ready directly. Skip here to prevent the
+          // INITIAL_SESSION (null) handler from racing and overwriting
+          // signedIn=true set by the exchange callback.
+          if (exchangePending) return;
+
           const manual = await authPersistence.getItem(JWT_KEY);
           if (manual?.trim()) {
             setSignedIn(true);
           } else {
             setSignedIn(Boolean(session?.access_token));
           }
-          // Only mark ready here if no code exchange is in-flight
-          if (!exchangePending) markReady();
+          markReady();
         }
       );
 
@@ -158,9 +163,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSignedIn(false);
   }, [supabase]);
 
-  // Auto-sign-out on server 401 (expired/invalid JWT)
+  // Auto-sign-out on server 401 (expired/invalid JWT).
+  // Skip 401s in the first few seconds after ready — gives the fresh session
+  // time to propagate (avoids sign-out immediately after magic link sign-in).
+  const readyAtRef = useRef<number>(0);
   useEffect(() => {
-    setOnUnauthorized(() => { signOut(); });
+    if (ready && !readyAtRef.current) readyAtRef.current = Date.now();
+  }, [ready]);
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      if (Date.now() - readyAtRef.current < 3000) return; // grace period
+      signOut();
+    });
   }, [signOut]);
 
   const value = useMemo(
