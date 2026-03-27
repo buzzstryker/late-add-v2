@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [signedIn, setSignedIn] = useState(false);
   const supabase = useMemo(() => (hasSupabaseAuthConfig() ? createSupabase() : null), []);
   const readyRef = useRef(false);
+  const signedInAtRef = useRef<number>(0); // timestamp of last sign-in
 
   // Wire up the access-token getter for api.ts
   useEffect(() => {
@@ -58,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const hasToken = Boolean(session?.access_token);
           console.log('[AUTH EVENT]', _event, 'email:', session?.user?.email ?? null, 'hasToken:', hasToken);
           setSignedIn(hasToken);
+          if (hasToken) signedInAtRef.current = Date.now();
           if (!readyRef.current) {
             readyRef.current = true;
             console.log('[AUTH] ready=true');
@@ -107,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const verifyOtp = useCallback(
     async (email: string, token: string) => {
       if (!supabase) return { error: 'Supabase not configured' };
-      const { error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({
         email: email.trim(),
         token: token.trim(),
         type: 'email',
@@ -117,20 +119,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { error: error.message };
       }
       console.log('[AUTH] verifyOtp success');
+      // Explicitly set the session so the Supabase client (and getSession) has it
+      // immediately — prevents 401s from API calls that fire before onAuthStateChange
+      if (data.session) {
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+      }
       return { error: null };
     },
     [supabase]
   );
 
   const signOut = useCallback(async () => {
-    console.log('[AUTH] signOut called', new Error().stack?.split('\n').slice(1, 4).join(' <- '));
+    console.log('[AUTH] signOut called');
     if (supabase) await supabase.auth.signOut();
     setSignedIn(false);
   }, [supabase]);
 
-  // Auto-sign-out on server 401 (expired/invalid JWT)
+  // Auto-sign-out on server 401 (expired/invalid JWT).
+  // Grace period: ignore 401s within 5 seconds of sign-in — the fresh session
+  // may not have propagated to the API client for in-flight requests yet.
   useEffect(() => {
     setOnUnauthorized(() => {
+      const msSinceSignIn = signedInAtRef.current ? Date.now() - signedInAtRef.current : 9999;
+      if (msSinceSignIn < 5000) {
+        console.log('[AUTH] 401 ignored — within 5s grace period of sign-in');
+        return;
+      }
       console.log('[AUTH] 401 intercepted → signOut');
       signOut();
     });
