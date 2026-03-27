@@ -1,120 +1,101 @@
-# Welcome to your Expo app 👋
+# late-add-expo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo app for Late Add Golf v2 — web (Vercel), iOS, and Android via Expo Go.
 
-## Get started
+## Web deployment
 
-1. Install dependencies
+- **Production:** https://app.lateaddgolf.com (Vercel, auto-deploys from `master`)
+- **Vercel root directory:** `late-add-expo/`
+- **Build:** `npx expo export --platform web` → outputs to `dist/`
 
-   ```bash
-   npm install
-   ```
+## Authentication
 
-2. Start the app
+Login uses **email OTP** (6-digit code):
 
-   ```bash
-   npx expo start
-   ```
+1. User enters their email on the login screen
+2. Taps "Send Login Code" → Supabase sends a 6-digit code to their email
+3. User enters the code → `supabase.auth.verifyOtp()` establishes the session
+4. No redirects, no magic links, no PKCE — works identically on web and mobile
 
-### iPad / iPhone app: real Late Add data (not the browser)
+**Email/password** fallback is available behind a "Sign in with password instead" toggle (used for dev accounts).
 
-**Use this after the web admin works.** Team sequence: test **`late-add-admin/`** first, then the same API on device here (see repo root [README.md](../../README.md) → **Recommended testing order**).
+Only existing users can log in (`shouldCreateUser: false`). Player accounts are created by an admin via `late-add-api/scripts/invite-players.mjs`.
 
-After sign-in, the **Standings** tab loads **live** groups, seasons, and points from your Late Add API (same as the admin site).
+### Auth architecture
 
-1. Copy **`late-add-expo/.env.example`** to **`.env`** in `late-add-expo`.
-2. Set **`EXPO_PUBLIC_LATE_ADD_API_URL`** to your Edge Functions base, e.g.  
-   `https://YOUR_PROJECT.supabase.co/functions/v1`  
-   **Important:** If Supabase runs on your PC, the iPad cannot use `127.0.0.1`. Use your PC’s **LAN IP** (e.g. `http://192.168.1.50:54321/functions/v1`) and ensure the firewall allows it—or use a **hosted** Supabase project.
-3. **`EXPO_PUBLIC_SUPABASE_URL`** + **`EXPO_PUBLIC_SUPABASE_ANON_KEY`** in `.env` so you can **sign in with email and password** (recommended). In Supabase: **Authentication → Users → Add user** (email + password) for an account that can call your API.
+- **AuthContext** (`contexts/AuthContext.tsx`): `onAuthStateChange` is the single source of truth for `signedIn` and `ready` state. Exposes `sendOtp`, `verifyOtp`, `signInWithPassword`, `signOut`.
+- **Session storage**: `lib/authPersistence.ts` — uses `localStorage` on web, `expo-file-system` on native.
+- **401 handling**: API calls that return 401 trigger automatic sign-out (with a 30-second grace period after fresh login to avoid stale in-flight requests).
+- **Routing**: `_layout.tsx` redirects to `/login` when `signedIn=false` and to `/(tabs)/standings` when `signedIn=true`.
 
-#### Where do I get a JWT? (only if you paste token instead of email)
+## Environment variables
 
-Supabase does **not** show user JWTs in the dashboard. You get **`access_token`** when Auth signs someone in:
+Copy `.env.example` to `.env`:
 
-1. **Easiest:** Use **email & password** on the Late Add app—no JWT to copy.
-2. **Password grant (curl / Postman):** Replace project URL, anon key, email, password:
-
-   ```bash
-   curl -s -X POST "https://YOUR_PROJECT_REF.supabase.co/auth/v1/token?grant_type=password" \
-     -H "apikey: YOUR_ANON_OR_PUBLISHABLE_KEY" \
-     -H "Content-Type: application/json" \
-     -d "{\"email\":\"you@example.com\",\"password\":\"your-password\"}"
-   ```
-
-   Copy the **`access_token`** value from the JSON (long string starting with `eyJ…`). Paste that into the app or into Late Add admin’s JWT field.
-
-3. **Late Add admin:** If you already pasted a JWT there, it’s the same kind of token—you can paste the same value into the mobile app.
-4. `npm run start:tunnel` (or `start:lan`), open in **Expo Go** on the iPad.
-
-**Metro error resolving `@supabase/auth-js`:** From `late-add-expo`, run `npx expo start -c` (clear cache). The project includes `metro.config.js` that disables package `exports` resolution for compatibility with Supabase. Always start Expo from **`late-add-expo`** (or use `npm run start:tunnel` from the repo root).
-
-**AsyncStorage / “Native module is null, cannot access legacy storage”:** Sign-in no longer uses `@react-native-async-storage/async-storage`. Sessions and pasted JWTs are stored with **`expo-file-system`** on iOS/Android and **`localStorage`** on web (`lib/authPersistence.ts`).
-
----
-
-### Expo Go from a Windows PC (iPhone / iPad)
-
-Your phone or iPad does **not** need Xcode or Android Studio. Use **Expo Go** from the App Store / Play Store.
-
-**Option A — Tunnel (works best from PC)**  
-PC and tablet often can’t see each other on Wi‑Fi (guest Wi‑Fi, firewall, VPN). Tunnel fixes that:
-
-```bash
-npm run start:tunnel
+```
+EXPO_PUBLIC_SUPABASE_URL=https://ftmqzxykwcccocogkjhc.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
+EXPO_PUBLIC_LATE_ADD_API_URL=https://ftmqzxykwcccocogkjhc.supabase.co/functions/v1
 ```
 
-1. If prompted, sign in: `npx expo login` (free Expo account).
-2. Wait until the terminal shows a QR code / URL.
-3. On **iPad**: Camera app → scan QR → open in **Expo Go**.  
-   Or open **Expo Go** → “Enter URL manually” and paste the `exp://…` URL from the terminal.
+For Vercel, set these in the Vercel dashboard under Settings > Environment Variables.
 
-**Option B — Same Wi‑Fi (LAN)**  
-If PC and iPad are on the **same** home Wi‑Fi (not guest / isolated):
+## Development
 
+```bash
+cd late-add-expo
+npm install
+npx expo start        # dev server (web + mobile)
+npx expo start --web  # web only
+```
+
+### Mobile (Expo Go on iPhone / iPad)
+
+```bash
+npm run start:tunnel   # works from Windows PC to iOS device
+```
+
+Scan the QR code with the Camera app, opens in Expo Go.
+
+**LAN alternative** (same Wi-Fi required):
 ```bash
 npm run start:lan
 ```
 
-If it still won’t load:
+### PWA / Add to Home Screen
 
-1. **Windows Firewall**: Settings → Privacy & security → Windows Security → Firewall → “Allow an app” → allow **Node.js** on **Private** networks. Or temporarily turn off the firewall to test.
-2. **Correct PC IP**: In PowerShell run `ipconfig`, find your Wi‑Fi **IPv4** (e.g. `192.168.1.50`). In Expo Go, try **Enter URL manually**: `exp://YOUR_IP:8081` (port may differ; use what the terminal prints).
+The web deployment includes:
+- `public/manifest.json` with PWA metadata
+- `public/apple-touch-icon.png` (180x180) for iOS home screen icon
+- `app/+html.tsx` with manifest and apple-touch-icon head tags
 
-**Expo Go version**  
-Install the latest **Expo Go** from the store so it matches this project’s Expo SDK.
+To get the app icon on iPhone: Safari > Share > Add to Home Screen.
 
----
+## Supabase configuration
 
-In the output, you'll find options to open the app in a
+### Auth settings (pushed via `supabase config push`)
+- **Site URL:** `https://app.lateaddgolf.com`
+- **Redirect URLs:** `https://app.lateaddgolf.com/**`, `https://late-add-v2.vercel.app/**`
+- **OTP:** 6 digits, 1-hour expiry
+- **Email template:** Custom OTP-only template (shows code, no magic link)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Edge Functions
+All Edge Functions are deployed with `--no-verify-jwt`. Functions handle auth internally via `getUser(token)`. See `late-add-api/supabase/config.toml` for the full list.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+late-add-expo/
+├── app/              # Expo Router screens (file-based routing)
+│   ├── (tabs)/       # Tab screens: standings, rounds, history, etc.
+│   ├── login.tsx     # OTP + password login
+│   ├── _layout.tsx   # Root layout with auth routing
+│   └── +html.tsx     # Custom HTML head (PWA, icons)
+├── components/       # Shared UI components
+├── contexts/         # AuthContext, GroupContext, DrawerContext
+├── lib/              # API client, config, auth persistence
+├── constants/        # Theme colors
+├── hooks/            # Custom hooks
+├── public/           # Static assets (manifest, icons)
+└── assets/           # Images and fonts
+```

@@ -80,7 +80,7 @@ The next phase is **UI and front-end work** for the Late Add app: screens and fl
 
 The front end should support the following, backed by the existing API:
 
-1. **Auth** — Sign-in with Supabase Auth; use the returned JWT for all API calls (Bearer).
+1. **Auth** — Sign-in via email OTP (6-digit code) or email/password with Supabase Auth; use the returned JWT for all API calls (Bearer). Player accounts are created by admin via `invite-players.mjs`.
 2. **Groups and seasons** — List and manage groups (and sections if used); list seasons per group; create/edit as needed (API for groups/seasons may be extended; currently ingestion and standings are the main implemented endpoints).
 3. **Ingestion** — For a chosen group and round date, submit event results (scores array with player_id and points or result_type). Support optional `source_app` and `external_event_id` for idempotency and attribution.
 4. **Standings** — For a season (and optional group), call `get-standings` and display points-only standings (rounds_played, total_points). No money in standings.
@@ -110,8 +110,9 @@ Screens and navigation can be designed around these flows; the API contract and 
 
 ## Developer setup
 
-- **late-add-api** (Late Add v2 backend): See [late-add-api/README.md](./late-add-api/README.md) and [late-add-api/docs/](./late-add-api/docs/). Typical flow: `cd late-add-api`, `npm install`, copy `.env` from `.env.example`, `supabase login --token <token>`, `supabase link --project-ref ftmqzxykwcccocogkjhc`, `supabase db push`, `supabase functions deploy --no-verify-jwt`. We use **Supabase Cloud exclusively** (no local Supabase). The `--no-verify-jwt` flag is required because functions handle auth internally. Run integration/domain tests against the cloud project as documented there.
-- **late-add-admin** (admin UI): See [late-add-admin/README.md](./late-add-admin/README.md) for first-time setup and per-session instructions (JWT generation, dev server).
+- **late-add-api** (Late Add v2 backend): See [late-add-api/README.md](./late-add-api/README.md) and [late-add-api/docs/](./late-add-api/docs/). Typical flow: `cd late-add-api`, `npm install`, copy `.env` from `.env.example`, `supabase login --token <token>`, `supabase link --project-ref ftmqzxykwcccocogkjhc`, `supabase db push`, `supabase functions deploy --no-verify-jwt`, `supabase config push`. We use **Supabase Cloud exclusively** (no local Supabase). The `--no-verify-jwt` flag is required because functions handle auth internally. Run integration/domain tests against the cloud project as documented there.
+- **late-add-expo** (web + mobile app): See [late-add-expo/README.md](./late-add-expo/README.md). Web deployment on Vercel at `https://app.lateaddgolf.com`. Auth via email OTP (6-digit code). PWA-ready with home screen icon.
+- **late-add-admin** (admin UI): See [late-add-admin/README.md](./late-add-admin/README.md) for first-time setup and per-session instructions.
 - **Source apps** (e.g. any golf app that calls the Late Add API): Separate codebases; each implements its own client and auth to call the API.
 - **Full API contract, validation rules, and error codes**: [late-add-api/docs/](./late-add-api/docs/) (api.md, payout-configuration-design.md, settlement-calculation-design.md).
 

@@ -31,7 +31,7 @@ Late Add v2 supports events (rounds) from three paths. All converge into the sam
 
 | Screen | Purpose |
 |--------|---------|
-| **Auth / sign-in** | Email/password login via Supabase Auth; also supports pasting a JWT. Route: `/login`. |
+| **Auth / sign-in** | Email OTP login (6-digit code sent to email, verified in-app) via Supabase Auth; email/password fallback for dev accounts. Route: `/login`. |
 | **Dashboard** | Operational snapshot: recent rounds, pending attribution count, pending player mapping count; Attention Required section with links to review queues. Dev tools card: Reset & Import All, Import New Rounds. |
 | **Rounds** | All rounds (API-ingested and manual). 🏆 for tournament rounds. "+ Add Round" visible for active season (all users) or past season (admin only). "Season ended" label shown on past seasons. Add Round form: date, tournament toggle + buy-in + pool validation, player chips, score entry with live +/- preview. Submits via `POST /ingest-event-results`. Route: `/events`. |
 | **Round detail** | Single round: metadata, PLAYER / GAME PTS / +/- table, Quick Payout / Payout with Venmo. **Edit/delete: super admin and group admin only** — buttons hidden for members (client-side check + RLS backend enforcement). **Quick Payout** = minimized transactions. **Payout** = every loser pays every winner the game_points difference × dollars_per_point. Venmo deep links to `https://venmo.com/{handle}?txn=pay&amount=X&note={group}%20Golf%20-%20{date}`. Route: `/events/:eventId` (admin), `/round/[id]` (expo). |

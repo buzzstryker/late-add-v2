@@ -66,8 +66,22 @@ npm run test:integration
 
 ```bash
 supabase db push
-supabase functions deploy
+supabase functions deploy --no-verify-jwt
+supabase config push                        # pushes auth config (OTP template, redirect URLs)
 ```
+
+The `--no-verify-jwt` flag is required — all functions handle auth internally via `getUser(token)`. Platform-level JWT verification uses different keys when linked to a remote project and rejects valid tokens.
+
+### Player accounts
+
+Player auth accounts are created via `scripts/invite-players.mjs`:
+
+```bash
+node scripts/invite-players.mjs                  # dry run — shows player list
+node scripts/invite-players.mjs --send-invites   # creates accounts + links players.user_id
+```
+
+This creates Supabase auth accounts for players with emails in specified groups, sends invite emails, and updates `players.user_id` to link each player to their auth account.
 
 ## Glide ODS import
 
