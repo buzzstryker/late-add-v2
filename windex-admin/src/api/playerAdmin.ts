@@ -210,27 +210,33 @@ export async function updatePlayer(
     throw new Error(`Failed to update player: ${res.status} ${text}`);
   }
   // A PATCH that matches 0 rows (RLS-filtered or id not found) returns 200 with
-  // an empty array. Surface it instead of reporting a false "Saved".
+  // an empty array. Surface it instead of reporting a false "Saved". This guard
+  // is the load-bearing one — keep it.
   const rows = await res.json().catch(() => null);
   if (!Array.isArray(rows) || rows.length === 0) {
     throw new Error('Nothing was saved — the player was not found or you do not have permission to edit it.');
   }
 
-  // Read back what the server actually stored and assert every requested field
-  // landed. `updates` is spread into the body, so a key the caller passes that
-  // this function's type union forgot would be dropped by PostgREST silently
-  // and still return 200 with a row — indistinguishable from success. That is
-  // exactly the failure mode is_heckler would have had.
-  const saved = rows[0] as Record<string, unknown>;
-  const mismatched = Object.entries(updates)
-    .filter(([k, v]) => v !== undefined && saved[k] !== v)
-    .map(([k]) => k);
-  if (mismatched.length > 0) {
-    throw new Error(
-      `Saved, but these fields did not take: ${mismatched.join(', ')}. ` +
-      `The column may be missing from the request, or blocked by a policy.`
-    );
-  }
+  // DELIBERATELY NOT DONE: a per-field read-back assertion comparing `updates`
+  // against rows[0]. It was added when is_heckler landed, on the theory that a
+  // key missing from this function's type union would be dropped silently and
+  // still return 200. Tested against live and removed, because:
+  //
+  //   1. PostgREST does NOT silently drop unknown columns — it rejects the whole
+  //      request with 400 PGRST204 ("Could not find the 'x' column of 'players'
+  //      in the schema cache"), which the !res.ok branch above already surfaces.
+  //      The hazard it guarded against cannot occur.
+  //   2. It broke a real call site. handleConfirmRetire sends
+  //      new Date().toISOString() ("...435Z"); PostgREST re-serializes timestamptz
+  //      as "...435+00:00". Strict comparison never matches, so every retire threw
+  //      "did not take: retired_at" on a write that had actually succeeded — and
+  //      the modal stayed open showing failure, inviting a duplicate retry.
+  //   3. Its only remaining value would be catching silent coercion, which this
+  //      schema deliberately never does: the migration 054/055 trigger RAISEs
+  //      EXCEPTION on a disallowed column write rather than coercing it back.
+  //
+  // The type union on `updates` is what actually prevents the is_heckler class of
+  // bug — a forgotten key is a compile error, not a runtime surprise.
 }
 
 export async function updateMembership(

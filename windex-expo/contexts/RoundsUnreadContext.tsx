@@ -55,20 +55,28 @@ async function authHeaders(): Promise<Record<string, string> | null> {
 
 export function RoundsUnreadProvider({ children }: { children: ReactNode }) {
   const [hasUnreadRounds, setHasUnreadRounds] = useState(false);
-  const { myGroups } = useGroup();
+  const { myGroups, groups, amHeckler } = useGroup();
 
-  // Stable key so checkUnread (and the effect below) re-run only when the
-  // membership set truly changes, not on every GroupContext render.
-  const myGroupIdsKey = useMemo(
-    () => myGroups.map((g) => g.id).sort().join(','),
-    [myGroups]
+  // Which groups' rounds count as "mine" for the unread dot.
+  //
+  // Members: the groups they belong to. A Heckler belongs to none, so this
+  // used to resolve to '' and the check below early-returned — a Heckler could
+  // never get a rounds dot at all. They watch every league instead.
+  //
+  // `groups` from GroupContext is already leagues-only (rosters are filtered
+  // out at GroupContext:238), so this is the group_type='league' set without
+  // needing a second filter here.
+  const watchedGroupIdsKey = useMemo(
+    () => (amHeckler ? groups : myGroups).map((g) => g.id).sort().join(','),
+    [amHeckler, groups, myGroups]
   );
 
   const markRoundsSeen = useCallback(() => setHasUnreadRounds(false), []);
 
-  // Watermark (missing row = epoch) vs any round entered since in my groups.
+  // Watermark (missing row = epoch) vs any round entered since, in the watched
+  // groups (my memberships, or every league for a Heckler).
   const checkUnread = useCallback(async () => {
-    if (!myGroupIdsKey) return;
+    if (!watchedGroupIdsKey) return;
     const headers = await authHeaders();
     if (!headers) return;
     const myId = await getAuthorPlayerId();
@@ -84,7 +92,7 @@ export function RoundsUnreadProvider({ children }: { children: ReactNode }) {
         if (rows[0]?.last_seen_at) lastSeenAt = rows[0].last_seen_at;
       }
       const roundsRes = await fetch(
-        `${restBase()}/rest/v1/league_rounds?group_id=in.(${myGroupIdsKey})` +
+        `${restBase()}/rest/v1/league_rounds?group_id=in.(${watchedGroupIdsKey})` +
           `&row_type=eq.regular_round&created_at=gt.${encodeURIComponent(lastSeenAt)}` +
           `&select=id&limit=1`,
         { headers }
@@ -95,7 +103,7 @@ export function RoundsUnreadProvider({ children }: { children: ReactNode }) {
     } catch {
       // Leave state as-is; the next foreground re-checks.
     }
-  }, [myGroupIdsKey]);
+  }, [watchedGroupIdsKey]);
 
   useEffect(() => {
     void checkUnread();

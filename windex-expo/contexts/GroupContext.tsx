@@ -44,6 +44,17 @@ type GroupContextValue = {
   isSuperAdmin: boolean;
   isGroupAdmin: (groupId: string) => boolean;
   myPlayerIds: string[];
+  /** True when any players row linked to this auth user has is_heckler
+   *  (migration 055) — a global spectator. Mirrors the am_i_heckler() SQL
+   *  helper, but resolved client-side from the same request that produces
+   *  myPlayerIds rather than costing a second round trip. */
+  amHeckler: boolean;
+  /** display_name / email of the signed-in user's earliest-created players row
+   *  — the same row getAuthorPlayerId() picks for chat authorship, so the
+   *  drawer identifies you as the name your messages are posted under. Null
+   *  until resolved, or when no players row is linked. */
+  myDisplayName: string | null;
+  myEmail: string | null;
   dataVersion: number;
   invalidateData: () => void;
   isSelectedSeasonActive: boolean;
@@ -92,6 +103,9 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [adminGroupIds, setAdminGroupIds] = useState<Set<string>>(new Set());
   const [myPlayerIds, setMyPlayerIds] = useState<string[]>([]);
+  const [amHeckler, setAmHeckler] = useState(false);
+  const [myDisplayName, setMyDisplayName] = useState<string | null>(null);
+  const [myEmail, setMyEmail] = useState<string | null>(null);
 
   const isGroupAdmin = useCallback((groupId: string) => adminGroupIds.has(groupId), [adminGroupIds]);
 
@@ -120,6 +134,9 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
       setIsSuperAdmin(false);
       setAdminGroupIds(new Set());
       setMyPlayerIds([]);
+      setAmHeckler(false);
+      setMyDisplayName(null);
+      setMyEmail(null);
       setMyMembershipJoinedAt(new Map());
       setMyMembershipsLoaded(false);
       return;
@@ -143,15 +160,43 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
           setIsSuperAdmin(val === true);
         }
 
-        // My player IDs
-        const pidRes = await fetch(`${base}/rest/v1/rpc/get_my_player_ids`, { method: 'POST', headers, body: '{}' });
+        // My player rows. This replaces the get_my_player_ids RPC with the
+        // equivalent PostgREST select (players_select is USING(true), and the
+        // RPC's body is literally `SELECT id FROM players WHERE user_id =
+        // auth.uid()`), so it returns is_heckler in the SAME request rather
+        // than costing a second round trip for the badge flag.
+        // userId comes from AuthContext and is set by the same listener that
+        // sets signedIn; the guard below keeps the old behaviour if it ever
+        // lags, since myPlayerIds gates every write affordance in the app.
+        if (!userId) {
+          if (!cancelled) setMyMembershipsLoaded(true);
+          return;
+        }
+        const pidRes = await fetch(
+          `${base}/rest/v1/players?user_id=eq.${encodeURIComponent(userId)}` +
+            `&select=id,is_heckler,display_name,email&order=created_at.asc`,
+          { headers }
+        );
         if (!pidRes.ok) {
           if (!cancelled) setMyMembershipsLoaded(true);
           return;
         }
-        const ids: string[] = await pidRes.json();
+        const playerRows: {
+          id: string;
+          is_heckler: boolean | null;
+          display_name: string | null;
+          email: string | null;
+        }[] = await pidRes.json();
         if (cancelled) return;
+        const ids = playerRows.map((r) => r.id);
         setMyPlayerIds(ids);
+        // Any one linked row carrying the flag makes the user a Heckler —
+        // same semantics as the am_i_heckler() SQL helper's EXISTS.
+        setAmHeckler(playerRows.some((r) => r.is_heckler === true));
+        // [0] is the earliest-created row thanks to order=created_at.asc —
+        // the same one getAuthorPlayerId() posts chat messages as.
+        setMyDisplayName(playerRows[0]?.display_name ?? null);
+        setMyEmail(playerRows[0]?.email ?? null);
 
         if (ids.length === 0) {
           // No player records linked to this auth user. Mark loaded so the
@@ -190,7 +235,7 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
       }
     })();
     return () => { cancelled = true; };
-  }, [ready, signedIn]);
+  }, [ready, signedIn, userId]);
 
   // ─── Persisted choice loader ──────────────────────────────────────────────
   // userPrefs is async; load the persisted selectedGroupId for the current
@@ -395,6 +440,9 @@ export function GroupProvider({ children }: { children: React.ReactNode }) {
         isSuperAdmin,
         isGroupAdmin,
         myPlayerIds,
+        amHeckler,
+        myDisplayName,
+        myEmail,
         dataVersion,
         invalidateData,
         isSelectedSeasonActive,

@@ -8,7 +8,7 @@ import 'react-native-reanimated';
 import { Drawer } from '@/components/Drawer';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { DrawerProvider, useDrawer } from '@/contexts/DrawerContext';
-import { GroupProvider } from '@/contexts/GroupContext';
+import { GroupProvider, useGroup } from '@/contexts/GroupContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { registerServiceWorker } from '@/lib/pwaUpdate';
 
@@ -20,6 +20,7 @@ function RootNavigator() {
   const colorScheme = useColorScheme();
   const { ready, signedIn, signOut } = useAuth();
   const { drawerOpen, closeDrawer } = useDrawer();
+  const { myDisplayName, myEmail } = useGroup();
   const segments = useSegments();
   const router = useRouter();
 
@@ -92,10 +93,16 @@ function RootNavigator() {
         <Stack.Screen name="activity/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
+      {/* userName/userEmail were never passed, so the drawer footer always fell
+          back to 'Player' / '' for everyone. A Heckler has no standings row and
+          therefore no other identity surface in the app, which is what made the
+          omission worth fixing rather than leaving cosmetic. */}
       <Drawer
         visible={drawerOpen}
         onClose={closeDrawer}
         onNavigate={handleDrawerNavigate}
+        userName={myDisplayName ?? undefined}
+        userEmail={myEmail ?? undefined}
       />
       <StatusBar style="auto" />
     </ThemeProvider>

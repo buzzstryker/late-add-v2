@@ -709,9 +709,14 @@ export default function ChatScreen() {
           ]}
         >
           {showAuthor ? (
-            <Text style={[styles.authorLabel, { color: colors.icon }]} numberOfLines={1}>
-              {displayName(names, item.author_player_id)}
-            </Text>
+            <View style={styles.authorRow}>
+              <Text style={[styles.authorLabel, { color: colors.icon }]} numberOfLines={1}>
+                {displayName(names, item.author_player_id)}
+              </Text>
+              {names.get(item.author_player_id)?.is_heckler ? (
+                <Text style={styles.hecklerPill}>Heckler</Text>
+              ) : null}
+            </View>
           ) : null}
           <Pressable
             onPress={
@@ -1067,6 +1072,26 @@ const styles = StyleSheet.create({
   rowMine: { alignItems: 'flex-end' },
   rowOther: { alignItems: 'flex-start' },
   authorLabel: { fontSize: 16, fontWeight: '600', marginBottom: 2, marginLeft: 12 },
+  // Row wrapper so the pill sits beside the name without changing the name's
+  // own metrics — authorLabel keeps its marginLeft/marginBottom exactly as
+  // before, so message rows are untouched for everyone who isn't a Heckler.
+  authorRow: { flexDirection: 'row', alignItems: 'center' },
+  // Indigo to match the admin badge, and distinct from OLIVE (own messages)
+  // and the amber Roster badge. Sized down from authorLabel so it reads as an
+  // annotation on the name rather than part of it.
+  hecklerPill: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+    color: '#3949AB',
+    backgroundColor: '#E8EAF6',
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    marginLeft: 6,
+    marginBottom: 2,
+    overflow: 'hidden', // iOS needs this for borderRadius on <Text>
+  },
   bubble: {
     maxWidth: '78%',
     borderRadius: 18,

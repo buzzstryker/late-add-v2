@@ -284,6 +284,9 @@ export async function updateMembershipRest(membershipId: string, updates: Record
 export type PlayerNames = {
   display_name: string;
   full_name: string | null;
+  /** Global spectator ("Heckler", migration 055). Drives the chat author badge.
+   *  boolean, not the smallint used by is_active/is_super_admin. */
+  is_heckler: boolean;
 };
 
 /**
@@ -308,12 +311,20 @@ export async function getPlayerNames(playerIds: string[]): Promise<Map<string, P
     const anonKey = getSupabaseAnonKey();
     const inList = unique.map((id) => `"${id}"`).join(',');
     const res = await fetch(
-      `${base}/rest/v1/players?id=in.(${inList})&select=id,display_name,full_name`,
+      `${base}/rest/v1/players?id=in.(${inList})&select=id,display_name,full_name,is_heckler`,
       { headers: { Authorization: `Bearer ${token}`, apikey: anonKey || token } }
     );
     if (!res.ok) return new Map();
-    const rows: { id: string; display_name: string; full_name: string | null }[] = await res.json();
-    return new Map(rows.map((r) => [r.id, { display_name: r.display_name, full_name: r.full_name }]));
+    const rows: { id: string; display_name: string; full_name: string | null; is_heckler: boolean | null }[] =
+      await res.json();
+    return new Map(rows.map((r) => [r.id, {
+      display_name: r.display_name,
+      full_name: r.full_name,
+      // Coerce: a cached PWA build reading a pre-055 response would get
+      // undefined here, and an undefined badge flag should read as "not a
+      // heckler" rather than rendering as truthy-ish somewhere downstream.
+      is_heckler: r.is_heckler === true,
+    }]));
   } catch {
     return new Map();
   }
