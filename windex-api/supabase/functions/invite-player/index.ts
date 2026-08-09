@@ -204,10 +204,10 @@ function validate(body: InvitePlayerRequest): { ok: true; data: {
     return { ok: false, error: "is_heckler must be a boolean (true/false, not 1/0)" };
   }
   const is_heckler = body.is_heckler === true;
-  // A Heckler holds ZERO group_members rows, ever. Rather than silently
+  // A Gallery user holds ZERO group_members rows, ever. Rather than silently
   // discarding assignments the caller asked for, reject the contradiction.
   if (is_heckler && group_assignments.length > 0) {
-    return { ok: false, error: "A Heckler cannot be assigned to any group — send group_assignments: []" };
+    return { ok: false, error: "A Gallery user cannot be assigned to any group — send group_assignments: []" };
   }
   return { ok: true, data: { display_name, full_name, email, send_invite, group_assignments, is_heckler } };
 }

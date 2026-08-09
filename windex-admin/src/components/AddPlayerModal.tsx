@@ -225,17 +225,17 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
                 onChange={(e) => setIsHeckler(e.target.checked)}
                 disabled={busy}
               />
-              <span style={{ color: '#3949AB', fontWeight: 600 }}>Heckler (global spectator)</span>
+              <span style={{ color: '#3949AB', fontWeight: 600 }}>Gallery</span>
             </label>
             <div style={{ fontSize: 12, color: '#666', marginTop: 4, marginLeft: 24 }}>
-              Sees every league's standings, rounds and chat, and can post in chat
-              badged as a Heckler — but never competes. No standings row, no points,
-              no payout share. Hecklers hold no group membership, so group assignment
-              is disabled below.
+              Views everything — every league's standings, rounds and chat — and can
+              post in chat badged as Gallery. Joins no group, and never appears in
+              standings: no points, no skins, no payout share. Because they hold no
+              group membership, group assignment is disabled below.
             </div>
           </div>
 
-          {/* Group assignment is hidden outright when Heckler is on — the two are
+          {/* Group assignment is hidden outright when Gallery is on — the two are
               mutually exclusive, and leaving a disabled list visible invites the
               question of whether the selections still count. They do not: the
               payload sends group_assignments: [] either way. */}

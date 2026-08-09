@@ -714,7 +714,7 @@ export default function ChatScreen() {
                 {displayName(names, item.author_player_id)}
               </Text>
               {names.get(item.author_player_id)?.is_heckler ? (
-                <Text style={styles.hecklerPill}>Heckler</Text>
+                <Text style={styles.galleryPill}>Gallery</Text>
               ) : null}
             </View>
           ) : null}
@@ -1074,12 +1074,16 @@ const styles = StyleSheet.create({
   authorLabel: { fontSize: 16, fontWeight: '600', marginBottom: 2, marginLeft: 12 },
   // Row wrapper so the pill sits beside the name without changing the name's
   // own metrics — authorLabel keeps its marginLeft/marginBottom exactly as
-  // before, so message rows are untouched for everyone who isn't a Heckler.
+  // before, so message rows are untouched for everyone not in the Gallery.
   authorRow: { flexDirection: 'row', alignItems: 'center' },
   // Indigo to match the admin badge, and distinct from OLIVE (own messages)
   // and the amber Roster badge. Sized down from authorLabel so it reads as an
   // annotation on the name rather than part of it.
-  hecklerPill: {
+  //
+  // Label is always "Gallery" — singular and plural alike, never
+  // "Gallery Member(s)". The backing column is still `is_heckler`, the
+  // placeholder name the feature shipped under.
+  galleryPill: {
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 0.3,

@@ -66,12 +66,17 @@ const STATUS_PILL: Record<StatusKey, { label: string; color: string; bg: string;
 };
 
 /**
- * Heckler badge (migration 055). Matches the visual treatment of the amber
- * "Roster" badge in Groups.tsx:53-72 — same inline <span>, same metrics — but
- * in indigo so the two are never confused at a glance. Deliberately NOT
- * extracted into a shared Badge primitive; that's a separate cleanup.
+ * Gallery badge (migration 055). "Gallery" is the golf term for the crowd
+ * following play — the label is always "Gallery", singular and plural alike,
+ * never "Gallery Member(s)". The underlying column is still `is_heckler`, the
+ * placeholder name it shipped under.
+ *
+ * Matches the visual treatment of the amber "Roster" badge in Groups.tsx:53-72
+ * — same inline <span>, same metrics — but in indigo so the two are never
+ * confused at a glance. Deliberately NOT extracted into a shared Badge
+ * primitive; that's a separate cleanup.
  */
-function HecklerBadge() {
+function GalleryBadge() {
   return (
     <span
       style={{
@@ -84,7 +89,7 @@ function HecklerBadge() {
         letterSpacing: 0.3,
       }}
     >
-      Heckler
+      Gallery
     </span>
   );
 }
@@ -319,10 +324,10 @@ export function Players() {
               <option value="">Select group...</option>
               {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
               {/* Pseudo-option, not a real group: players with ZERO
-                  group_members rows. Covers hecklers (who never have one) and
-                  anyone simply not yet added to a group — the label names both
-                  cases deliberately. See UNAFFILIATED_GROUP_ID. */}
-              <option value={UNAFFILIATED_GROUP_ID}>Unaffiliated / Hecklers</option>
+                  group_members rows. Covers Gallery users (who never have one)
+                  and anyone simply not yet added to a group — the label names
+                  both cases deliberately. See UNAFFILIATED_GROUP_ID. */}
+              <option value={UNAFFILIATED_GROUP_ID}>Unaffiliated / Gallery</option>
             </select>
           </div>
           {isSuperAdmin && (
@@ -449,11 +454,11 @@ export function Players() {
 
       {players.length > 0 && (
         <div className="card">
-          <h2>{unaffiliated ? `Unaffiliated / Hecklers (${players.length})` : `Members (${players.length})`}</h2>
+          <h2>{unaffiliated ? `Unaffiliated / Gallery (${players.length})` : `Members (${players.length})`}</h2>
           {unaffiliated && (
             <p style={{ margin: '0 0 12px', color: '#666', fontSize: 13 }}>
-              Players with no group membership. Hecklers are badged; the rest are
-              simply not in a group yet. Role and Active are membership
+              Players with no group membership. Gallery users are badged; the rest
+              are simply not in a group yet. Role and Active are membership
               properties, so they show as — here.
             </p>
           )}
@@ -542,7 +547,7 @@ function DisplayRow({
       <td style={{ padding: '6px 10px', fontWeight: 600 }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
           {p.display_name}
-          {p.is_heckler && <HecklerBadge />}
+          {p.is_heckler && <GalleryBadge />}
         </span>
       </td>
       <td style={{ padding: '6px 10px', color: '#666' }}>{p.full_name ?? '—'}</td>
@@ -641,9 +646,9 @@ function EditRow({ player: p, authStatus, isSuperAdmin, onSave, onCancel, saving
               checked={heckler}
               onChange={(e) => setHeckler(e.target.checked)}
               disabled={p.membership !== null}
-              title={p.membership !== null ? 'A Heckler holds no group membership. Remove them from every group first.' : ''}
+              title={p.membership !== null ? 'A Gallery user holds no group membership. Remove them from every group first.' : ''}
             />
-            Heckler
+            Gallery
           </label>
         )}
       </td>
