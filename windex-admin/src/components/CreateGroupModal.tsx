@@ -153,7 +153,7 @@ export function CreateGroupModal({ open, onClose, onSuccess }: CreateGroupModalP
     });
   };
 
-  const handleAddPlayerSuccess = (result: { player: { id: string; display_name: string; email: string | null; user_id: string | null; is_active: number } }) => {
+  const handleAddPlayerSuccess = (result: { player: { id: string; display_name: string; email: string | null; user_id: string | null; is_active: number; is_heckler?: boolean } }) => {
     setAddPlayerOpen(false);
     // Refresh and auto-select the new player. Optimistically inject into the
     // list so the user sees them immediately; the refetch is the source of
@@ -168,6 +168,9 @@ export function CreateGroupModal({ open, onClose, onSuccess }: CreateGroupModalP
       is_active: result.player.is_active,
       retired_at: null,
       user_id: result.player.user_id,
+      // This modal creates group members, so the Heckler toggle is never on
+      // here — but read the server's answer rather than hardcoding false.
+      is_heckler: result.player.is_heckler ?? false,
     };
     setAllPlayers((prev) => {
       if (prev.some((p) => p.id === newPlayer.id)) return prev;

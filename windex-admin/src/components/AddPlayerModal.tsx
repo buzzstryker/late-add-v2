@@ -29,6 +29,9 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [sendInvite, setSendInvite] = useState(true);
+  // Global spectator (migration 055). Mutually exclusive with group assignment:
+  // a Heckler holds ZERO group_members rows, ever.
+  const [isHeckler, setIsHeckler] = useState(false);
   // groupId -> role; presence in this map = "selected".
   const [assignments, setAssignments] = useState<Record<string, 'admin' | 'member'>>({});
   const [busy, setBusy] = useState(false);
@@ -41,6 +44,7 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
       setDisplayName('');
       setEmail('');
       setSendInvite(true);
+      setIsHeckler(false);
       setAssignments({});
       setBusy(false);
       setError(null);
@@ -87,9 +91,13 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
     setError(null);
     setDuplicateExistingId(null);
 
-    const group_assignments: GroupAssignment[] = Object.entries(assignments).map(
-      ([group_id, role]) => ({ group_id, role })
-    );
+    // A Heckler is never assigned to a group. Send an EXPLICIT empty array,
+    // never omit the key: invite-player validates `Array.isArray(...)` before
+    // anything else (index.ts:176) and a missing key is a 400. Hiding the group
+    // UI must not change the payload shape.
+    const group_assignments: GroupAssignment[] = isHeckler
+      ? []
+      : Object.entries(assignments).map(([group_id, role]) => ({ group_id, role }));
 
     try {
       const result = await invitePlayer({
@@ -97,6 +105,7 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
         email: trimmedEmail,
         send_invite: sendInvite,
         group_assignments,
+        is_heckler: isHeckler,
       });
       onSuccess(result);
     } catch (e) {
@@ -208,6 +217,29 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
             </div>
           </div>
 
+          <div style={{ marginBottom: 18 }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: busy ? 'default' : 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={isHeckler}
+                onChange={(e) => setIsHeckler(e.target.checked)}
+                disabled={busy}
+              />
+              <span style={{ color: '#3949AB', fontWeight: 600 }}>Heckler (global spectator)</span>
+            </label>
+            <div style={{ fontSize: 12, color: '#666', marginTop: 4, marginLeft: 24 }}>
+              Sees every league's standings, rounds and chat, and can post in chat
+              badged as a Heckler — but never competes. No standings row, no points,
+              no payout share. Hecklers hold no group membership, so group assignment
+              is disabled below.
+            </div>
+          </div>
+
+          {/* Group assignment is hidden outright when Heckler is on — the two are
+              mutually exclusive, and leaving a disabled list visible invites the
+              question of whether the selections still count. They do not: the
+              payload sends group_assignments: [] either way. */}
+          {!isHeckler && (
           <div>
             <div style={labelStyle}>Group assignments</div>
             {sortedGroups.length === 0 ? (
@@ -272,6 +304,7 @@ export function AddPlayerModal({ open, groups, onClose, onSuccess }: AddPlayerMo
               {Object.keys(assignments).length} group{Object.keys(assignments).length === 1 ? '' : 's'} selected
             </div>
           </div>
+          )}
 
           {error && (
             <div

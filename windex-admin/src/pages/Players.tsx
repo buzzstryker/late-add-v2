@@ -12,6 +12,7 @@ import {
   sendInvite, PlayerAlreadyLinkedError,
   adminUpdateUserEmail,
   getPlayersAuthStatus,
+  UNAFFILIATED_GROUP_ID,
   type PlayerWithMembership, type PlayerAuthStatus,
 } from '../api/playerAdmin';
 import { getAuthToken } from '../api/client';
@@ -63,6 +64,30 @@ const STATUS_PILL: Record<StatusKey, { label: string; color: string; bg: string;
   signed_in:   { label: 'signed in',   color: '#2e7d32', bg: '#e8f5e9', border: '#a5d6a7' },
   retired:     { label: 'retired',     color: '#616161', bg: '#eeeeee', border: '#bdbdbd' },
 };
+
+/**
+ * Heckler badge (migration 055). Matches the visual treatment of the amber
+ * "Roster" badge in Groups.tsx:53-72 — same inline <span>, same metrics — but
+ * in indigo so the two are never confused at a glance. Deliberately NOT
+ * extracted into a shared Badge primitive; that's a separate cleanup.
+ */
+function HecklerBadge() {
+  return (
+    <span
+      style={{
+        fontSize: 11,
+        fontWeight: 600,
+        color: '#3949AB',
+        background: '#E8EAF6',
+        borderRadius: 6,
+        padding: '1px 7px',
+        letterSpacing: 0.3,
+      }}
+    >
+      Heckler
+    </span>
+  );
+}
 
 function StatusPill({ status }: { status: StatusKey | null }) {
   if (!status) return <span style={{ color: '#999', fontSize: 12 }}>—</span>;
@@ -156,6 +181,7 @@ export function Players() {
     venmo_handle: string;
     role: string;
     is_active: number;
+    is_heckler: boolean;
   }) => {
     if (!getCurrentUserId()) { setSaveMsg('Not signed in'); return; }
     setSaving(true);
@@ -163,16 +189,29 @@ export function Players() {
     try {
       // Non-email player fields. Email is handled separately below because it
       // is the OTP login identity, not just a column.
+      //
+      // is_heckler is sent only when it actually changed. The migration-055
+      // trigger rejects ANY change by a non-super-admin with 42501, so
+      // including an unchanged value would be harmless (IS DISTINCT FROM is
+      // false) — but sending it only on change keeps the failure surface
+      // limited to the person who actually toggled it.
       await updatePlayer(p.id, {
         display_name: fields.display_name,
         full_name: fields.full_name || null,
         venmo_handle: fields.venmo_handle || null,
         is_active: fields.is_active,
+        ...(fields.is_heckler !== p.is_heckler ? { is_heckler: fields.is_heckler } : {}),
       });
-      await updateMembership(p.membership.id, {
-        role: fields.role,
-        is_active: fields.is_active,
-      });
+      // Unaffiliated players (hecklers, and anyone not yet in a group) have no
+      // group_members row. This call used to be unconditional and would throw
+      // on `p.membership.id` for them. Role/Active are membership properties,
+      // so there is simply nothing to write.
+      if (p.membership) {
+        await updateMembership(p.membership.id, {
+          role: fields.role,
+          is_active: fields.is_active,
+        });
+      }
 
       // Email change: route a LINKED player through admin-update-user-email so
       // auth.users.email changes too (and players.email is synced across all of
@@ -266,6 +305,7 @@ export function Players() {
 
   const modalTitle = 'Send invite';
   const modalConfirmLabel = 'Send invite';
+  const unaffiliated = groupId === UNAFFILIATED_GROUP_ID;
 
   return (
     <>
@@ -278,6 +318,11 @@ export function Players() {
             <select id="pl-group" value={groupId} onChange={(e) => { setGroupId(e.target.value); setEditingId(null); }}>
               <option value="">Select group...</option>
               {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+              {/* Pseudo-option, not a real group: players with ZERO
+                  group_members rows. Covers hecklers (who never have one) and
+                  anyone simply not yet added to a group — the label names both
+                  cases deliberately. See UNAFFILIATED_GROUP_ID. */}
+              <option value={UNAFFILIATED_GROUP_ID}>Unaffiliated / Hecklers</option>
             </select>
           </div>
           {isSuperAdmin && (
@@ -393,12 +438,25 @@ export function Players() {
       {saveMsg && <div style={{ padding: '8px 16px', margin: '8px 0', background: saveMsg === 'Saved' ? '#e8f5e9' : '#ffebee', borderRadius: 4 }}>{saveMsg}</div>}
 
       {!loading && groupId && players.length === 0 && (
-        <EmptyState message={tab === 'retired' ? 'No retired players in this group.' : 'No players in this group.'} />
+        <EmptyState
+          message={
+            unaffiliated
+              ? (tab === 'retired' ? 'No retired unaffiliated players.' : 'No unaffiliated players — everyone belongs to a group.')
+              : (tab === 'retired' ? 'No retired players in this group.' : 'No players in this group.')
+          }
+        />
       )}
 
       {players.length > 0 && (
         <div className="card">
-          <h2>Members ({players.length})</h2>
+          <h2>{unaffiliated ? `Unaffiliated / Hecklers (${players.length})` : `Members (${players.length})`}</h2>
+          {unaffiliated && (
+            <p style={{ margin: '0 0 12px', color: '#666', fontSize: 13 }}>
+              Players with no group membership. Hecklers are badged; the rest are
+              simply not in a group yet. Role and Active are membership
+              properties, so they show as — here.
+            </p>
+          )}
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #ddd', textAlign: 'left' }}>
@@ -419,6 +477,7 @@ export function Players() {
                       key={p.id}
                       player={p}
                       authStatus={authStatus.get(p.id) ?? null}
+                      isSuperAdmin={isSuperAdmin}
                       onSave={(f) => handleSave(p, f)}
                       onCancel={() => setEditingId(null)}
                       saving={saving}
@@ -480,16 +539,27 @@ function DisplayRow({
 
   return (
     <tr style={{ borderBottom: '1px solid #eee' }}>
-      <td style={{ padding: '6px 10px', fontWeight: 600 }}>{p.display_name}</td>
+      <td style={{ padding: '6px 10px', fontWeight: 600 }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          {p.display_name}
+          {p.is_heckler && <HecklerBadge />}
+        </span>
+      </td>
       <td style={{ padding: '6px 10px', color: '#666' }}>{p.full_name ?? '—'}</td>
       <td style={{ padding: '6px 10px', color: '#666' }}>{p.email ?? '—'}</td>
       <td style={{ padding: '6px 10px' }}><StatusPill status={status} /></td>
       <td style={{ padding: '6px 10px', color: '#666' }}>{p.venmo_handle ?? '—'}</td>
-      <td style={{ padding: '6px 10px' }}>{p.membership.role}</td>
+      {/* Role and Active come from group_members. Unaffiliated players have no
+          such row, so there is nothing to show — not a default of 'member'. */}
+      <td style={{ padding: '6px 10px' }}>{p.membership ? p.membership.role : <span style={{ color: '#999' }}>—</span>}</td>
       <td style={{ padding: '6px 10px' }}>
-        <span style={{ color: p.membership.is_active ? '#2e7d32' : '#c62828', fontWeight: 600 }}>
-          {p.membership.is_active ? 'Yes' : 'No'}
-        </span>
+        {p.membership ? (
+          <span style={{ color: p.membership.is_active ? '#2e7d32' : '#c62828', fontWeight: 600 }}>
+            {p.membership.is_active ? 'Yes' : 'No'}
+          </span>
+        ) : (
+          <span style={{ color: '#999' }}>—</span>
+        )}
       </td>
       <td style={{ padding: '6px 10px', whiteSpace: 'nowrap' }}>
         {showSendInvite && (
@@ -537,10 +607,11 @@ function DisplayRow({
   );
 }
 
-function EditRow({ player: p, authStatus, onSave, onCancel, saving }: {
+function EditRow({ player: p, authStatus, isSuperAdmin, onSave, onCancel, saving }: {
   player: PlayerWithMembership;
   authStatus: PlayerAuthStatus | null;
-  onSave: (fields: { display_name: string; full_name: string; email: string; venmo_handle: string; role: string; is_active: number }) => void;
+  isSuperAdmin: boolean;
+  onSave: (fields: { display_name: string; full_name: string; email: string; venmo_handle: string; role: string; is_active: number; is_heckler: boolean }) => void;
   onCancel: () => void;
   saving: boolean;
 }) {
@@ -548,14 +619,33 @@ function EditRow({ player: p, authStatus, onSave, onCancel, saving }: {
   const [fullName, setFullName] = useState(p.full_name ?? '');
   const [email, setEmail] = useState(p.email ?? '');
   const [venmo, setVenmo] = useState(p.venmo_handle ?? '');
-  const [role, setRole] = useState(p.membership.role);
-  const [active, setActive] = useState(p.membership.is_active);
+  // Membership fields fall back to harmless defaults for an unaffiliated
+  // player. They are never written for one — handleSave skips updateMembership
+  // when p.membership is null — and the inputs are disabled below.
+  const [role, setRole] = useState(p.membership?.role ?? 'member');
+  const [active, setActive] = useState(p.membership?.is_active ?? 1);
+  const [heckler, setHeckler] = useState(p.is_heckler);
   const status = deriveStatus(p, authStatus);
 
   return (
     <tr style={{ borderBottom: '1px solid #eee', background: '#f9f9f9' }}>
       <td style={{ padding: '4px 8px' }}>
         <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} style={{ width: '100%', padding: 4 }} />
+        {/* Super-admin only: the migration-055 trigger rejects is_heckler
+            changes from anyone else with 42501, so showing the control to a
+            non-super admin would only produce a confusing failed save. */}
+        {isSuperAdmin && (
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, fontSize: 12, color: '#3949AB', fontWeight: 600 }}>
+            <input
+              type="checkbox"
+              checked={heckler}
+              onChange={(e) => setHeckler(e.target.checked)}
+              disabled={p.membership !== null}
+              title={p.membership !== null ? 'A Heckler holds no group membership. Remove them from every group first.' : ''}
+            />
+            Heckler
+          </label>
+        )}
       </td>
       <td style={{ padding: '4px 8px' }}>
         <input value={fullName} onChange={(e) => setFullName(e.target.value)} style={{ width: '100%', padding: 4 }} />
@@ -567,20 +657,25 @@ function EditRow({ player: p, authStatus, onSave, onCancel, saving }: {
       <td style={{ padding: '4px 8px' }}>
         <input value={venmo} onChange={(e) => setVenmo(e.target.value)} style={{ width: '100%', padding: 4 }} />
       </td>
+      {/* Role/Active are group_members columns — nothing to edit without one. */}
       <td style={{ padding: '4px 8px' }}>
-        <select value={role} onChange={(e) => setRole(e.target.value)} style={{ padding: 4 }}>
-          <option value="member">member</option>
-          <option value="admin">admin</option>
-        </select>
+        {p.membership ? (
+          <select value={role} onChange={(e) => setRole(e.target.value)} style={{ padding: 4 }}>
+            <option value="member">member</option>
+            <option value="admin">admin</option>
+          </select>
+        ) : <span style={{ color: '#999' }}>—</span>}
       </td>
       <td style={{ padding: '4px 8px' }}>
-        <select value={active} onChange={(e) => setActive(Number(e.target.value))} style={{ padding: 4 }}>
-          <option value={1}>Yes</option>
-          <option value={0}>No</option>
-        </select>
+        {p.membership ? (
+          <select value={active} onChange={(e) => setActive(Number(e.target.value))} style={{ padding: 4 }}>
+            <option value={1}>Yes</option>
+            <option value={0}>No</option>
+          </select>
+        ) : <span style={{ color: '#999' }}>—</span>}
       </td>
       <td style={{ padding: '4px 8px', whiteSpace: 'nowrap' }}>
-        <button className="btn btn-primary" onClick={() => onSave({ display_name: displayName, full_name: fullName, email, venmo_handle: venmo, role, is_active: active })} disabled={saving} style={{ padding: '4px 10px', fontSize: 12, marginRight: 4 }}>
+        <button className="btn btn-primary" onClick={() => onSave({ display_name: displayName, full_name: fullName, email, venmo_handle: venmo, role, is_active: active, is_heckler: heckler })} disabled={saving} style={{ padding: '4px 10px', fontSize: 12, marginRight: 4 }}>
           {saving ? '...' : 'Save'}
         </button>
         <button className="btn btn-secondary" onClick={onCancel} disabled={saving} style={{ padding: '4px 10px', fontSize: 12 }}>Cancel</button>

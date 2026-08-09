@@ -38,8 +38,14 @@
 //     "group_assignments": [
 //       { "group_id": "abc123", "role": "member" },
 //       { "group_id": "def456", "role": "admin" }
-//     ]
+//     ],
+//     "is_heckler": false            // optional; global spectator (migration 055)
 //   }
+// group_assignments is REQUIRED to be an array but may be empty — a player with
+// no group is valid, and all three group code paths below are already guarded
+// on `.length > 0`. is_heckler:true REQUIRES group_assignments: [] (a Heckler
+// holds zero group_members rows by definition); the combination is rejected
+// rather than silently discarding the assignments.
 // At least one of full_name / display_name is required. When display_name is
 // blank it is generated server-side via the canonical ladder (see
 // generateDisplayName) — the single source of truth for auto-nicknames.
@@ -96,6 +102,7 @@ type InvitePlayerRequest = {
   email?: unknown;
   send_invite?: unknown;
   group_assignments?: unknown;
+  is_heckler?: unknown;
 };
 
 // ── Canonical display_name ladder ─────────────────────────────────────────
@@ -149,6 +156,7 @@ function validate(body: InvitePlayerRequest): { ok: true; data: {
   email: string;
   send_invite: boolean;
   group_assignments: GroupAssignment[];
+  is_heckler: boolean;
 } } | { ok: false; error: string } {
   // display_name is OPTIONAL now: if omitted/blank the handler generates it
   // from full_name via the canonical ladder. Either display_name or full_name
@@ -188,7 +196,20 @@ function validate(body: InvitePlayerRequest): { ok: true; data: {
     }
     group_assignments.push({ group_id: a.group_id, role: a.role });
   }
-  return { ok: true, data: { display_name, full_name, email, send_invite, group_assignments } };
+  // Heckler (migration 055): a global spectator. Optional, defaults false.
+  // Strictly boolean — players.is_heckler is boolean, NOT the smallint used by
+  // is_active / is_super_admin. A 1/0 here is a caller bug, so reject it loudly
+  // rather than coercing and letting the wrong convention spread.
+  if (body.is_heckler !== undefined && typeof body.is_heckler !== "boolean") {
+    return { ok: false, error: "is_heckler must be a boolean (true/false, not 1/0)" };
+  }
+  const is_heckler = body.is_heckler === true;
+  // A Heckler holds ZERO group_members rows, ever. Rather than silently
+  // discarding assignments the caller asked for, reject the contradiction.
+  if (is_heckler && group_assignments.length > 0) {
+    return { ok: false, error: "A Heckler cannot be assigned to any group — send group_assignments: []" };
+  }
+  return { ok: true, data: { display_name, full_name, email, send_invite, group_assignments, is_heckler } };
 }
 
 async function findExistingAuthUser(admin: SupabaseClient, email: string): Promise<string | null> {
@@ -244,7 +265,7 @@ serve(async (req) => {
   }
   const v = validate(body);
   if (!v.ok) return json({ error: v.error }, 400);
-  const { display_name, full_name, email, send_invite, group_assignments } = v.data;
+  const { display_name, full_name, email, send_invite, group_assignments, is_heckler } = v.data;
 
   // Service-role client for the writes — bypasses RLS so we can also write
   // user_id later via the trigger path, and so partial-failure rollback can
@@ -306,10 +327,14 @@ serve(async (req) => {
       email,
       is_active: 1,
       is_super_admin: 0,
+      // boolean, not 1/0 — see validate(). The BEFORE UPDATE trigger from
+      // migration 055 does not apply on INSERT, and this runs service-role
+      // anyway, so the value is written directly.
+      is_heckler,
       created_at: nowIso,
       updated_at: nowIso,
     })
-    .select("id, display_name, email, user_id, is_active")
+    .select("id, display_name, email, user_id, is_active, is_heckler")
     .single();
   if (pErr || !playerInsert) {
     return json({ error: "Failed to create player", details: pErr?.message ?? "no row returned" }, 500);

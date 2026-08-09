@@ -40,7 +40,31 @@ export interface PlayerDetail {
    * (i.e., eligible for an OTP invite via the send-invite Edge Function).
    */
   user_id: string | null;
+  /**
+   * Global spectator ("Heckler", migration 055). Views everything and posts in
+   * chat, but holds ZERO group_members rows and never competes.
+   *
+   * boolean, NOT the smallint used by is_active / is_super_admin — those are
+   * Glide-import legacy and are not being propagated. Never write 1/0 here.
+   *
+   * Writable only by a super admin: enforce_players_privileged_columns() pins
+   * it and raises 42501 for anyone else, in BOTH directions.
+   */
+  is_heckler: boolean;
 }
+
+/** Every column PlayerDetail needs. One constant so a new field can't be added
+ *  to the interface but forgotten in one of the two queries that build it. */
+const PLAYER_SELECT =
+  'id,display_name,full_name,email,venmo_handle,photo_url,is_active,retired_at,user_id,is_heckler';
+
+/**
+ * Sentinel group id for the "Unaffiliated / Hecklers" pseudo-option in the
+ * Players page group dropdown. Not a real group — `listPlayersWithMembership`
+ * branches on it and queries players directly. Prefixed with `__` so it can
+ * never collide with a real 20-char group id.
+ */
+export const UNAFFILIATED_GROUP_ID = '__unaffiliated__';
 
 export interface GroupMembership {
   id: string;
@@ -51,7 +75,17 @@ export interface GroupMembership {
 }
 
 export interface PlayerWithMembership extends PlayerDetail {
-  membership: GroupMembership;
+  /**
+   * NULL for rows returned under the UNAFFILIATED_GROUP_ID pseudo-option —
+   * those players have no group_members row by definition (hecklers always,
+   * and any player who simply isn't in a group yet).
+   *
+   * Deliberately `| null` rather than optional-and-ignored: it makes the
+   * compiler flag every `.membership.<x>` dereference, which is how the
+   * unconditional updateMembership() call in Players.tsx was caught instead of
+   * throwing at runtime for a heckler.
+   */
+  membership: GroupMembership | null;
 }
 
 /**
@@ -63,7 +97,7 @@ export interface PlayerWithMembership extends PlayerDetail {
  */
 export async function listAllPlayers(): Promise<PlayerDetail[]> {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/players?retired_at=is.null&select=id,display_name,full_name,email,venmo_handle,photo_url,is_active,retired_at,user_id&order=display_name.asc`,
+    `${SUPABASE_URL}/rest/v1/players?retired_at=is.null&select=${PLAYER_SELECT}&order=display_name.asc`,
     { headers: headers() }
   );
   if (!res.ok) throw new Error(`Failed to fetch players: ${res.status}`);
@@ -81,6 +115,41 @@ export async function listPlayersWithMembership(
   groupId: string,
   opts?: { retired?: boolean }
 ): Promise<PlayerWithMembership[]> {
+  const retiredFilter = opts?.retired ? '&retired_at=not.is.null' : '&retired_at=is.null';
+
+  // ── "Unaffiliated / Hecklers" pseudo-option ──────────────────────────────
+  // Players with ZERO group_members rows. The membership-first path below
+  // returns [] at the `members.length === 0` guard before it ever queries
+  // players, so these rows are unreachable through it — hence a separate
+  // branch rather than a tweak to the existing one, which stays untouched for
+  // real groups.
+  //
+  // PostgREST cannot express "no rows in a child table" directly, so this is
+  // two round trips: every membership's player_id, then every player NOT in
+  // that set. `not.in.()` with an empty list is a syntax error, so the empty
+  // case is handled by dropping the filter entirely.
+  if (groupId === UNAFFILIATED_GROUP_ID) {
+    const gmRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/group_members?select=player_id`,
+      { headers: headers() }
+    );
+    if (!gmRes.ok) throw new Error(`Failed to fetch memberships: ${gmRes.status}`);
+    const gmRows: { player_id: string }[] = await gmRes.json();
+    const memberIds = Array.from(new Set(gmRows.map((r) => r.player_id)));
+
+    const notIn = memberIds.length > 0
+      ? `&id=not.in.(${memberIds.map((id) => `"${id}"`).join(',')})`
+      : '';
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/players?select=${PLAYER_SELECT}${retiredFilter}${notIn}&order=display_name.asc`,
+      { headers: headers() }
+    );
+    if (!res.ok) throw new Error(`Failed to fetch players: ${res.status}`);
+    const rows: PlayerDetail[] = await res.json();
+    return rows.map((p) => ({ ...p, membership: null }));
+  }
+
+  // ── Real group: membership-first, unchanged ──────────────────────────────
   // Fetch group_members for this group
   const membersRes = await fetch(
     `${SUPABASE_URL}/rest/v1/group_members?group_id=eq.${encodeURIComponent(groupId)}&select=id,group_id,player_id,role,is_active`,
@@ -94,9 +163,8 @@ export async function listPlayersWithMembership(
   // Fetch player details for all member player_ids
   const playerIds = members.map((m) => m.player_id);
   const inList = playerIds.map((id) => `"${id}"`).join(',');
-  const retiredFilter = opts?.retired ? '&retired_at=not.is.null' : '&retired_at=is.null';
   const playersRes = await fetch(
-    `${SUPABASE_URL}/rest/v1/players?id=in.(${inList})${retiredFilter}&select=id,display_name,full_name,email,venmo_handle,photo_url,is_active,retired_at,user_id`,
+    `${SUPABASE_URL}/rest/v1/players?id=in.(${inList})${retiredFilter}&select=${PLAYER_SELECT}`,
     { headers: headers() }
   );
   if (!playersRes.ok) throw new Error(`Failed to fetch players: ${playersRes.status}`);
@@ -105,7 +173,7 @@ export async function listPlayersWithMembership(
   const playerMap = new Map(players.map((p) => [p.id, p]));
 
   return members
-    .map((m) => {
+    .map((m): PlayerWithMembership | null => {
       const p = playerMap.get(m.player_id);
       if (!p) return null;
       return { ...p, membership: m };
@@ -124,7 +192,8 @@ export async function listPlayersWithMembership(
  */
 export async function updatePlayer(
   playerId: string,
-  updates: Partial<Pick<PlayerDetail, 'display_name' | 'full_name' | 'email' | 'venmo_handle' | 'is_active' | 'retired_at'>>
+  updates: Partial<Pick<PlayerDetail,
+    'display_name' | 'full_name' | 'email' | 'venmo_handle' | 'is_active' | 'retired_at' | 'is_heckler'>>
 ): Promise<void> {
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/players?id=eq.${encodeURIComponent(playerId)}`,
@@ -145,6 +214,22 @@ export async function updatePlayer(
   const rows = await res.json().catch(() => null);
   if (!Array.isArray(rows) || rows.length === 0) {
     throw new Error('Nothing was saved — the player was not found or you do not have permission to edit it.');
+  }
+
+  // Read back what the server actually stored and assert every requested field
+  // landed. `updates` is spread into the body, so a key the caller passes that
+  // this function's type union forgot would be dropped by PostgREST silently
+  // and still return 200 with a row — indistinguishable from success. That is
+  // exactly the failure mode is_heckler would have had.
+  const saved = rows[0] as Record<string, unknown>;
+  const mismatched = Object.entries(updates)
+    .filter(([k, v]) => v !== undefined && saved[k] !== v)
+    .map(([k]) => k);
+  if (mismatched.length > 0) {
+    throw new Error(
+      `Saved, but these fields did not take: ${mismatched.join(', ')}. ` +
+      `The column may be missing from the request, or blocked by a policy.`
+    );
   }
 }
 
@@ -225,7 +310,11 @@ export interface InvitePlayerInput {
   display_name: string;
   email: string;
   send_invite: boolean;
+  /** REQUIRED, may be empty. invite-player validates Array.isArray() before
+   *  anything else — omitting the key is a 400, not a default. */
   group_assignments: GroupAssignment[];
+  /** Global spectator (migration 055). Requires group_assignments: []. */
+  is_heckler?: boolean;
 }
 
 export interface InvitePlayerResponse {
@@ -235,6 +324,7 @@ export interface InvitePlayerResponse {
     email: string | null;
     user_id: string | null;
     is_active: number;
+    is_heckler: boolean;
   };
   groups_assigned: number;
   invite_sent: boolean;
