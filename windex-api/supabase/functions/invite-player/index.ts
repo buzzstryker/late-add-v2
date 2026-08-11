@@ -212,7 +212,18 @@ function validate(body: InvitePlayerRequest): { ok: true; data: {
   return { ok: true, data: { display_name, full_name, email, send_invite, group_assignments, is_heckler } };
 }
 
-async function findExistingAuthUser(admin: SupabaseClient, email: string): Promise<string | null> {
+/**
+ * An auth user that already owns the address, plus WHETHER THEY HAVE CONFIRMED
+ * IT. The confirmation flag is the whole point (migration 056): an unconfirmed
+ * account proves nothing about who controls the inbox, so it must never be
+ * linked to a player row.
+ */
+type ExistingAuthUser = { id: string; emailConfirmed: boolean };
+
+async function findExistingAuthUser(
+  admin: SupabaseClient,
+  email: string,
+): Promise<ExistingAuthUser | null> {
   // listUsers paginates; for a small project this is fine. If user count grows
   // we can switch to a direct query against auth.users via service role.
   let page = 1;
@@ -221,7 +232,7 @@ async function findExistingAuthUser(admin: SupabaseClient, email: string): Promi
     const { data, error } = await admin.auth.admin.listUsers({ page, perPage });
     if (error) throw new Error(`Failed to list auth users: ${error.message}`);
     const hit = data?.users?.find((u) => u.email?.toLowerCase() === email);
-    if (hit) return hit.id;
+    if (hit) return { id: hit.id, emailConfirmed: !!hit.email_confirmed_at };
     if (!data?.users || data.users.length < perPage) return null;
     page++;
     if (page > 50) return null; // safety bound (10k users)
@@ -301,9 +312,12 @@ serve(async (req) => {
   }
 
   // ── Insert players row ──────────────────────────────────────────────────
-  // Order matters: the players row must exist BEFORE we call createUser so
-  // that link_player_on_auth_signup (migration 020) finds a pending email
-  // match when the auth.users INSERT trigger fires.
+  // Order still matters, but for a later moment than it used to. Migration 056
+  // moved linking from auth.users INSERT to email CONFIRMATION, so the players
+  // row no longer has to exist before createUser — it has to exist before the
+  // invitee enters their code. Creating it first remains the right sequence
+  // (there is no window in which the invite can outrun the row), it simply is
+  // not load-bearing the way it was under migration 020.
   // Resolve the final display_name: use the caller's if provided, otherwise
   // generate from full_name via the canonical ladder, deduped against all
   // existing players.display_name (case-insensitive).
@@ -361,35 +375,67 @@ serve(async (req) => {
   // ── Optional invite ─────────────────────────────────────────────────────
   let invite_sent = false;
   let already_had_auth = false;
+  let blocked_unconfirmed = false;
   let warning: string | null = null;
 
   if (send_invite) {
-    let existingUserId: string | null = null;
+    let existingAuth: ExistingAuthUser | null = null;
     try {
-      existingUserId = await findExistingAuthUser(admin, email);
+      existingAuth = await findExistingAuthUser(admin, email);
     } catch (err) {
       // Treat lookup failure as "unknown" — fall through to the createUser
       // call, which will surface its own duplicate-user error if needed.
       console.warn("listUsers lookup failed, falling through to createUser:", err);
     }
 
-    if (existingUserId) {
+    if (existingAuth && existingAuth.emailConfirmed) {
       already_had_auth = true;
-      // Best-effort: link now if not already linked. The migration's trigger
-      // would have handled the AFTER-INSERT case, but a pre-existing auth
-      // user predates this trigger. If user_id is still null, link manually.
+      // A CONFIRMED account already owns this address, which proves the person
+      // controls the inbox, so linking is safe. (link_player_on_email_confirm
+      // won't fire for them — they confirmed long ago — so link explicitly.)
       const { error: linkErr } = await admin
         .from("players")
-        .update({ user_id: existingUserId, updated_at: new Date().toISOString() })
+        .update({ user_id: existingAuth.id, updated_at: new Date().toISOString() })
         .eq("id", playerId)
         .is("user_id", null);
       if (linkErr) {
         console.warn("Manual link of pre-existing auth user failed:", linkErr.message);
       }
+    } else if (existingAuth) {
+      // An UNCONFIRMED account already owns this address. DO NOT LINK.
+      //
+      // Third of the three link sites closed by migration 056. Before the fix
+      // this branch linked on the mere existence of an auth row — identical in
+      // effect to the old AFTER INSERT trigger, just reached by an admin
+      // clicking "Add Player" instead of by the stranger's signup.
+      //
+      // Mail a fresh sign-in code instead and leave the new player row pending.
+      // The code goes to the address the admin typed — the real person's inbox,
+      // never the squatter's — so confirming it links the row automatically.
+      already_had_auth = true;
+      blocked_unconfirmed = true;
+      const { error: otpErr } = await admin.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: false, emailRedirectTo: undefined },
+      });
+      if (otpErr) {
+        warning =
+          `An unconfirmed account already exists for ${email}, so the player was ` +
+          `deliberately not linked to it — but re-sending the sign-in code failed: ` +
+          `${otpErr.message}. Use Send Invite to retry.`;
+      } else {
+        invite_sent = true;
+        warning =
+          "An unconfirmed account already existed for this address, so the player " +
+          "was deliberately NOT linked to it. A fresh sign-in code has been emailed; " +
+          "the row links automatically once they enter it.";
+      }
     } else {
-      // Step 1: create the auth.users row without sending an email. The
-      // link_player_on_auth_signup trigger fires AFTER INSERT and links the
-      // players row we just inserted (by case-insensitive email match).
+      // Step 1: create the auth.users row without sending an email. Created
+      // UNCONFIRMED (email_confirm:false), so under migration 056 no link
+      // happens yet — link_player_on_email_confirm fires on the NULL ->
+      // timestamp transition of email_confirmed_at, i.e. when they redeem the
+      // code from step 2. The player is INVITED now, LINKED then.
       const { error: createErr } = await admin.auth.admin.createUser({
         email,
         email_confirm: false,
@@ -417,20 +463,33 @@ serve(async (req) => {
         options: { shouldCreateUser: false, emailRedirectTo: undefined },
       });
       if (otpErr) {
-        // Auth user exists and the trigger has linked the player — only
-        // the email send failed. Admin can use Send Again to retry.
-        warning = `Auth user created but OTP email failed: ${otpErr.message}. Use Send Again to retry.`;
+        // The auth user exists; only the email send failed. Under migration 056
+        // the player row is (correctly) still unlinked either way — it links
+        // when they confirm. Admin can use Send Invite to retry the email.
+        warning = `Auth user created but OTP email failed: ${otpErr.message}. Use Send Invite to retry.`;
       } else {
         invite_sent = true;
       }
     }
   }
 
+  // Re-read so the response carries the row as it actually stands. Under 056
+  // user_id is normally still NULL here — the player is INVITED, not LINKED —
+  // and the admin UI keys its pill on `invited`, never on user_id.
+  const { data: finalRow } = await admin
+    .from("players")
+    .select("id, display_name, email, user_id, is_active, is_heckler")
+    .eq("id", playerId)
+    .maybeSingle();
+
   return json({
-    player: playerInsert,
+    player: finalRow ?? playerInsert,
     groups_assigned: group_assignments.length,
     invite_sent,
     already_had_auth,
+    blocked_unconfirmed,
+    invited: invite_sent || already_had_auth,
+    linked: !!(finalRow as { user_id?: string | null } | null)?.user_id,
     ...(warning ? { warning } : {}),
   }, 200);
 });

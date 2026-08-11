@@ -33,10 +33,22 @@
 // inviteUserByEmail creates the auth.users row itself, so createUser is NOT
 // called: GoTrue rejects inviteUserByEmail for an already-existing user
 // (HTTP 422 — see Project_Context 2026-05-14 note), and the existing-auth-
-// by-email precheck below already handles the "row exists" case. The
-// migration-020 link_player_on_auth_signup trigger fires AFTER INSERT on
-// auth.users regardless of which admin API performed the INSERT, so the
-// pending players row is auto-linked by email exactly as before.
+// by-email precheck below already handles the "row exists" case.
+//
+// MIGRATION 056 CHANGED WHAT A SUCCESSFUL INVITE LOOKS LIKE.
+// Linking no longer happens at auth.users INSERT; it happens when the invitee
+// CONFIRMS their email. So after a successful invite from this function,
+// players.user_id is still NULL and that is correct, not a failure:
+//
+//     invited_at  means INVITED   (this function's job)
+//     user_id     means LINKED    (happens later, when they enter their code)
+//
+// Two consequences, both handled below:
+//   * The existing-auth branch is now split on confirmation. An UNCONFIRMED
+//     pre-existing account is NOT linked — it is one of the three link sites
+//     056 had to close, and gating only the DB trigger would have left this
+//     one as an equivalent hole reachable from the admin UI.
+//   * The post-invite assertion no longer treats "not linked" as a failure.
 //
 // Auth: handler-side getUser(token) + am_i_super_admin() RPC. Deployed with
 // verify_jwt = false (matches every other function in this project — see
@@ -51,17 +63,21 @@
 //   3. Reject if player.user_id IS NOT NULL → 409 "already linked".
 //   4. Reject if email is null/empty/invalid → 400.
 //   5. Check for an existing auth.users row by email.
-//      a. If found → manually link the player row, no email sent (avoids a
-//         pointless re-email AND the inviteUserByEmail 422-on-existing-user
-//         error). Response marks already_had_auth=true.
-//      b. If not found → inviteUserByEmail: one atomic call that creates the
-//         auth row, fires the link trigger, and sends the welcome email.
-//   6. Re-read players.user_id to confirm the trigger linked, and return the
-//      final row. linked=false + warning surfaces a rare email-casing /
-//      trigger mismatch rather than silently succeeding.
+//      a. Found AND CONFIRMED → manually link the player row, no email sent
+//         (avoids a pointless re-email AND the inviteUserByEmail
+//         422-on-existing-user error). already_had_auth=true.
+//      b. Found but UNCONFIRMED → do NOT link. Mail a fresh sign-in code and
+//         leave the row pending. blocked_unconfirmed=true. Self-heals: the
+//         code lands in the real person's inbox, and confirming links the row.
+//      c. Not found → inviteUserByEmail: one atomic call that creates the auth
+//         row and sends the welcome email (which now carries the code itself).
+//   6. Re-read the players row AND re-check GoTrue, asserting that an auth user
+//      now exists. "Not linked" is the normal, correct outcome of a fresh
+//      invite under 056 and is no longer warned about.
 //
 // Responses:
-//   200 { ok: true, invite_sent, already_had_auth, linked, player, warning? }
+//   200 { ok: true, invite_sent, already_had_auth, blocked_unconfirmed,
+//         invited, linked, player, warning? }
 //   400 { error: "..." }       — missing/invalid email, malformed body
 //   401 { error: "Unauthorized" }
 //   403 { error: "Super admin only" }
@@ -92,7 +108,18 @@ type PlayerRow = {
   user_id: string | null;
 };
 
-async function findExistingAuthUser(admin: SupabaseClient, email: string): Promise<string | null> {
+/**
+ * An auth user that already owns the address, plus WHETHER THEY HAVE CONFIRMED
+ * IT. The confirmation flag is the whole point (migration 056): an unconfirmed
+ * account proves nothing about who controls the inbox, so it must never be
+ * linked to a player row.
+ */
+type ExistingAuthUser = { id: string; emailConfirmed: boolean };
+
+async function findExistingAuthUser(
+  admin: SupabaseClient,
+  email: string,
+): Promise<ExistingAuthUser | null> {
   // Mirrors invite-player. listUsers paginates; safe for our scale.
   let page = 1;
   const perPage = 200;
@@ -100,7 +127,7 @@ async function findExistingAuthUser(admin: SupabaseClient, email: string): Promi
     const { data, error } = await admin.auth.admin.listUsers({ page, perPage });
     if (error) throw new Error(`Failed to list auth users: ${error.message}`);
     const hit = data?.users?.find((u) => u.email?.toLowerCase() === email);
-    if (hit) return hit.id;
+    if (hit) return { id: hit.id, emailConfirmed: !!hit.email_confirmed_at };
     if (!data?.users || data.users.length < perPage) return null;
     page++;
     if (page > 50) return null; // safety bound (10k users)
@@ -178,9 +205,9 @@ serve(async (req) => {
   }
 
   // ── Find existing auth user, else inviteUserByEmail ──────────────────────
-  let existingAuthId: string | null = null;
+  let existingAuth: ExistingAuthUser | null = null;
   try {
-    existingAuthId = await findExistingAuthUser(admin, email);
+    existingAuth = await findExistingAuthUser(admin, email);
   } catch (err) {
     return json({
       error: "Auth user lookup failed",
@@ -190,16 +217,17 @@ serve(async (req) => {
 
   let invite_sent = false;
   let already_had_auth = false;
+  let blocked_unconfirmed = false;
   let warning: string | null = null;
 
-  if (existingAuthId) {
-    // Auth user exists but the player isn't linked. Manually link rather
-    // than re-sending — avoids a pointless email blast at someone who
-    // already has an account. Matches the prior magic-link flow's behavior.
+  if (existingAuth && existingAuth.emailConfirmed) {
+    // A CONFIRMED account already owns this address, which proves the person
+    // controls the inbox. Link directly rather than re-emailing someone who can
+    // already sign in. Matches the prior magic-link flow's behavior.
     already_had_auth = true;
     const { error: linkErr } = await admin
       .from("players")
-      .update({ user_id: existingAuthId, updated_at: new Date().toISOString() })
+      .update({ user_id: existingAuth.id, updated_at: new Date().toISOString() })
       .eq("id", playerId)
       .is("user_id", null); // race-safe: only link if still unlinked
     if (linkErr) {
@@ -208,13 +236,44 @@ serve(async (req) => {
         details: linkErr.message,
       }, 500);
     }
+  } else if (existingAuth) {
+    // An UNCONFIRMED account already owns this address. DO NOT LINK.
+    //
+    // This is the second of the three link sites migration 056 had to close.
+    // Gating only the database trigger would have left this branch as a fully
+    // equivalent hole, reachable by a super admin clicking Send Invite: it
+    // linked on the mere existence of an auth row, with no confirmation check,
+    // exactly like the old AFTER INSERT trigger.
+    //
+    // Instead, mail a fresh sign-in code and leave the player row pending. The
+    // code goes to the address on the players row -- the REAL person's inbox,
+    // never the squatter's -- so this self-heals: they enter the code, GoTrue
+    // confirms the account, and link_player_on_email_confirm (056) links the
+    // row at that moment. An admin needs no SQL to recover a squatted address.
+    already_had_auth = true;
+    blocked_unconfirmed = true;
+    const { error: otpErr } = await admin.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false, emailRedirectTo: undefined },
+    });
+    if (otpErr) {
+      return json({
+        error: "An unconfirmed account already exists for this address, and re-sending the sign-in code failed",
+        details: otpErr.message,
+      }, 500);
+    }
+    invite_sent = true;
   } else {
-    // Single atomic call: inviteUserByEmail creates the auth.users row
-    // (firing the migration-020 link_player_on_auth_signup trigger, which
-    // links the pending players row by email match) AND sends the URL-free
-    // "Invite user" welcome email. No createUser — GoTrue rejects
-    // inviteUserByEmail for an already-existing user (422), and the
-    // existingAuthId branch above already handled the "row exists" case.
+    // Single atomic call: inviteUserByEmail creates the auth.users row AND
+    // sends the "Invite user" welcome email — which since 2026-08-10 carries
+    // the 6-digit code itself plus standing instructions for requesting a
+    // fresh one. The row is created UNCONFIRMED, so under migration 056 NO
+    // link happens here; link_player_on_email_confirm fires later, when the
+    // invitee redeems that code.
+    //
+    // No createUser — GoTrue rejects inviteUserByEmail for an already-existing
+    // user (422), and both existing-auth branches above already handled the
+    // "row exists" case (confirmed → link, unconfirmed → re-send code, no link).
     // display_name is passed as user metadata for parity with the old
     // createUser; redirectTo is intentionally omitted so nothing can
     // re-introduce a confirmation URL into the email body.
@@ -233,10 +292,18 @@ serve(async (req) => {
     invite_sent = true;
   }
 
-  // ── Confirm link landed ──────────────────────────────────────────────────
-  // The trigger fires AFTER INSERT on auth.users (or for the already_had_auth
-  // branch, we just did the UPDATE above). Re-read to surface trigger
-  // failures (email casing/whitespace mismatch) rather than silently succeed.
+  // ── Confirm the outcome ──────────────────────────────────────────────────
+  // REWORKED for migration 056. The old assertion was
+  //     if (invite_sent && !linked) warn
+  // which was right when linking happened at auth.users INSERT: an invite that
+  // did not immediately link meant something was wrong. Under confirm-time
+  // linking a fresh invite NEVER links -- the player stays pending until they
+  // enter their code -- so that check would now fire a scary warning on every
+  // single successful invite and train the admin to ignore warnings.
+  //
+  // The invariant actually worth asserting is that an auth user now exists for
+  // this address. So re-read BOTH sides: the players row (for the response) and
+  // GoTrue (to prove the invite did something).
   const { data: post, error: postErr } = await admin
     .from("players")
     .select("id, display_name, email, user_id")
@@ -247,21 +314,41 @@ serve(async (req) => {
   }
   const linked = !!(post && (post as PlayerRow).user_id);
 
-  if (invite_sent && !linked) {
-    // Auth row was created + welcome email sent, but the AFTER INSERT
-    // trigger did not link a players row — almost always an email
-    // casing/whitespace mismatch between players.email and the invited
-    // address. Surface it rather than report a clean success.
+  let authNow: ExistingAuthUser | null = null;
+  try {
+    authNow = await findExistingAuthUser(admin, email);
+  } catch {
+    // Best effort -- a lookup failure here must not turn a successful invite
+    // into a 500. It only costs us the assertion below.
+    authNow = null;
+  }
+
+  if (!authNow) {
     warning =
-      "Invite email sent, but the player row did not auto-link " +
-      "(email casing/whitespace mismatch?). Verify the player's email " +
-      "matches the invited address — the auth user exists either way.";
+      "Reported success, but no auth user exists for this address afterwards. " +
+      "Nothing was created — retry, and check the Edge Function logs.";
+  } else if (already_had_auth && !blocked_unconfirmed && !linked) {
+    // A CONFIRMED account exists and we ran the explicit UPDATE, so the row
+    // should be linked. If it isn't, the `.is("user_id", null)` guard matched
+    // nothing — usually an email casing/whitespace mismatch.
+    warning =
+      "A confirmed account already exists for this address, but the player row " +
+      "did not link. Verify players.email matches the auth email exactly.";
+  } else if (blocked_unconfirmed) {
+    warning =
+      "An unconfirmed account already existed for this address, so the player " +
+      "was deliberately NOT linked to it. A fresh sign-in code has been emailed; " +
+      "the row links automatically once they enter it.";
   }
 
   return json({
     ok: true,
     invite_sent,
     already_had_auth,
+    blocked_unconfirmed,
+    // invited = "an invitation exists for this address", which under 056 is the
+    // state the admin UI keys its pill on. Distinct from `linked`.
+    invited: invite_sent || already_had_auth,
     linked,
     player: post ?? playerRow,
     ...(warning ? { warning } : {}),

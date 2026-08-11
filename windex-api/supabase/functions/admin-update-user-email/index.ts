@@ -28,16 +28,23 @@
 //   2. Validate body: player_id present, email present + well-formed.
 //   3. Resolve the TARGET auth user_id SERVER-SIDE from player_id via the
 //      service-role client (never trust a user_id from the client). 404 if the
-//      player doesn't exist; 400 if the player has no linked auth account.
+//      player doesn't exist. Since migration 056, players.user_id is NULL for
+//      every invited-but-unconfirmed player — which is exactly when a typo'd
+//      invite address needs fixing — so resolution falls back to matching the
+//      player's CURRENT email against auth.users. 400 only if neither works.
 //   4. Guard against stealing another account's address: if some OTHER auth
 //      user already owns the new email → 409.
 //   5. auth.admin.updateUserById(targetUserId, { email, email_confirm: true }).
+//  5b. If we resolved by email fallback, write players.user_id explicitly
+//      rather than trusting the 056 confirm trigger that email_confirm:true
+//      fires — that trigger matches on the NEW email and links only the oldest
+//      pending match, which need not be the row the admin asked about.
 //   6. Sync players.email across ALL rows sharing that target user_id (a person
 //      can have multiple player records, e.g. "Buzz" / "Buzz YC Weds").
 //   7. Return a clear result; surface real GoTrue/DB errors to the admin UI.
 //
 // Responses:
-//   200 { ok: true, user_id, email, players_synced }
+//   200 { ok: true, user_id, email, players_synced, resolved_by }
 //   400 { error: "..." }   — bad body, invalid email, player has no auth account
 //   401 { error: "Unauthorized" }
 //   403 { error: "Super admin only" }
@@ -147,11 +154,32 @@ serve(async (req) => {
     .maybeSingle();
   if (pErr) return json({ error: "Player lookup failed", details: pErr.message }, 500);
   if (!player) return json({ error: "Player not found" }, 404);
-  const targetUserId = (player as PlayerRow).user_id;
+  // MIGRATION 056: players.user_id is NULL for every invited-but-unconfirmed
+  // player, which is precisely when an admin most wants to fix a typo'd invite
+  // address. Resolving the target from user_id alone would 400 on exactly that
+  // case. So fall back to a case-insensitive match on the player's CURRENT
+  // email — the address the pending invite went to.
+  let targetUserId = (player as PlayerRow).user_id;
+  let resolved_by: "user_id" | "email_fallback" = "user_id";
+  if (!targetUserId) {
+    const currentEmail = (player as PlayerRow).email?.trim().toLowerCase() ?? "";
+    if (currentEmail) {
+      try {
+        targetUserId = await findAuthUserByEmail(admin, currentEmail);
+        if (targetUserId) resolved_by = "email_fallback";
+      } catch (err) {
+        return json({
+          error: "Auth user lookup failed while resolving an unlinked player",
+          details: err instanceof Error ? err.message : String(err),
+        }, 500);
+      }
+    }
+  }
   if (!targetUserId) {
     return json({
-      error: "Player has no linked auth account — there is no login email to change. " +
-        "Invite the player first (send-invite), or edit players.email directly.",
+      error: "Player has no auth account — neither linked nor findable by their current email. " +
+        "There is no login identity to change. Invite the player first (send-invite), " +
+        "or edit players.email directly.",
     }, 400);
   }
 
@@ -181,6 +209,31 @@ serve(async (req) => {
     return json({ error: "Failed to update auth email", details: updErr.message }, 500);
   }
 
+  // ── 5b. Link this player explicitly when we resolved by email ─────────────
+  // updateUserById above passes email_confirm:true, which flips
+  // email_confirmed_at and therefore FIRES link_player_on_email_confirm (056).
+  // We do not rely on that: the trigger matches on the NEW email and only ever
+  // touches ONE row (the oldest pending match), so with an email fallback in
+  // play the row it picks is not guaranteed to be the row the admin asked
+  // about. Write the link ourselves, service-role, and leave nothing to
+  // trigger-ordering. `.is("user_id", null)` keeps it race-safe and makes this
+  // a no-op when the trigger already did the job.
+  if (resolved_by === "email_fallback") {
+    const { error: linkErr } = await admin
+      .from("players")
+      .update({ user_id: targetUserId, updated_at: new Date().toISOString() })
+      .eq("id", playerId)
+      .is("user_id", null);
+    if (linkErr) {
+      return json({
+        error: "Auth email updated, but linking the player to that auth user failed",
+        details: linkErr.message,
+        user_id: targetUserId,
+        email: newEmail,
+      }, 500);
+    }
+  }
+
   // ── 6. Sync the players mirror across EVERY row for this auth user ─────────
   const { data: synced, error: syncErr } = await admin
     .from("players")
@@ -203,5 +256,6 @@ serve(async (req) => {
     user_id: targetUserId,
     email: newEmail,
     players_synced: synced?.length ?? 0,
+    resolved_by,
   }, 200);
 });
