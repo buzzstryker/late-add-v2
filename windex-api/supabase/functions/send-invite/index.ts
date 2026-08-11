@@ -67,8 +67,10 @@
 //         (avoids a pointless re-email AND the inviteUserByEmail
 //         422-on-existing-user error). already_had_auth=true.
 //      b. Found but UNCONFIRMED → do NOT link. Mail a fresh sign-in code and
-//         leave the row pending. blocked_unconfirmed=true. Self-heals: the
-//         code lands in the real person's inbox, and confirming links the row.
+//         leave the row pending. blocked_unconfirmed=true. The code lands in
+//         the real person's inbox, and confirming links the row — but see the
+//         note at that branch: this RECOVERS THE ADDRESS, it does not clean up
+//         the account. Do not call it self-healing.
 //      c. Not found → inviteUserByEmail: one atomic call that creates the auth
 //         row and sends the welcome email (which now carries the code itself).
 //   6. Re-read the players row AND re-check GoTrue, asserting that an auth user
@@ -275,9 +277,23 @@ serve(async (req) => {
     //
     // Instead, mail a fresh sign-in code and leave the player row pending. The
     // code goes to the address on the players row -- the REAL person's inbox,
-    // never the squatter's -- so this self-heals: they enter the code, GoTrue
-    // confirms the account, and link_player_on_email_confirm (056) links the
-    // row at that moment. An admin needs no SQL to recover a squatted address.
+    // never the squatter's. They enter the code, GoTrue confirms the account,
+    // and link_player_on_email_confirm (056) links the row at that moment. An
+    // admin needs no SQL to recover a squatted address.
+    //
+    // NOT "self-healing" -- that word was used during development and it was
+    // wrong. This RECOVERS THE ADDRESS; it does not clean up the account. If a
+    // squatter signed up with a password, confirming here makes that password
+    // LIVE on a now-confirmed account that is linked to a real player row: they
+    // could then use the public password grant to hold a session as that
+    // player. It is inert only while the account stays unconfirmed
+    // (mailer_allow_unverified_email_sign_ins is false).
+    //
+    // Windex has no user-facing password flow at all -- login.tsx only ever
+    // calls signInWithOtp/verifyOtp -- so the recommended fix is to disable the
+    // password grant project-wide, a config change rather than a code one. See
+    // BACKLOG in buzz-project-docs. Until that lands, treat a recovered address
+    // as recovered, NOT as a cleaned-up account.
     already_had_auth = true;
     blocked_unconfirmed = true;
     const { error: otpErr } = await admin.auth.signInWithOtp({
