@@ -25,32 +25,58 @@ export default function LoginScreen() {
   const inputBg = colorScheme === 'dark' ? '#1c1c1e' : '#f5f5f5';
   const { sendOtp, verifyOtp } = useAuth();
 
-  // OTP flow state
+  // OTP flow state.
+  //
+  // SINGLE STEP, DELIBERATELY. This screen used to gate the code field behind
+  // `otpSent`, which only "Send Login Code" could set — so the only way to
+  // reach the code field was to request a NEW code, and requesting one mints a
+  // fresh token that supersedes the previous one. That made the code we put in
+  // the invite email unreachable in EVERY case, not merely when it had expired:
+  // an invitee could look straight at their code and have nowhere to type it.
+  // Confirmed on the live screen 2026-08-11.
+  //
+  // Both fields are now always visible. Sending a code is a secondary action
+  // for people who don't have one or whose code has expired.
   const [otpEmail, setOtpEmail] = useState('');
   const [otpCode, setOtpCode] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
+  // Confirmation that a code was just sent. Never gates the code field — it is
+  // presentational only. That distinction is the whole fix; do not make any
+  // input conditional on it.
+  const [notice, setNotice] = useState<string | null>(null);
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function onSendCode() {
     setError(null);
+    setNotice(null);
     if (!otpEmail.trim()) {
-      setError('Enter your email address.');
+      setError('Enter your email address first, then we can send you a code.');
       return;
     }
     setBusy(true);
     try {
       const { error: err } = await sendOtp(otpEmail);
-      if (err) setError(err);
-      else setOtpSent(true);
+      if (err) {
+        setError(err);
+      } else {
+        // Any code the user already had is now superseded by this one.
+        setOtpCode('');
+        setNotice(`Code sent to ${otpEmail.trim()}. It can take a minute to arrive.`);
+      }
     } finally {
       setBusy(false);
     }
   }
 
-  async function onVerifyCode() {
+  async function onSignIn() {
     setError(null);
+    setNotice(null);
+    if (!otpEmail.trim()) {
+      setError('Enter your email address.');
+      return;
+    }
+    // Guard: never attempt a verify with an empty code.
     if (!otpCode.trim()) {
       setError('Enter the 6-digit code from your email.');
       return;
@@ -65,10 +91,10 @@ export default function LoginScreen() {
     }
   }
 
-  function onChangeEmail() {
-    setOtpSent(false);
-    setOtpCode('');
-    setError(null);
+  // Codes are always 6 digits. Strip everything else so a pasted code carrying
+  // spaces or a stray character still verifies instead of failing opaquely.
+  function onChangeCode(next: string) {
+    setOtpCode(next.replace(/\D/g, '').slice(0, 6));
   }
 
   const inputStyle = [
@@ -92,80 +118,63 @@ export default function LoginScreen() {
             Windex
           </ThemedText>
 
-          {!otpSent ? (
-            /* ── Step 1: Enter email ── */
-            <>
-              <ThemedText type="subtitle" style={[styles.lead, { color: muted }]}>
-                Enter your email to receive a login code.
+          <ThemedText type="subtitle" style={[styles.lead, { color: muted }]}>
+            Enter your email and the 6-digit code from your Windex email.
+          </ThemedText>
+
+          <View style={styles.section}>
+            <TextInput
+              style={inputStyle}
+              placeholder="Your email address"
+              placeholderTextColor={muted}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              autoComplete="email"
+              textContentType="emailAddress"
+              value={otpEmail}
+              onChangeText={setOtpEmail}
+            />
+            <TextInput
+              style={[inputStyle, styles.codeInput]}
+              placeholder="000000"
+              placeholderTextColor={muted}
+              keyboardType="number-pad"
+              autoComplete="one-time-code"
+              textContentType="oneTimeCode"
+              maxLength={6}
+              value={otpCode}
+              onChangeText={onChangeCode}
+            />
+            <Pressable
+              accessibilityRole="button"
+              style={[styles.buttonPrimary, busy && styles.buttonDisabled]}
+              onPress={onSignIn}
+              disabled={busy}>
+              {busy ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <ThemedText style={styles.buttonText}>Sign In</ThemedText>
+              )}
+            </Pressable>
+          </View>
+
+          <View style={styles.secondary}>
+            <ThemedText style={[styles.secondaryLead, { color: muted }]}>
+              No code, or has it expired?
+            </ThemedText>
+            <Pressable
+              accessibilityRole="button"
+              style={[styles.buttonSecondary, { borderColor: border }, busy && styles.buttonDisabled]}
+              onPress={onSendCode}
+              disabled={busy}>
+              <ThemedText style={[styles.buttonSecondaryText, { color: muted }]}>
+                Send me a code
               </ThemedText>
+            </Pressable>
+          </View>
 
-              <View style={styles.section}>
-                <TextInput
-                  style={inputStyle}
-                  placeholder="Your email address"
-                  placeholderTextColor={muted}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  autoComplete="email"
-                  textContentType="emailAddress"
-                  value={otpEmail}
-                  onChangeText={setOtpEmail}
-                />
-                <Pressable
-                  style={[styles.buttonPrimary, busy && styles.buttonDisabled]}
-                  onPress={onSendCode}
-                  disabled={busy}>
-                  {busy ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <ThemedText style={styles.buttonText}>Send Login Code</ThemedText>
-                  )}
-                </Pressable>
-              </View>
-            </>
-          ) : (
-            /* ── Step 2: Enter code ── */
-            <>
-              <ThemedText type="subtitle" style={[styles.lead, { color: muted }]}>
-                Enter the 6-digit code sent to {otpEmail}
-              </ThemedText>
-
-              <View style={styles.section}>
-                <TextInput
-                  style={[inputStyle, styles.codeInput]}
-                  placeholder="000000"
-                  placeholderTextColor={muted}
-                  keyboardType="number-pad"
-                  autoComplete="one-time-code"
-                  textContentType="oneTimeCode"
-                  maxLength={6}
-                  value={otpCode}
-                  onChangeText={setOtpCode}
-                />
-                <Pressable
-                  style={[styles.buttonPrimary, busy && styles.buttonDisabled]}
-                  onPress={onVerifyCode}
-                  disabled={busy}>
-                  {busy ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <ThemedText style={styles.buttonText}>Verify Code</ThemedText>
-                  )}
-                </Pressable>
-
-                <View style={styles.codeActions}>
-                  <Pressable onPress={onSendCode} disabled={busy}>
-                    <ThemedText style={[styles.linkText, { color: muted }]}>Resend code</ThemedText>
-                  </Pressable>
-                  <ThemedText style={{ color: muted }}> · </ThemedText>
-                  <Pressable onPress={onChangeEmail}>
-                    <ThemedText style={[styles.linkText, { color: muted }]}>Change email</ThemedText>
-                  </Pressable>
-                </View>
-              </View>
-            </>
-          )}
-
+          {notice ? <ThemedText style={[styles.notice, { color: muted }]}>{notice}</ThemedText> : null}
           {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -195,12 +204,6 @@ const styles = StyleSheet.create({
     letterSpacing: 12,
     paddingVertical: 18,
   },
-  codeActions: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 12,
-  },
   linkText: { fontSize: 14 },
   buttonPrimary: {
     backgroundColor: '#0a7ea4',
@@ -211,5 +214,19 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { opacity: 0.6 },
   buttonText: { color: '#fff', fontWeight: '600', fontSize: 17 },
+  // Secondary action. Visually subordinate to Sign In — outlined rather than
+  // filled — so the primary path stays "I have a code", which is what an
+  // invitee arrives holding.
+  secondary: { marginTop: 4 },
+  secondaryLead: { fontSize: 14, marginBottom: 8, textAlign: 'center' },
+  buttonSecondary: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 13,
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  buttonSecondaryText: { fontWeight: '600', fontSize: 15 },
+  notice: { marginTop: 16, fontSize: 15, lineHeight: 22 },
   error: { color: '#c62828', marginTop: 16, fontSize: 15, lineHeight: 22 },
 });
