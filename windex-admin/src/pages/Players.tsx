@@ -33,12 +33,19 @@ const hasValidEmail = (email: string | null) =>
   !!email && EMAIL_RE.test(email.trim());
 
 /**
- * Clipboard text for an invited-but-not-yet-signed-in player. Routes them to
- * the player-initiated login-code flow (Email 2 of the two-email model) — no
- * admin re-send email is involved.
+ * Clipboard text for an invited-but-not-yet-signed-in player.
+ *
+ * TWIN: keep identical to windex-expo/lib/playerInvite.ts buildSignInInstructions.
+ * If you edit one, edit the other (the two apps don't share code).
+ *
+ * Rewritten 2026-08-11 with the login screen. The old text said to tap
+ * "Send Login Code" — a button that no longer exists, and whose whole effect
+ * was to mint a REPLACEMENT code. Following it would have thrown away the code
+ * already sitting in the recipient's invite email, which is the exact behaviour
+ * the login-screen fix removed.
  */
 function buildSignInInstructions(email: string): string {
-  return `Go to windexgolf.com/login, enter your email (${email}), tap "Send Login Code", then check your email and enter the 6-digit code to sign in.`;
+  return `Go to windexgolf.com/login, enter your email (${email}) and the 6-digit code from your Windex email, then tap "Sign In". If you don't have a code or it has expired, tap "Send me a code" on that screen and we'll email you a new one.`;
 }
 
 // ─── Status column ────────────────────────────────────────────────────────

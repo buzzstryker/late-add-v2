@@ -36,8 +36,14 @@ export function deriveInviteStatus(
 
 // TWIN: keep identical to windex-admin/src/pages/Players.tsx buildSignInInstructions.
 // If you edit one, edit the other (the two apps don't share code).
+//
+// Rewritten 2026-08-11 with the login screen. The old text said to tap
+// "Send Login Code" — a button that no longer exists, and whose whole effect
+// was to mint a REPLACEMENT code. Following it would have thrown away the code
+// already sitting in the recipient's invite email, which is the exact behaviour
+// the login-screen fix removed.
 export function buildSignInInstructions(email: string): string {
-  return `Go to windexgolf.com/login, enter your email (${email}), tap "Send Login Code", then check your email and enter the 6-digit code to sign in.`;
+  return `Go to windexgolf.com/login, enter your email (${email}) and the 6-digit code from your Windex email, then tap "Sign In". If you don't have a code or it has expired, tap "Send me a code" on that screen and we'll email you a new one.`;
 }
 
 function restCtx() {

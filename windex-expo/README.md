@@ -11,14 +11,22 @@ Expo app for Late Add Golf v2 — web (Vercel), iOS, and Android via Expo Go.
 
 ## Authentication
 
-Login uses **email OTP** (6-digit code):
+Login uses **email OTP** (6-digit code). The screen is **single-step**: the email
+and code fields are both visible from load.
 
-1. User enters their email on the login screen
-2. Taps "Send Login Code" → Supabase sends a 6-digit code to their email
-3. User enters the code → `supabase.auth.verifyOtp()` establishes the session
+1. User enters their email **and** the 6-digit code — typically the one already
+   in their invite email — and taps **Sign In**
+2. `supabase.auth.verifyOtp({ type: 'email' })` establishes the session
+3. **Send me a code** is a secondary action for anyone without a code, or whose
+   code has expired. It mints a NEW code, superseding any earlier one
 4. No redirects, no magic links, no PKCE — works identically on web and mobile
 
-**Email/password** fallback is available behind a "Sign in with password instead" toggle (used for dev accounts).
+> Until 2026-08-11 the code field was gated behind "Send Login Code", so the only
+> route to it was to request a replacement code — which made the code in every
+> invite email unusable. Do not reintroduce a conditional around the code field.
+
+There is **no user-facing email/password flow.** `signInWithPassword` exists on
+the auth context but no screen calls it; the login screen is OTP-only.
 
 Only existing users can log in (`shouldCreateUser: false`). Player accounts are created by an admin via `windex-api/scripts/invite-players.mjs`.
 
