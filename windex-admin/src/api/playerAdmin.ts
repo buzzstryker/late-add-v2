@@ -335,6 +335,24 @@ export interface InvitePlayerResponse {
   groups_assigned: number;
   invite_sent: boolean;
   already_had_auth: boolean;
+  /**
+   * True when an UNCONFIRMED auth account already owned this address, so the
+   * new player was DELIBERATELY not linked to it (migration 056). A code is
+   * emailed instead; the row links when they confirm. The intended outcome.
+   */
+  blocked_unconfirmed: boolean;
+  /** True when the code could not be re-sent because GoTrue's 60s per-address throttle was open. Not an error. */
+  send_throttled: boolean;
+  /** An invitation now exists for this address. This — never `linked` — is the invited state. */
+  invited: boolean;
+  /** True only once a CONFIRMED human owns the row. A fresh invite leaves this false, correctly. */
+  linked: boolean;
+  /**
+   * Server-composed note when the outcome needs explaining. MUST be surfaced:
+   * on 2026-08-11 a correct deliberate-non-link reported as a plain "Invite
+   * sent" because this field existed on the response and the UI ignored it.
+   */
+  warning?: string;
 }
 
 export class DuplicatePlayerEmailError extends Error {
@@ -375,12 +393,29 @@ export interface SendInviteResponse {
   /** True if the email already had an auth.users row before this call. */
   already_had_auth: boolean;
   /**
-   * True if players.user_id is populated after the call. Mainly used to
-   * surface trigger failures (e.g. email casing/whitespace mismatch) — the
-   * link_player_on_auth_signup trigger from migration 020 should always
-   * fire on invite, but if it didn't we want to know rather than lie.
+   * True when an UNCONFIRMED auth account already owned this address, so the
+   * player was DELIBERATELY not linked to it (migration 056). A code is emailed
+   * instead; the row links when they confirm. Not an error — the intended
+   * outcome, and the squat defence.
+   */
+  blocked_unconfirmed: boolean;
+  /**
+   * True when the code could not be re-sent because GoTrue's per-address
+   * throttle (60s) was still open. Also not an error: the gate ran, the row is
+   * correctly pending, and a code from moments ago is already in the inbox.
+   */
+  send_throttled: boolean;
+  /** An invitation now exists for this address. This — never `linked` — is the invited state. */
+  invited: boolean;
+  /**
+   * True if players.user_id is populated after the call, i.e. a CONFIRMED
+   * human owns the row. Since migration 056 a fresh invite leaves this FALSE
+   * and that is correct: linking happens on email confirmation, not on invite.
+   * Do not read it as "did the invite work".
    */
   linked: boolean;
+  /** Precise server-composed note when the outcome needs explaining. Prefer it over reconstructing a message client-side. */
+  warning?: string;
   player: {
     id: string;
     display_name: string;

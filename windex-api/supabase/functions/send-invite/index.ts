@@ -116,6 +116,33 @@ type PlayerRow = {
  */
 type ExistingAuthUser = { id: string; emailConfirmed: boolean };
 
+/**
+ * Is this the per-address send throttle rather than a real send failure?
+ *
+ * GoTrue rate-limits repeat emails to the same address (smtp_max_frequency,
+ * currently 60s) and answers 429 with error_code `over_email_send_rate_limit`
+ * and "For security purposes, you can only request this after N seconds."
+ * That is a WAIT, not a failure — the gate has already done its job and the
+ * players row is correctly pending either way. Reporting it as a 500 saying
+ * "re-sending the sign-in code failed" reads as though the mechanism is broken
+ * and trains an admin to distrust a flow that is working. Observed live
+ * 2026-08-11: a second Send Invite click 14s after a successful one.
+ *
+ * Matched on ERROR CODE, never on HTTP status: a genuine SMTP outage is also an
+ * error here and MUST still surface loudly.
+ */
+function isEmailSendThrottled(e: unknown): boolean {
+  const code = (e as { code?: string } | null)?.code;
+  if (code === "over_email_send_rate_limit") return true;
+  // Belt and braces. This toolchain has no type-checker (Deno is not installed
+  // and `functions deploy` strips types), so if a supabase-js upgrade stops
+  // populating .code we would silently fall back to reporting a 500. The regex
+  // is deliberately narrow — it matches only GoTrue's throttle wording, not
+  // errors in general.
+  const msg = (e as { message?: string } | null)?.message ?? "";
+  return /you can only request this after/i.test(msg);
+}
+
 async function findExistingAuthUser(
   admin: SupabaseClient,
   email: string,
@@ -218,6 +245,7 @@ serve(async (req) => {
   let invite_sent = false;
   let already_had_auth = false;
   let blocked_unconfirmed = false;
+  let send_throttled = false;
   let warning: string | null = null;
 
   if (existingAuth && existingAuth.emailConfirmed) {
@@ -256,13 +284,18 @@ serve(async (req) => {
       email,
       options: { shouldCreateUser: false, emailRedirectTo: undefined },
     });
-    if (otpErr) {
+    if (otpErr && isEmailSendThrottled(otpErr)) {
+      // A code went out moments ago. The gate still did its job — the row is
+      // pending and unlinked — so this is a 200 with a "wait" note, not a 500.
+      send_throttled = true;
+    } else if (otpErr) {
       return json({
         error: "An unconfirmed account already exists for this address, and re-sending the sign-in code failed",
         details: otpErr.message,
       }, 500);
+    } else {
+      invite_sent = true;
     }
-    invite_sent = true;
   } else {
     // Single atomic call: inviteUserByEmail creates the auth.users row AND
     // sends the "Invite user" welcome email — which since 2026-08-10 carries
@@ -334,6 +367,12 @@ serve(async (req) => {
     warning =
       "A confirmed account already exists for this address, but the player row " +
       "did not link. Verify players.email matches the auth email exactly.";
+  } else if (blocked_unconfirmed && send_throttled) {
+    warning =
+      "An unconfirmed account already existed for this address, so the player " +
+      "was deliberately NOT linked to it. A sign-in code was already sent moments " +
+      "ago — wait a minute before requesting another. The row links automatically " +
+      "once they enter it.";
   } else if (blocked_unconfirmed) {
     warning =
       "An unconfirmed account already existed for this address, so the player " +
@@ -346,6 +385,7 @@ serve(async (req) => {
     invite_sent,
     already_had_auth,
     blocked_unconfirmed,
+    send_throttled,
     // invited = "an invitation exists for this address", which under 056 is the
     // state the admin UI keys its pill on. Distinct from `linked`.
     invited: invite_sent || already_had_auth,

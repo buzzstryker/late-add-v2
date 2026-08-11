@@ -261,13 +261,21 @@ export function Players() {
     setInviteError(null);
     try {
       const res = await sendInvite(inviteTarget.id);
+      // The server composes the precise note for the cases that need one
+      // (deliberate non-link, send throttled, confirmed-but-unlinked). Prefer
+      // it over reconstructing a message from flags out here.
+      //
+      // NOTE the branch that is deliberately gone: "Invite sent, but auto-link
+      // didn't fire." Under migration 056 a fresh invite NEVER links — the row
+      // links when the player enters their code — so that line would have
+      // fired on every single success and taught us to ignore it.
       let line: string;
-      if (res.already_had_auth) {
+      if (res.warning) {
+        line = res.warning;
+      } else if (res.already_had_auth && res.linked) {
         line = `Auth account already existed for ${inviteTarget.email}; linked without re-emailing.`;
-      } else if (res.invite_sent && res.linked) {
-        line = `Invite sent to ${inviteTarget.email}.`;
-      } else if (res.invite_sent && !res.linked) {
-        line = `Invite sent to ${inviteTarget.email}, but auto-link didn't fire. Refresh and check the player's email.`;
+      } else if (res.invite_sent) {
+        line = `Invite sent to ${inviteTarget.email}. They stay "Invited" until they enter the code.`;
       } else {
         line = `Invite request returned without change. Refresh and verify.`;
       }
@@ -369,10 +377,20 @@ export function Players() {
           onSuccess={(result) => {
             setAddOpen(false);
             const lines = [`Player ${result.player.display_name} created`];
-            if (result.invite_sent) {
-              lines.push(`Invite sent to ${result.player.email ?? ''}`);
-            } else if (result.already_had_auth) {
-              lines.push('Auth account already existed; linked or will auto-link on next sign-in');
+            // `warning` FIRST. It is the server's precise account of an outcome
+            // that needs explaining — a deliberate non-link against an
+            // unconfirmed account, or a throttled re-send. Checking invite_sent
+            // first hid exactly that on 2026-08-11: the gate correctly refused
+            // to link a squatted address and emailed a fresh code, and this
+            // toast reported a bare "Invite sent" because invite_sent was also
+            // true. A correct security decision rendered as an ordinary success
+            // is indistinguishable from the bug it prevents.
+            if (result.warning) {
+              lines.push(result.warning);
+            } else if (result.invite_sent) {
+              lines.push(`Invite sent to ${result.player.email ?? ''} — they stay "Invited" until they enter the code`);
+            } else if (result.already_had_auth && result.linked) {
+              lines.push('A confirmed account already existed for that address; linked without emailing');
             }
             setToast(lines.join(' — '));
             if (groupId) load();
@@ -397,9 +415,15 @@ export function Players() {
               <code>{inviteTarget.email}</code>?
             </p>
             <p style={{ margin: '12px 0 0', color: '#666', fontSize: 13 }}>
-              The player will receive a sign-in email. If they already have an auth
-              account under that email, we'll link the player record without sending
-              a new email.
+              The player will receive an email containing a sign-in code. They stay
+              &ldquo;Invited&rdquo; until they enter it — the account links at that
+              point, not now.
+            </p>
+            <p style={{ margin: '8px 0 0', color: '#666', fontSize: 13 }}>
+              If an account already exists for that address, we link it only when it
+              has been <strong>confirmed</strong>. An unconfirmed one is never linked
+              — we email a fresh code instead, so the address&rsquo;s real owner is the
+              one who completes it.
             </p>
           </div>
         )}

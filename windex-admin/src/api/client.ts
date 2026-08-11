@@ -120,7 +120,18 @@ export async function apiFetch<T>(
     } catch {
       // use text as message
     }
-    const msg = (body as { error?: string })?.error ?? text;
+    // Surface `details` alongside `error`. Every Edge Function in this project
+    // returns { error, details? }, where `error` is the human summary and
+    // `details` carries the underlying cause (the GoTrue/Postgres message).
+    // Dropping `details` here cost a full diagnostic cycle on 2026-08-11: a
+    // send-invite 500 read only "re-sending the sign-in code failed" on screen,
+    // while the actual cause — a 429 over_email_send_rate_limit — was sitting
+    // in `details` and had to be recovered from the Edge Function logs instead.
+    const errText = (body as { error?: string })?.error;
+    const detText = (body as { details?: string })?.details;
+    const msg = errText
+      ? (detText ? `${errText} — ${detText}` : errText)
+      : text;
     const withPath = res.status === 404 && path ? `Endpoint not implemented (404): ${path}. Add in windex-api or use PostgREST.` : msg;
     throw new ApiError(res.status, withPath, body, path);
   }

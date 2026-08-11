@@ -220,6 +220,25 @@ function validate(body: InvitePlayerRequest): { ok: true; data: {
  */
 type ExistingAuthUser = { id: string; emailConfirmed: boolean };
 
+/**
+ * Is this the per-address send throttle rather than a real send failure?
+ *
+ * GoTrue rate-limits repeat emails to the same address (smtp_max_frequency,
+ * currently 60s) and answers 429 with error_code `over_email_send_rate_limit`.
+ * That is a WAIT, not a failure — the players row is correctly pending either
+ * way — so it must not be reported as a broken send. Observed live 2026-08-11.
+ *
+ * Matched on ERROR CODE, never on HTTP status: a genuine SMTP outage is also an
+ * error here and MUST still surface loudly.
+ */
+function isEmailSendThrottled(e: unknown): boolean {
+  const code = (e as { code?: string } | null)?.code;
+  if (code === "over_email_send_rate_limit") return true;
+  // Belt and braces — no type-checker in this toolchain; see send-invite.
+  const msg = (e as { message?: string } | null)?.message ?? "";
+  return /you can only request this after/i.test(msg);
+}
+
 async function findExistingAuthUser(
   admin: SupabaseClient,
   email: string,
@@ -376,6 +395,7 @@ serve(async (req) => {
   let invite_sent = false;
   let already_had_auth = false;
   let blocked_unconfirmed = false;
+  let send_throttled = false;
   let warning: string | null = null;
 
   if (send_invite) {
@@ -418,7 +438,14 @@ serve(async (req) => {
         email,
         options: { shouldCreateUser: false, emailRedirectTo: undefined },
       });
-      if (otpErr) {
+      if (otpErr && isEmailSendThrottled(otpErr)) {
+        send_throttled = true;
+        warning =
+          "An unconfirmed account already existed for this address, so the player " +
+          "was deliberately NOT linked to it. A sign-in code was already sent moments " +
+          "ago — wait a minute before requesting another. The row links automatically " +
+          "once they enter it.";
+      } else if (otpErr) {
         warning =
           `An unconfirmed account already exists for ${email}, so the player was ` +
           `deliberately not linked to it — but re-sending the sign-in code failed: ` +
@@ -488,6 +515,7 @@ serve(async (req) => {
     invite_sent,
     already_had_auth,
     blocked_unconfirmed,
+    send_throttled,
     invited: invite_sent || already_had_auth,
     linked: !!(finalRow as { user_id?: string | null } | null)?.user_id,
     ...(warning ? { warning } : {}),
