@@ -35,6 +35,11 @@ const OLIVE = '#4B5E2A';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const PILL: Record<InviteStatus, { label: string; color: string; bg: string }> = {
+  // Status unavailable (the RPC returned nothing). Rendered as a neutral dash
+  // rather than an empty pill, so it reads as "not known yet" instead of a
+  // layout bug — and so it is visibly distinct from "Not invited", which is a
+  // claim we have no business making when we could not load the status.
+  unknown: { label: '—', color: '#9E9E9E', bg: '#F5F5F5' },
   not_invited: { label: 'Not invited', color: '#616161', bg: '#F0F0F0' },
   invited: { label: 'Invited — awaiting first sign-in', color: '#B26A00', bg: '#FFF3E0' },
   signed_in: { label: 'Signed in', color: '#2E7D32', bg: '#E8F5E9' },
@@ -307,6 +312,13 @@ export function AddInvitePlayerSheet({
     // Only a never-invited player gets the invite paired onto the add, and only
     // if we have an address to send to. Without one the add still proceeds —
     // a missing email must not block getting them into the group.
+    //
+    // 'unknown' deliberately does NOT qualify. If the status RPC gave us
+    // nothing we cannot tell an uninvited player from an invited one, and
+    // guessing wrong here sends a real email: it would mint a replacement code
+    // and supersede the one already sitting in that person's inbox. The add
+    // still works, it just doesn't carry an invite. Not guessing beats guessing
+    // wrong on a path that mails people.
     const withInvite = status === 'not_invited' && emailOk;
     const canJoin = membership === 'none' || membership === 'inactive';
     const joinLabel =

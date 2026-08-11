@@ -18,20 +18,52 @@ export type PlayerLite = {
 export type PlayerAuthStatus = {
   player_id: string;
   has_signed_in: boolean;
+  /**
+   * An invitation exists for this player (migration 056). Derived SERVER-SIDE
+   * as `invited_at IS NOT NULL OR confirmation_sent_at IS NOT NULL` — do not
+   * reconstruct it from `invited_at` here, because the dominant invite path
+   * (invite-player's createUser + signInWithOtp) never sets invited_at.
+   *
+   * This, never players.user_id, is what "invited" means.
+   */
+  has_been_invited: boolean;
   invited_at: string | null;
   email_confirmed_at: string | null;
   last_sign_in_at: string | null;
 };
 
-export type InviteStatus = 'not_invited' | 'invited' | 'signed_in';
+export type InviteStatus = 'unknown' | 'not_invited' | 'invited' | 'signed_in';
 
-/** never invited (no auth user) / invited-pending / signed-in. */
+/**
+ * unknown (status unavailable) / never invited / invited-pending / signed-in.
+ *
+ * Derived ENTIRELY from get_players_auth_status(). Since migration 056:
+ *
+ *     invited_at  means INVITED    -> has_been_invited, drives this
+ *     user_id     means LINKED     -> a confirmed human owns the row
+ *
+ * `userId` is deliberately gone from the signature's logic. It used to stand in
+ * for "was invited", which held only while linking happened at signup; under
+ * confirm-time linking a genuinely invited player has user_id NULL until they
+ * enter their code, so `if (!userId) return 'not_invited'` labelled every
+ * pending invitee never-invited. In this sheet that was not merely cosmetic:
+ * renderMatch pairs an invite onto the add when status === 'not_invited', so an
+ * already-invited player would have been re-invited, minting a replacement code
+ * and superseding the one already in their email.
+ *
+ * 'unknown' when the RPC gave us nothing. Previously a missing row fell through
+ * to `status?.has_signed_in` -> falsy -> 'invited', so an RPC FAILURE was
+ * indistinguishable from "invited but no activity" and silently downgraded
+ * signed-in players. Callers must not offer to send email on 'unknown': not
+ * guessing beats guessing wrong on a path that mails people.
+ */
 export function deriveInviteStatus(
-  userId: string | null,
+  _userId: string | null,
   status: PlayerAuthStatus | undefined,
 ): InviteStatus {
-  if (!userId) return 'not_invited';
-  return status?.has_signed_in ? 'signed_in' : 'invited';
+  if (!status) return 'unknown';
+  if (status.has_signed_in) return 'signed_in';
+  return status.has_been_invited ? 'invited' : 'not_invited';
 }
 
 // TWIN: keep identical to windex-admin/src/pages/Players.tsx buildSignInInstructions.
