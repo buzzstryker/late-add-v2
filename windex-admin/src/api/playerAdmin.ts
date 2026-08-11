@@ -464,6 +464,17 @@ export async function sendInvite(playerId: string): Promise<SendInviteResponse> 
 export interface PlayerAuthStatus {
   player_id: string;
   has_signed_in: boolean;
+  /**
+   * An invitation exists for this player (migration 056). Derived SERVER-SIDE
+   * as `invited_at IS NOT NULL OR confirmation_sent_at IS NOT NULL` — do not
+   * reconstruct it from `invited_at` out here, because the dominant invite
+   * path (invite-player's createUser + signInWithOtp) never sets invited_at
+   * and only ever sets confirmation_sent_at.
+   *
+   * This, never players.user_id, is what "invited" means. user_id means LINKED
+   * — a confirmed human owns the row — and is NULL for every pending invitee.
+   */
+  has_been_invited: boolean;
   invited_at: string | null;
   email_confirmed_at: string | null;
   last_sign_in_at: string | null;

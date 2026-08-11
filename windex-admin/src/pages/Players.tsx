@@ -42,10 +42,21 @@ function buildSignInInstructions(email: string): string {
 }
 
 // ─── Status column ────────────────────────────────────────────────────────
-// Three-state derivation from players.user_id + the get_players_auth_status
-// RPC. Returns null when we don't have enough info yet (RPC still loading
-// for a linked player). The "not invited" state is derivable from the row
-// alone, so it renders immediately.
+// Derived ENTIRELY from get_players_auth_status(). Since migration 056:
+//
+//     invited_at  means INVITED    -> has_been_invited, drives this pill
+//     user_id     means LINKED     -> a confirmed human owns the row
+//
+// user_id is deliberately absent here. It used to stand in for "was invited",
+// which worked only because linking happened at signup; under confirm-time
+// linking a genuinely invited player has user_id NULL right up until they
+// enter their code, so the old `if (!player.user_id) return 'not_invited'`
+// would have libelled every pending invitee as never-invited.
+//
+// COST, ACCEPTED DELIBERATELY: 'not_invited' is no longer derivable from the
+// row alone, so every pill shows "—" until the RPC resolves. An optimistic
+// hint from user_id would remove the flash and reintroduce exactly the
+// conflation this change exists to delete. Correctness over a few hundred ms.
 type StatusKey = 'not_invited' | 'invited' | 'signed_in' | 'retired';
 
 function deriveStatus(
@@ -53,9 +64,9 @@ function deriveStatus(
   authStatus: PlayerAuthStatus | null
 ): StatusKey | null {
   if (player.retired_at) return 'retired';
-  if (!player.user_id) return 'not_invited';
   if (!authStatus) return null;
-  return authStatus.has_signed_in ? 'signed_in' : 'invited';
+  if (authStatus.has_signed_in) return 'signed_in';
+  return authStatus.has_been_invited ? 'invited' : 'not_invited';
 }
 
 const STATUS_PILL: Record<StatusKey, { label: string; color: string; bg: string; border: string }> = {
@@ -559,12 +570,22 @@ function DisplayRow({
     ? (p.email ? 'Email is invalid' : 'Add an email first')
     : null;
 
-  // Invite affordance: only for never-invited players (no user_id) on the
-  // active tab. Invited-but-not-signed-in players self-serve sign-in at
-  // windexgolf.com/login — admins no longer re-send. Never on the Retired tab.
-  const showSendInvite = isSuperAdmin && !linked && tab === 'active';
-
   const status = deriveStatus(p, authStatus);
+
+  // Invite affordance. The CONDITION is unchanged from before migration 056 —
+  // what changed is what it now selects, because user_id stopped conflating two
+  // things. `!linked` used to mean "never invited"; it now means "no confirmed
+  // owner yet", which correctly includes pending invitees. So the same
+  // expression that once hid the button from invited players now offers it to
+  // them, which is the whole recovery path: a squatted or stale address can be
+  // re-invited from the UI with no SQL.
+  //
+  // Note this reads user_id, NOT the pill. That is not a relapse into the old
+  // conflation — it is a different question. The pill asks "were they invited"
+  // (has_been_invited); this asks "can send-invite succeed", which depends on
+  // linkage, because send-invite still 409s on a non-NULL user_id by design.
+  const showSendInvite = isSuperAdmin && !linked && tab === 'active';
+  const inviteLabel = status === 'invited' ? 'Resend Invite' : 'Send Invite';
 
   return (
     <tr style={{ borderBottom: '1px solid #eee' }}>
@@ -599,7 +620,7 @@ function DisplayRow({
             title={inviteDisabledReason ?? ''}
             style={{ padding: '4px 10px', fontSize: 12, marginRight: 4, opacity: emailOk ? 1 : 0.55 }}
           >
-            Send Invite
+            {inviteLabel}
           </button>
         )}
         {isSuperAdmin && status === 'invited' && (
