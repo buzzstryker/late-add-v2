@@ -27,6 +27,18 @@ export const Colors = {
     pillPositive: '#E8F5E9',
     pillNegative: '#FFEBEE',
     venmoBlue: '#008CFF',
+    // Chart chrome. `border` carries gridlines and `icon` carries axis labels —
+    // both already match the values the History chart had hardcoded — so only
+    // these two neutrals needed adding.
+    /** Zero line. Deliberately its own token: it has to read stronger than a
+     *  `border` gridline but weaker than `icon` axis text, and no existing token
+     *  sits on that step. */
+    chartZero: '#A8A8AD',
+    /** The single neutral gray of the unhighlighted field. Applied as a SOLID
+     *  stroke, never as opacity on a hue — a dozen translucent lines composite
+     *  to a dark knot at every crossing, and on a cumulative-points chart they
+     *  cross constantly, right where the eye goes. */
+    chartDim: '#C4C4CA',
   },
   dark: {
     text: '#ECEDEE',
@@ -46,6 +58,8 @@ export const Colors = {
     pillPositive: '#1B3D1B',
     pillNegative: '#3D1B1B',
     venmoBlue: '#4DA6FF',
+    chartZero: '#5A5A60',
+    chartDim: '#4E4E55',
   },
 };
 

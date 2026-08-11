@@ -1,14 +1,35 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
-import Svg, { Line as SvgLine, Polyline, Rect, Text as SvgText } from 'react-native-svg';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, LayoutChangeEvent, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import Svg, { Circle, Line as SvgLine, Polyline, Text as SvgText } from 'react-native-svg';
 import { getApiBase, getSupabaseAnonKey } from '@/lib/config';
 import { getStoredAccessToken, type StandingRow } from '@/lib/api';
-
-const PLAYER_COLORS = [
-  '#4B5E2A', '#2196F3', '#E91E63', '#FF9800', '#9C27B0',
-  '#009688', '#F44336', '#3F51B5', '#8BC34A', '#FF5722',
-  '#00BCD4', '#795548', '#607D8B', '#CDDC39', '#673AB7',
-];
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import {
+  CHART_H,
+  CHART_SERIES_DARK,
+  CHART_SERIES_LIGHT,
+  MAX_SELECTED,
+  PAD_B,
+  PAD_L,
+  PAD_R,
+  PAD_T,
+  activeLinesOf,
+  assignHues,
+  buildChartData,
+  buildMonthTicks,
+  buildTooltipRows,
+  formatDay,
+  formatFull,
+  isoOf,
+  makeScales,
+  makeToX,
+  nearestDate,
+  niceTickValues,
+  polylinePoints,
+  type ChartData,
+  type ScoreRow,
+} from '@/lib/historyChartMath';
 
 type Props = {
   seasonId: string;
@@ -18,19 +39,10 @@ type Props = {
   seasonEndDate: string;
 };
 
-type ScoreRow = {
-  player_id: string;
-  score_value: number | null;
-  score_override: number | null;
-  round_date: string;
-};
-
-type PlayerLine = {
-  id: string;
-  name: string;
-  color: string;
-  points: { x: number; y: number }[]; // normalized 0–1
-};
+const TOOLTIP_W = 168;
+const TOOLTIP_PAD = 8;
+const TOOLTIP_HEADER_H = 20;
+const TOOLTIP_ROW_H = 17;
 
 async function fetchSeasonScores(seasonId: string, groupId: string): Promise<ScoreRow[]> {
   const base = getApiBase().replace(/\/functions\/v1\/?$/, '');
@@ -60,7 +72,8 @@ async function fetchSeasonScores(seasonId: string, groupId: string): Promise<Sco
       { headers },
     );
     if (!res.ok) continue;
-    const rows: { player_id: string; score_value: number | null; score_override: number | null; league_round_id: string }[] = await res.json();
+    const rows: { player_id: string; score_value: number | null; score_override: number | null; league_round_id: string }[] =
+      await res.json();
     for (const r of rows) {
       allScores.push({
         player_id: r.player_id,
@@ -73,101 +86,23 @@ async function fetchSeasonScores(seasonId: string, groupId: string): Promise<Sco
   return allScores;
 }
 
-function buildLines(
-  scores: ScoreRow[],
-  standings: StandingRow[],
-  seasonStart: string,
-): { lines: PlayerLine[]; yMin: number; yMax: number; xMax: number } {
-  const playerIds = standings.map((s) => s.player_id);
-
-  // Group score deltas by date per player
-  const deltasByDate = new Map<string, Map<string, number>>();
-  for (const s of scores) {
-    const pid = s.player_id;
-    if (!playerIds.includes(pid)) continue;
-    const pts = s.score_override ?? s.score_value ?? 0;
-    const dateMap = deltasByDate.get(s.round_date) ?? new Map<string, number>();
-    dateMap.set(pid, (dateMap.get(pid) ?? 0) + pts);
-    deltasByDate.set(s.round_date, dateMap);
-  }
-
-  const sortedDates = [...deltasByDate.keys()].sort();
-  const startTs = new Date(seasonStart + 'T00:00:00').getTime();
-  const todayTs = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00').getTime();
-  const range = todayTs - startTs || 1;
-
-  // xMax = 1.0 represents today
-  const toX = (date: string) => {
-    const ts = new Date(date + 'T00:00:00').getTime();
-    return Math.max(0, Math.min(1, (ts - startTs) / range));
-  };
-
-  let yMin = 0;
-  let yMax = 0;
-
-  const lines: PlayerLine[] = playerIds.map((pid, i) => {
-    const points: { x: number; y: number }[] = [{ x: 0, y: 0 }];
-    let cumulative = 0;
-
-    for (const date of sortedDates) {
-      const delta = deltasByDate.get(date)?.get(pid) ?? 0;
-      if (delta !== 0) {
-        cumulative += delta;
-        points.push({ x: toX(date), y: cumulative });
-      }
-    }
-
-    // If player has no rounds, return empty points (will be filtered out)
-    if (points.length <= 1) {
-      return {
-        id: pid,
-        name: standings[i]?.player_name ?? pid.slice(0, 8),
-        color: PLAYER_COLORS[i % PLAYER_COLORS.length],
-        points: [],
-      };
-    }
-
-    for (const p of points) {
-      if (p.y < yMin) yMin = p.y;
-      if (p.y > yMax) yMax = p.y;
-    }
-
-    return {
-      id: pid,
-      name: standings[i]?.player_name ?? pid.slice(0, 8),
-      color: PLAYER_COLORS[i % PLAYER_COLORS.length],
-      points,
-    };
-  });
-
-  return { lines, yMin, yMax, xMax: 1 };
-}
-
-function niceTickValues(min: number, max: number, count: number): number[] {
-  const range = max - min || 1;
-  const roughStep = range / (count - 1);
-  const magnitude = Math.pow(10, Math.floor(Math.log10(roughStep)));
-  const options = [1, 2, 5, 10];
-  let step = options[0] * magnitude;
-  for (const o of options) {
-    if (o * magnitude >= roughStep) { step = o * magnitude; break; }
-  }
-  const start = Math.floor(min / step) * step;
-  const ticks: number[] = [];
-  for (let v = start; v <= max + step * 0.01; v += step) {
-    ticks.push(Math.round(v));
-  }
-  return ticks;
-}
-
 export function HistoryChart({ seasonId, groupId, standings, seasonStartDate, seasonEndDate }: Props) {
-  const [chartState, setChartState] = useState<{
-    lines: PlayerLine[];
-    yMin: number;
-    yMax: number;
-  } | null>(null);
+  const scheme = useColorScheme() ?? 'light';
+  const c = Colors[scheme];
+  const series = scheme === 'dark' ? CHART_SERIES_DARK : CHART_SERIES_LIGHT;
+
+  const [chartState, setChartState] = useState<ChartData | null>(null);
   const [loading, setLoading] = useState(true);
   const [svgWidth, setSvgWidth] = useState(0);
+
+  // Selection, and the two independent pointer paths. `pinned` comes from a tap
+  // (touch), `hovered` from a mouse. They are resolved, never merged.
+  const [selected, setSelected] = useState<string[]>([]);
+  const [pinned, setPinned] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [cursorY, setCursorY] = useState<number | null>(null);
+
+  const todayIso = useMemo(() => isoOf(new Date()), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -175,7 +110,10 @@ export function HistoryChart({ seasonId, groupId, standings, seasonStartDate, se
     fetchSeasonScores(seasonId, groupId)
       .then((scores) => {
         if (cancelled) return;
-        setChartState(buildLines(scores, standings, seasonStartDate));
+        setChartState(buildChartData(scores, standings, seasonStartDate, todayIso));
+        setSelected([]);
+        setPinned(null);
+        setHovered(null);
       })
       .catch(() => {
         if (!cancelled) setChartState(null);
@@ -183,133 +121,363 @@ export function HistoryChart({ seasonId, groupId, standings, seasonStartDate, se
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => { cancelled = true; };
-  }, [seasonId, groupId, standings, seasonStartDate, seasonEndDate]);
+    return () => {
+      cancelled = true;
+    };
+  }, [seasonId, groupId, standings, seasonStartDate, seasonEndDate, todayIso]);
 
   const onLayout = (e: LayoutChangeEvent) => setSvgWidth(e.nativeEvent.layout.width);
 
   if (loading) return <ActivityIndicator style={styles.spinner} size="large" />;
 
-  // Filter to players who have at least one round
-  const activeLines = chartState?.lines.filter((l) => l.points.length > 0) ?? [];
-  if (activeLines.length === 0) return <Text style={styles.empty}>No history data.</Text>;
+  const activeLines = activeLinesOf(chartState);
+  if (activeLines.length === 0) {
+    return <Text style={[styles.empty, { color: c.icon }]}>No history data.</Text>;
+  }
 
-  const { yMin: rawYMin, yMax: rawYMax } = chartState!;
-  const pad = Math.max(10, Math.round((rawYMax - rawYMin) * 0.1));
-  const yMin = rawYMin - pad;
-  const yMax = rawYMax + pad;
-
-  // Dynamic month ticks: count elapsed months from season start to today
-  const startDate = new Date(seasonStartDate + 'T00:00:00');
-  const today = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00');
-  const elapsedMonths = Math.max(1,
-    (today.getFullYear() - startDate.getFullYear()) * 12 +
-    (today.getMonth() - startDate.getMonth())
-  );
-
-  // Build month tick labels: first letter of each month from season start
-  const MONTH_LETTERS = ['J','F','M','A','M','J','J','A','S','O','N','D'];
-  const monthTicks = Array.from({ length: elapsedMonths }, (_, i) => {
-    const monthIndex = (startDate.getMonth() + 1 + i) % 12;
-    return { nx: (i + 1) / (elapsedMonths + 1), label: MONTH_LETTERS[monthIndex] };
-  });
-
-  const CHART_H = 300;
-  const PAD_L = 45;
-  const PAD_R = 12;
-  const PAD_T = 12;
-  const PAD_B = 28;
-  const plotW = Math.max(1, svgWidth - PAD_L - PAD_R);
-  const plotH = CHART_H - PAD_T - PAD_B;
-
-  const toSvgX = (nx: number) => PAD_L + nx * plotW;
-  const toSvgY = (val: number) => PAD_T + (1 - (val - yMin) / (yMax - yMin)) * plotH;
-
+  const { yMin, yMax } = chartState!;
+  const toX = makeToX(seasonStartDate, todayIso);
+  const s = makeScales(svgWidth, yMin, yMax);
+  const monthTicks = buildMonthTicks(seasonStartDate, todayIso, toX);
   const yTicks = niceTickValues(yMin, yMax, 6);
 
+  const allIds = activeLines.map((l) => l.id);
+  const hues = assignHues(allIds, selected);
+  const colorFor = (id: string) => {
+    const slot = hues.get(id);
+    return slot === undefined ? c.chartDim : series[slot];
+  };
+
+  // Pin beats hover: a mouse user who taps gets pin semantics, and a hover-only
+  // user never sees a pin.
+  const activeDate = pinned ?? hovered ?? null;
+  const atCap = selected.length >= MAX_SELECTED;
+
+  const togglePlayer = (id: string) => {
+    setSelected((prev) => {
+      if (prev.includes(id)) return prev.filter((p) => p !== id);
+      if (prev.length >= MAX_SELECTED) return prev;
+      return [...prev, id];
+    });
+  };
+
+  // --- Tooltip -------------------------------------------------------------
+  // A View, not SVG: names need numberOfLines + ellipsis and values need
+  // tabular-nums, neither of which react-native-svg's <Text> offers, and RN has
+  // no text measurement to hand-lay-out SVG text against. The crosshair and the
+  // dots stay in SVG.
+  let tooltip: {
+    date: string;
+    rows: ReturnType<typeof buildTooltipRows>;
+    left: number;
+    top: number;
+    height: number;
+    cx: number;
+  } | null = null;
+
+  if (activeDate && svgWidth > 0) {
+    const nx = toX(activeDate);
+    // A tap gives an x, not a meaningful y, so the touch path ranks the nearest-5
+    // from the plot's vertical midpoint.
+    const cy = cursorY ?? PAD_T + s.plotH / 2;
+    const rows = buildTooltipRows(activeLines, nx, selected, cy, s);
+    if (rows.length > 0) {
+      const height = TOOLTIP_PAD * 2 + TOOLTIP_HEADER_H + rows.length * TOOLTIP_ROW_H;
+      const cx = s.toSvgX(nx);
+
+      let left = cx + 10;
+      if (left + TOOLTIP_W > svgWidth - PAD_R) left = cx - 10 - TOOLTIP_W;
+      left = Math.max(PAD_L, Math.min(left, svgWidth - PAD_R - TOOLTIP_W));
+
+      const positioned = rows.filter((r) => r.svgY !== null);
+      const meanY = positioned.length
+        ? positioned.reduce((a, r) => a + (r.svgY ?? 0), 0) / positioned.length
+        : PAD_T + s.plotH / 2;
+      const top = Math.max(PAD_T, Math.min(meanY - height / 2, CHART_H - PAD_B - height));
+
+      tooltip = { date: activeDate, rows, left, top, height, cx };
+    }
+  }
+
+  const handlePlotPress = (locationX: number) => {
+    const d = nearestDate(chartState!.dates, toX, s, locationX + PAD_L);
+    setPinned((prev) => (prev === d ? null : d));
+  };
+
+  // Mouse path. currentTarget is the chartWrap element, so this x shares an
+  // origin with svgWidth — deliberately NOT the plot-relative locationX the
+  // Pressable hands back. Unifying the two is how an off-by-PAD_L gets in.
+  const handleMouseMove = (e: any) => {
+    const el = e?.currentTarget;
+    if (!el?.getBoundingClientRect) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    if (x < PAD_L || x > (svgWidth || rect.width) - PAD_R) {
+      setHovered(null);
+      return;
+    }
+    setCursorY(y);
+    setHovered(nearestDate(chartState!.dates, toX, s, x));
+  };
+
+  const clearHover = () => {
+    setHovered(null);
+    setCursorY(null);
+  };
+
+  const webHoverProps =
+    Platform.OS === 'web' ? ({ onMouseMove: handleMouseMove, onMouseLeave: clearHover } as object) : {};
+
   return (
-    <View style={styles.container}>
-      <View style={styles.chartWrap} onLayout={onLayout}>
+    <Pressable style={styles.container} onPress={() => setPinned(null)}>
+      {/* Pills sit ABOVE the plot: a control belongs above what it controls, and
+          it keeps the tap target in thumb reach instead of behind a 300px scroll. */}
+      <View style={styles.pillRow}>
+        {selected.length > 0 ? (
+          <Pressable
+            style={[styles.pill, { backgroundColor: c.card, borderColor: c.border }]}
+            onPress={() => setSelected([])}
+          >
+            <Text style={[styles.pillLabel, { color: c.icon }]}>
+              {'✕'} Clear ({selected.length}/{MAX_SELECTED})
+            </Text>
+          </Pressable>
+        ) : null}
+
+        {activeLines.map((line) => {
+          const isSel = selected.includes(line.id);
+          const hue = colorFor(line.id);
+          // At the cap, unselected pills go genuinely disabled rather than
+          // silently no-opping — a dead-looking tap is the worst of the options.
+          const locked = atCap && !isSel;
+          return (
+            <Pressable
+              key={line.id}
+              disabled={locked}
+              onPress={() => togglePlayer(line.id)}
+              style={[
+                styles.pill,
+                {
+                  backgroundColor: isSel ? hue + '1F' : c.card,
+                  borderColor: isSel ? hue : c.border,
+                },
+              ]}
+            >
+              <View style={[styles.swatch, { backgroundColor: isSel ? hue : c.chartDim }]} />
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.pillLabel,
+                  { color: isSel ? c.text : c.icon },
+                  locked && styles.pillLabelLocked,
+                ]}
+              >
+                {line.name}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      {/* RN Web forwards onMouseMove/onMouseLeave to the DOM node (verified in
+          react-native-web/dist/modules/forwardedProps/index.js:146,148), but RN's
+          own ViewProps has no web pointer surface. Spread them untyped here
+          rather than widening ViewProps app-wide, and only on web — there is no
+          mouse to listen for on native. */}
+      <View style={styles.chartWrap} onLayout={onLayout} {...webHoverProps}>
         {svgWidth > 0 && (
           <Svg width={svgWidth} height={CHART_H}>
-            {/* Y grid lines and labels */}
             {yTicks.map((v) => {
-              const y = toSvgY(v);
+              const y = s.toSvgY(v);
               if (y < PAD_T || y > CHART_H - PAD_B) return null;
               return (
-                <SvgLine key={`yg-${v}`} x1={PAD_L} y1={y} x2={svgWidth - PAD_R} y2={y} stroke="#E0E0E0" strokeWidth={0.5} />
+                <SvgLine key={`yg-${v}`} x1={PAD_L} y1={y} x2={svgWidth - PAD_R} y2={y} stroke={c.border} strokeWidth={0.5} />
               );
             })}
             {yTicks.map((v) => {
-              const y = toSvgY(v);
+              const y = s.toSvgY(v);
               if (y < PAD_T || y > CHART_H - PAD_B) return null;
               return (
-                <SvgText key={`yl-${v}`} x={PAD_L - 6} y={y + 4} fontSize={11} fill="#8E8E93" textAnchor="end">
+                <SvgText key={`yl-${v}`} x={PAD_L - 6} y={y + 4} fontSize={11} fill={c.icon} textAnchor="end">
                   {String(v)}
                 </SvgText>
               );
             })}
 
-            {/* X grid lines + month letter labels */}
-            {monthTicks.map((tick, i) => {
-              const x = toSvgX(tick.nx);
-              return (
-                <SvgLine key={`xg-${i}`} x1={x} y1={PAD_T} x2={x} y2={CHART_H - PAD_B} stroke="#E0E0E0" strokeWidth={0.5} />
-              );
-            })}
-            {monthTicks.map((tick, i) => {
-              const x = toSvgX(tick.nx);
-              return (
-                <SvgText key={`xl-${i}`} x={x} y={CHART_H - PAD_B + 14} fontSize={11} fill="#8E8E93" textAnchor="middle">
-                  {tick.label}
-                </SvgText>
-              );
-            })}
+            {monthTicks.map((tick, i) => (
+              <SvgLine
+                key={`xg-${i}`}
+                x1={s.toSvgX(tick.nx)}
+                y1={PAD_T}
+                x2={s.toSvgX(tick.nx)}
+                y2={CHART_H - PAD_B}
+                stroke={c.border}
+                strokeWidth={0.5}
+              />
+            ))}
+            {monthTicks.map((tick, i) => (
+              <SvgText
+                key={`xl-${i}`}
+                x={s.toSvgX(tick.nx)}
+                y={CHART_H - PAD_B + 14}
+                fontSize={11}
+                fill={c.icon}
+                textAnchor="middle"
+              >
+                {tick.label}
+              </SvgText>
+            ))}
 
-            {/* Zero line */}
             {yMin < 0 && yMax > 0 && (
-              <SvgLine x1={PAD_L} y1={toSvgY(0)} x2={svgWidth - PAD_R} y2={toSvgY(0)} stroke="#999" strokeWidth={0.8} strokeDasharray="4,3" />
+              <SvgLine
+                x1={PAD_L}
+                y1={s.toSvgY(0)}
+                x2={svgWidth - PAD_R}
+                y2={s.toSvgY(0)}
+                stroke={c.chartZero}
+                strokeWidth={0.8}
+                strokeDasharray="4,3"
+              />
             )}
 
-            {/* Player lines */}
-            {activeLines.map((line) => {
-              const pts = line.points.map((p) => `${toSvgX(p.x)},${toSvgY(p.y)}`).join(' ');
-              return (
+            {/* Two passes, not a sort and not an opacity trick: SVG paints in
+                document order, so the dimmed field must be emitted first and the
+                highlighted lines second to land on top of it. */}
+            {activeLines
+              .filter((l) => !selected.includes(l.id))
+              .map((line) => (
                 <Polyline
-                  key={line.id}
-                  points={pts}
+                  key={`dim-${line.id}`}
+                  points={polylinePoints(line, s)}
                   fill="none"
-                  stroke={line.color}
+                  stroke={c.chartDim}
+                  strokeWidth={1.5}
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              ))}
+            {activeLines
+              .filter((l) => selected.includes(l.id))
+              .map((line) => (
+                <Polyline
+                  key={`sel-${line.id}`}
+                  points={polylinePoints(line, s)}
+                  fill="none"
+                  stroke={colorFor(line.id)}
                   strokeWidth={2.5}
                   strokeLinejoin="round"
                   strokeLinecap="round"
                 />
-              );
-            })}
+              ))}
+
+            {tooltip ? (
+              <>
+                <SvgLine
+                  x1={tooltip.cx}
+                  y1={PAD_T}
+                  x2={tooltip.cx}
+                  y2={CHART_H - PAD_B}
+                  stroke={c.chartZero}
+                  strokeWidth={1}
+                />
+                {tooltip.rows.map((r) =>
+                  r.svgY === null ? null : (
+                    <Circle
+                      key={`dot-${r.id}`}
+                      cx={tooltip!.cx}
+                      cy={r.svgY}
+                      r={4}
+                      fill={colorFor(r.id)}
+                      stroke={c.card}
+                      strokeWidth={1.5}
+                    />
+                  ),
+                )}
+              </>
+            ) : null}
           </Svg>
         )}
-      </View>
 
-      {/* Legend — only players with rounds */}
-      <View style={styles.legend}>
-        {activeLines.map((line) => (
-          <View key={line.id} style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: line.color }]} />
-            <Text style={styles.legendLabel} numberOfLines={1}>{line.name}</Text>
+        {/* Plot-rect tap target. Pressable rides RN Web's responder system, which
+            leaves touch-action alone, so the enclosing ScrollView keeps its
+            vertical scroll and a drag that starts here still scrolls the page. */}
+        {svgWidth > 0 && (
+          <Pressable
+            style={[styles.plotHit, { left: PAD_L, right: PAD_R, top: PAD_T, bottom: PAD_B }]}
+            onPress={(e) => handlePlotPress(e.nativeEvent.locationX)}
+          />
+        )}
+
+        {tooltip ? (
+          <View
+            pointerEvents="none"
+            style={[
+              styles.tooltip,
+              {
+                left: tooltip.left,
+                top: tooltip.top,
+                width: TOOLTIP_W,
+                backgroundColor: c.card,
+                borderColor: c.border,
+              },
+            ]}
+          >
+            <Text style={[styles.tooltipHeader, { color: c.icon }]}>{formatFull(tooltip.date)}</Text>
+            {tooltip.rows.map((r) => (
+              <View key={r.id} style={styles.tooltipRow}>
+                <View style={[styles.swatch, { backgroundColor: colorFor(r.id) }]} />
+                <Text numberOfLines={1} style={[styles.tooltipName, { color: c.text }]}>
+                  {r.name}
+                </Text>
+                {r.ended ? (
+                  <Text style={[styles.tooltipEnded, { color: c.icon }]} numberOfLines={1}>
+                    {Math.round(r.value)} · last {formatDay(r.lastDate!)}
+                  </Text>
+                ) : (
+                  <Text style={[styles.tooltipValue, { color: c.text }]}>{Math.round(r.value)}</Text>
+                )}
+              </View>
+            ))}
           </View>
-        ))}
+        ) : null}
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 8 },
   spinner: { marginVertical: 40 },
-  empty: { textAlign: 'center', marginTop: 24, fontSize: 15, color: '#8E8E93' },
-  chartWrap: { height: 300, marginTop: 8 },
-  legend: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 8, paddingTop: 12 },
-  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  legendDot: { width: 10, height: 10, borderRadius: 5 },
-  legendLabel: { fontSize: 12, color: '#666', maxWidth: 80 },
+  empty: { textAlign: 'center', marginTop: 24, fontSize: 15 },
+  chartWrap: { height: CHART_H, marginTop: 8 },
+
+  pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingTop: 4 },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    maxWidth: 140,
+  },
+  pillLabel: { fontSize: 12 },
+  pillLabelLocked: { opacity: 0.5 },
+  swatch: { width: 8, height: 8, borderRadius: 4 },
+
+  plotHit: { position: 'absolute' },
+
+  tooltip: {
+    position: 'absolute',
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: TOOLTIP_PAD,
+  },
+  tooltipHeader: { fontSize: 11, height: TOOLTIP_HEADER_H, lineHeight: TOOLTIP_HEADER_H },
+  tooltipRow: { flexDirection: 'row', alignItems: 'center', gap: 6, height: TOOLTIP_ROW_H },
+  tooltipName: { flex: 1, fontSize: 12 },
+  tooltipValue: { fontSize: 12, fontVariant: ['tabular-nums'] },
+  tooltipEnded: { fontSize: 11, fontVariant: ['tabular-nums'] },
 });
