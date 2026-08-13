@@ -44,7 +44,12 @@ export default function LoginScreen() {
   // input conditional on it.
   const [notice, setNotice] = useState<string | null>(null);
 
-  const [busy, setBusy] = useState(false);
+  // WHICH action is in flight, not merely THAT one is. The spinner has to
+  // appear on the button the user actually pressed — a single boolean put it
+  // in "Sign In" even when "Send me a code" was tapped, so the only feedback
+  // for the send appeared on an unrelated control.
+  const [pending, setPending] = useState<'send' | 'signin' | null>(null);
+  const busy = pending !== null;
   const [error, setError] = useState<string | null>(null);
 
   async function onSendCode() {
@@ -54,7 +59,7 @@ export default function LoginScreen() {
       setError('Enter your email address first, then we can send you a code.');
       return;
     }
-    setBusy(true);
+    setPending('send');
     try {
       const { error: err } = await sendOtp(otpEmail);
       if (err) {
@@ -64,8 +69,14 @@ export default function LoginScreen() {
         setOtpCode('');
         setNotice(`Code sent to ${otpEmail.trim()}. It can take a minute to arrive.`);
       }
+    } catch {
+      // sendOtp resolves with { error } for everything auth-js recognises, but
+      // it RETHROWS anything that isn't an AuthError. This block used to be
+      // try/finally with no catch, so such a rejection went unhandled and the
+      // screen showed nothing whatsoever. Every exit path must say something.
+      setError('Something went wrong sending your code. Please try again.');
     } finally {
-      setBusy(false);
+      setPending(null);
     }
   }
 
@@ -81,13 +92,16 @@ export default function LoginScreen() {
       setError('Enter the 6-digit code from your email.');
       return;
     }
-    setBusy(true);
+    setPending('signin');
     try {
       const { error: err } = await verifyOtp(otpEmail, otpCode);
       if (err) setError(err);
       // On success, onAuthStateChange fires SIGNED_IN → router navigates to standings
+    } catch {
+      // Same missing-catch hazard as onSendCode above.
+      setError('Something went wrong signing you in. Please try again.');
     } finally {
-      setBusy(false);
+      setPending(null);
     }
   }
 
@@ -122,6 +136,23 @@ export default function LoginScreen() {
             Enter your email and the 6-digit code from your Windex email.
           </ThemedText>
 
+          {/*
+            Outcome of the last tap, ABOVE the inputs. This used to be the last
+            child of the ScrollView — below both fields and both buttons —
+            which on a phone with the keyboard up put it off-screen with
+            nothing scrolling to it, so a real error was indistinguishable from
+            nothing happening. Anything reporting the result of a press has to
+            be visible without scrolling. Do not move this below the fold.
+
+            error and notice are mutually exclusive: both are cleared at the
+            top of every handler and exactly one is set afterwards.
+          */}
+          {error ? (
+            <ThemedText style={styles.error}>{error}</ThemedText>
+          ) : notice ? (
+            <ThemedText style={[styles.notice, { color: muted }]}>{notice}</ThemedText>
+          ) : null}
+
           <View style={styles.section}>
             <TextInput
               style={inputStyle}
@@ -151,7 +182,7 @@ export default function LoginScreen() {
               style={[styles.buttonPrimary, busy && styles.buttonDisabled]}
               onPress={onSignIn}
               disabled={busy}>
-              {busy ? (
+              {pending === 'signin' ? (
                 <ActivityIndicator color="#fff" />
               ) : (
                 <ThemedText style={styles.buttonText}>Sign In</ThemedText>
@@ -168,14 +199,15 @@ export default function LoginScreen() {
               style={[styles.buttonSecondary, { borderColor: border }, busy && styles.buttonDisabled]}
               onPress={onSendCode}
               disabled={busy}>
-              <ThemedText style={[styles.buttonSecondaryText, { color: muted }]}>
-                Send me a code
-              </ThemedText>
+              {pending === 'send' ? (
+                <ActivityIndicator color={muted} />
+              ) : (
+                <ThemedText style={[styles.buttonSecondaryText, { color: muted }]}>
+                  Send me a code
+                </ThemedText>
+              )}
             </Pressable>
           </View>
-
-          {notice ? <ThemedText style={[styles.notice, { color: muted }]}>{notice}</ThemedText> : null}
-          {error ? <ThemedText style={styles.error}>{error}</ThemedText> : null}
         </ScrollView>
       </KeyboardAvoidingView>
     </ThemedView>
@@ -227,6 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   buttonSecondaryText: { fontWeight: '600', fontSize: 15 },
-  notice: { marginTop: 16, fontSize: 15, lineHeight: 22 },
-  error: { color: '#c62828', marginTop: 16, fontSize: 15, lineHeight: 22 },
+  // Feedback now sits above the inputs, so it needs space BELOW it, not above.
+  notice: { marginBottom: 18, fontSize: 15, lineHeight: 22 },
+  error: { color: '#c62828', marginBottom: 18, fontSize: 15, lineHeight: 22 },
 });

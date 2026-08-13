@@ -4,6 +4,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { getSupabaseAnonKey, getSupabaseUrl, hasSupabaseAuthConfig } from '@/lib/config';
 import { setAccessTokenGetter, setOnUnauthorized } from '@/lib/api';
 import { friendlyAuthError } from '@/lib/authErrors';
+import { createTimeoutFetch } from '@/lib/authFetch';
 import { authPersistence } from '@/lib/authPersistence';
 import { setRealtimeAuth } from '@/lib/supabase';
 
@@ -30,6 +31,10 @@ function createSupabase(): SupabaseClient | null {
       persistSession: true,
       detectSessionInUrl: false,
     },
+    // Every auth request gets a hard deadline. supabase-js sets none, so a
+    // fetch that never settles used to hang the login screen forever with no
+    // error and no request ever reaching GoTrue. See lib/authFetch.ts.
+    global: { fetch: createTimeoutFetch() },
   });
 }
 

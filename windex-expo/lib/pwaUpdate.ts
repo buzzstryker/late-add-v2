@@ -16,6 +16,11 @@ let composerBusy = false; // chat composer focused or holding unsent text
 let reloadPending = false; // a SW update is waiting to be applied
 let refreshing = false; // a reload is already in flight (in-memory loop guard)
 
+// Resume-time update checks: at most one per minute, so rapid app switching
+// doesn't fire a burst of sw.js requests.
+let lastUpdateCheck = 0;
+const UPDATE_CHECK_MIN_INTERVAL_MS = 60_000;
+
 function maybeReload(): void {
   if (refreshing || !reloadPending || composerBusy) return;
   if (typeof window === 'undefined') return;
@@ -58,7 +63,28 @@ export function registerServiceWorker(buildId: string): void {
     reloadPending = true;
     maybeReload();
   });
-  navigator.serviceWorker.register(`/sw.js?v=${buildId}`).catch(() => {
-    /* registration failure is non-fatal; the app still works without the SW */
-  });
+  navigator.serviceWorker
+    .register(`/sw.js?v=${buildId}`)
+    .then((registration) => {
+      // This register() call runs ONCE, from _layout.tsx's mount effect. iOS
+      // freezes an installed standalone PWA and resumes it from a snapshot
+      // WITHOUT re-navigating, so on a home-screen install that mount may not
+      // happen again for days — and the app keeps running whatever bundle it
+      // was frozen with. Re-check for a new SW every time it comes back to the
+      // foreground; if one is found, the normal controllerchange path above
+      // applies it (composer-aware, loop-guarded).
+      if (typeof document === 'undefined') return;
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== 'visible') return;
+        const now = Date.now();
+        if (now - lastUpdateCheck < UPDATE_CHECK_MIN_INTERVAL_MS) return;
+        lastUpdateCheck = now;
+        registration.update().catch(() => {
+          /* offline or transient — the next resume tries again */
+        });
+      });
+    })
+    .catch(() => {
+      /* registration failure is non-fatal; the app still works without the SW */
+    });
 }
